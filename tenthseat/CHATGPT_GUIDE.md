@@ -26,7 +26,7 @@ Upload the whole `tenthseat/` folder (or the repo zip) together with this guide.
 | **Inspiration** | FF4's pacing and structure: an opening on a vehicle at night, a crisis of conscience before your commander, being demoted onto a suspicious errand, a guardian boss, a village destroyed by the errand itself, and a new ally born from the tragedy |
 | **Battle** | Active Time Battle. Each fighter has a TIME gauge; a full gauge means it's their turn. The **Wait** or **Active** setting is in Config |
 | **Jobs** | 8 jobs, one per patron god. Change any hero's job **at any time** from the field menu. Jobs have ranks (JP from battles) that unlock skills. Each hero also keeps an **innate command** in every job |
-| **Party** | Raine Cudlar, Miasma, Verai Cudlar |
+| **Party** | Raine Cudlar, Miasma, Verai, Luna (joins at Goldengrove) |
 | **Length** | About 1.5 to 3 hours for Chapter One |
 
 ### Controls
@@ -71,29 +71,84 @@ Arrows or WASD move · Z / Space / Enter confirm · X cancel / menu · Esc menu 
 
 | Hero | Look (character sheets: `tools/source/hero_<name>_sheet.webp`) | Personality | Innate command |
 |---|---|---|---|
-| **Raine Cudlar** | Wild spiky orange hair, green eyes, long black ragged coat, white tee, ripped blue jeans, heavy black boots, gold crescent-moon pendant | Serious, stubborn, loyal to a fault; learning to ask "why" | **Brew** (alchemy) |
-| **Miasma** | Long fiery red hair, amber eyes, charred-bone dragon horns, big bone-and-metal dragon wings, patterned green dress, red braided rope belt, long black gloves, brown boots, black-purple "miasma" wisps | Dragon-blooded freelancer; greedy, blunt, secretly soft; the comic relief | **Breath** |
-| **Verai Cudlar** | Huge wavy dark hair with perpetual smoke wisps, warm brown skin, brown eyes, green pinafore over a brown long-sleeve dress, grey scarf, brown boots | Gentle and kind, with steel underneath. Raine's younger sister | **Smoke** (Nyxia's remnant dream-smoke) |
+| **Raine Cudlar** | Wild spiky orange hair, green eyes, long black ragged coat, white tee, ripped blue jeans, heavy black boots, gold crescent-moon pendant | Serious, stubborn, loyal to a fault; learning to ask "why". Daughter of High Knight Odeaon. Grew up in Hollowmere | **Brew** (alchemy) |
+| **Miasma** | Long fiery red hair, amber eyes, charred-bone dragon horns, big bone-and-metal dragon wings, patterned green dress, red braided rope belt, long black gloves, brown boots, black-purple "miasma" wisps | Dragon-blooded freelancer; greedy, blunt, secretly soft; the comic relief. **Secretly Raine's mother** | **Breath** |
+| **Verai** | Huge wavy dark hair with perpetual smoke wisps, warm brown skin, brown eyes, green pinafore over a brown long-sleeve dress, grey scarf, brown boots | Gentle and kind, with steel underneath. A foundling Hollowmere feared for her shadows; Raine was her only friend. **Secretly Sonia's daughter** | **Smoke** (Nyxia's night, inside her) |
+| **Luna** ("Dame Luna") | Silver Dawnguard armor, full helm with a crescent crest, blue cape, broadsword. True form: a **moonfang**, with silver fur, tall silver ears, gold eyes and black claws | Polite, brave, eats a lot of meat, and is terrible at lying. **Secretly a monster**, trying to prove monsters can be good | **Moon** (her hidden instincts; using it risks exposure) |
+
+**Secrets.** The player learns these through private scenes before the party does. Keep them consistent.
+
+- **Miasma is Raine's mother.**
+  - Raine's father, **High Knight Odeaon**, told Raine "a dragon killed your mother". That's technically true: he hid the half-dragon baby from the Temple's pyres.
+  - Miasma watched Raine grow up from the edge of the Silverleaf. She got herself hired as a Warden contractor to stay close.
+  - Raine does NOT know yet.
+  - Hints so far:
+    - Miasma refuses to enter the temple while Odeaon is there.
+    - Her night confrontation with Odeaon, ending "Goodnight, little ember."
+    - Elder Moth recognizes her.
+    - She snaps "Don't you EVER step in front of dragonfire" after the Chimera fight.
+    - Her campfire line: "I had a daughter... Every day, kid."
+    - Her near-slip: "I'm not the only one keeping a—".
+- **Verai is Sonia's daughter.**
+  - Sonia left her in the Silverleaf mist 17 years ago, and Elder Moth found her.
+  - Nyxia's night passed from Sonia into Verai; that's her smoke.
+  - It is revealed at the Twin Falls. The party then makes a **decision** (see 2.4).
+- **Luna is a monster.**
+  - The player can "catch" her four times:
+    1. The Goldengrove night ears.
+    2. The first time she uses a Moon skill in battle (automatic).
+    3. Her cracked helmet in the Tower of Dawn.
+    4. Her furry hand at the Elaris's Embrace lantern.
+  - Catching her 2 or more times leads to a reveal scene at the end of Chapter One. Otherwise she stays hidden, and only the player sees her true form.
 
 **Supporting cast:**
+- **High Knight Odeaon**: Raine's father. Stern, silver-haired, bearded, silver armor, blue cape. He loves Raine but hides everything.
 - **High Luminar Vesper**: grey-skinned elf, white hair, gold sun halo, white and gold robes. Secretly Sonia.
-- **Sonia, the Unseated**: see `tools/source/boss_sonia.webp`. Sylara's halo plus Nyxia's stolen shadows, and a shadow-clawed arm.
+- **Sonia, the Unseated**: see `tools/source/boss_sonia.webp`. Sylara's halo plus Nyxia's stolen shadows, and a shadow-clawed arm. Verai's mother.
 - **Warden Tamsin**: Raine's lieutenant.
-- **Elder Moth** and **Oracle Sef**: Hollowmere villagers.
+- **Elder Moth**, who found baby Verai, and **Oracle Sef**: Hollowmere villagers.
 - **Bridgewarden Pip**: halfling.
 - **Harbormaster Grell**: half-orc sailor.
 
 ### 2.4 Chapter One beats
-1. **Opening crawl.** The Ascendant Ten, Nyxia's fall, "A god can be replaced."
-2. **The Gilded Wake**, a river barge at night. The Lantern Wardens bring back the Nyxian **Veil Lantern**. The crew is uneasy; Miasma jokes. River Lurkers attack, which is the battle tutorial.
-3. **Solanthia, Grand Temple.** Raine asks Vesper why they're taking relics. She is stripped of command and ordered to carry the **Dawn Censer** to Hollowmere, her birthplace.
-4. **The night in the Warden Quarters.** Miasma and Raine talk; we learn Raine left her sister. A dark card shows "???" (Sonia) plotting.
-5. **Silverleaf Wood.** Boss: **the Veilstag**. It was blocking the censer, not attacking.
-6. **Hollowmere.** Reunion with Verai. The censer opens and the **Sunscarred Votary** burns the village. Verai joins mid-crisis for the boss fight. Afterwards comes the fallout: Verai learns Raine killed the Veilstag. Verai: *"Not because I forgive you."* The Ash Reaper job unlocks at the cracked shrine.
-7. **The Dreamers' Pass** opens south. **Goldengrove**: Pip lowers the Aurora Bridge.
-8. **Brightwater.** Grell reports the Tower of Dawn is dark. The Tidecaller job unlocks at Thalara's shrine.
-9. **Tower of Dawn.** Boss: **Sunforged Chimera** (lion, dragon and serpent sewn together). The Wyrmblood job unlocks for Miasma. The reward is the skiff **Wren**.
-10. **Elaris's Embrace.** Boss: **Bloomheart Colossus**. Vesper arrives, is revealed as **Sonia**, takes the **Heartseed**, and wins a scripted fight lasting 5 turns. *"Team Take-Them-Back."* End of Chapter One.
+0. **Trailer** (before the title screen; also "Watch Trailer" on the title menu). **Opening crawl**, then a **river cinematic** of the barge at night.
+1. **The Gilded Wake.** An acted scene with the Veil Lantern. Miasma calls Raine "kid". River Lurkers attack (battle tutorial).
+2. **Solanthia.**
+   - Dame Luna cameo: she sniffs Miasma.
+   - At the temple door, Miasma spots Odeaon and refuses to go in.
+   - The audience: Raine meets her father; Vesper demotes her and hands over the **Dawn Censer**. Odeaon: "Be careful with that one."
+3. **Night.**
+   - Raine tells Miasma her mother was "killed by a dragon", and talks about Verai.
+   - Miasma and Odeaon's secret confrontation in the street.
+   - The Sonia "???" card: "a little shadow I left behind".
+4. **Silverleaf Wood.** Boss: **the Veilstag**.
+5. **Hollowmere.**
+   - Verai reunion. **Choice** (bond).
+   - A cinematic of the censer opening.
+   - The **Sunscarred Votary** burns the village; Verai joins for the fight.
+   - Villagers blame Verai. **Choice** (bond).
+   - Elder Moth recognizes Miasma, and tells Verai she was found in the mist.
+   - Ash Reaper unlocks.
+6. **Goldengrove.**
+   - Dame Luna arrives "to arrest" Raine and joins instead.
+   - Night: a **choice** with Verai (bond), and a Luna catch moment.
+   - Pip lowers the Aurora Bridge.
+7. **Brightwater.** Harbormaster Grell. Tidecaller unlocks.
+8. **Tower of Dawn.**
+   - Boss: **Sunforged Chimera**.
+   - Miasma's protective outburst; Wyrmblood unlocks.
+   - Luna catch moment.
+   - Reward: the **Wren** (boat).
+9. **Camp talks at Dawn Lanterns** ("Talk with the party"): Miasma's "I had a daughter", and Luna's claws on the Embrace.
+10. **Elaris's Embrace.**
+    - Boss: **Bloomheart Colossus**.
+    - Vesper is revealed as **Sonia** (cinematic), and says Verai is her daughter (flashback cinematic).
+    - A scripted 5-turn fight.
+    - **The decision:** Raine chooses "stays with us" (+2), "your choice" (+1) or "go with her" (-2). The total with the bond points decides the outcome:
+      - 3 or more: Verai **stays**.
+      - 1 to 2: she **leaves alone**.
+      - 0 or less: she **goes with Sonia**.
+    - Luna's resolution, then the end crawl. The crawl changes with the outcomes.
 
 ### 2.5 Tone rules
 - Short lines, one or two sentences per text box. FF4 moves fast.
@@ -197,6 +252,17 @@ Example prompt:
 
 Then create sheets (`<hero>_<job>_sheet.png`) with the 11 poses in 3.4. **Priority order:** Raine Oathblade, Miasma Freelancer, Verai Dawnsinger (the starting jobs), then Miasma Wyrmblood, then the rest.
 
+### 4.1b New characters (highest priority after the starting jobs)
+- `luna.png` (battle still, facing LEFT, ~128px tall, Dawnguard armor with the helm on) and `luna_oathblade_sheet.png` (11-frame sheet). Until then the game scales up her field sprite.
+- `luna_face.png` (helmeted) and `face_luna_true.png` (moonfang face, gold eyes, silver ears). The true-form face isn't wired yet; use it in `lunaResolution()` in `js/events.js`.
+- `field_luna.png` and `field_lunawolf.png` (her true form: same armor, no helm, silver ears), `field_odeaon.png`, and `face_odeaon.png`. For `face_odeaon`, add `'High Knight Odeaon': 'face_odeaon'` to `NPC_FACES`.
+- Cinematic stills (optional, 960×640; used through `cinema()` layers with `img:`):
+  - `cine_barge` (the barge at night)
+  - `cine_censer` (the censer cracking open)
+  - `cine_mist` (Sonia leaving baby Verai in the Silverleaf mist)
+  - `cine_moon` (Luna under the full moon without her helmet)
+  - `cine_miasma_odeaon` (the two of them facing off in a moonlit street)
+
 ### 4.2 Portraits (128×128)
 - **Heroes:** `raine_face`, `miasma_face`, `verai_face`. The existing ones are 72×72 crops; replace them with clean bust portraits in matching anime-JRPG style.
 - **NPCs:** `face_vesper`, `face_sonia`, `face_votary`, `face_tamsin` (a stern dark-haired Warden lieutenant), `face_grell` (a grizzled green-skinned half-orc harbormaster with a grey beard and navy coat), `face_moth` (an old Hollowmere woman with a lavender shawl and smoke), `face_sef` (a hooded oracle in purple).
@@ -275,7 +341,39 @@ Themes (for `tile_<art>_<theme>.png` variants): `world`, `town`, `solanthia`, `t
 
 ---
 
-## 5. Animation and effects to-do
+## 5. Acting, cinematics, trailer, debug
+
+**Acting (FF4-style).** Story scenes put the whole party on the map as **actors** that walk, turn and react. The system is in `js/cinema.js`, class `Actor`. Inside `scene(async ({ raine, miasma, verai, luna }) => { ... })` in `js/events.js`, actors can:
+- walk: `walk(dirs)`, `walkTo(x, y)`, `stepBack()`, `lunge()`
+- turn: `face(dirOrActor)`, `shake()` (a "no" head shake), `spin()`
+- move in place: `hop()`, `nod()`, `laugh()` (bounce with ♪), `tremble()`
+- change pose: `kneel()`, `fall()`, `stand()`
+- pop an emote bubble with a small action: `surprise()` (!), `question()` (?), `sad()` (...), `angry()`, `sweat()`, `heart()`, `idea()`
+- fade: `fadeIn()`, `fadeOut()`
+
+Other tools:
+- **Map NPCs:** `npcActor(key)` lets a map NPC act.
+- **Camera:** `F().pan(x, y)` and `F().letterbox()`.
+- **Speaking:** a speaking character bobs while their text types.
+- **Idle NPCs** breathe. Setting `act: 'sweep' | 'hammer' | 'pray' | 'dance'` on an NPC gives it a looping chore.
+
+When you add real field sprite sheets (4.3), all of this uses them automatically. A good upgrade is extra field poses per character (`field_<look>_emote.png`: surprised, sad, laughing, kneeling), which would need a small change in `Actor.drawActor`.
+
+**Cinematics.** `cinema([...shots])` shows full-screen letterboxed shots. Each shot can have a background (`'river' | 'fire' | 'forest' | 'moon' | 'seats' | 'dawn' | 'void' | 'falls' | 'gold' | 'black' | 'stars'`), layers (images or scaled sprites that move, zoom and fade), captions, flashes, shakes, sound effects and music. The trailer is `trailerShots()` in `js/cinema.js`. Replace procedural backgrounds with painted `cine_*.png` layers for a big quality jump.
+
+**Debug menu.** Press F2 or backtick, or click the DEBUG button. It can:
+- fix a stuck or black screen
+- jump to 11 story checkpoints
+- warp to any map
+- win the current battle
+- heal, add levels or unlock all jobs
+- toggle random battles
+- show the map position
+- show the error log
+
+The game loop now catches errors instead of freezing, and a watchdog restores the screen if a fade gets stuck.
+
+## 5b. Animation and effects to-do
 1. **Hero sheets** (4.1): the biggest improvement.
 2. **Boss idle frames** (`_2`).
 3. **Battle effects** are code particles in `spawnFx()` in `js/battle.js`: slash, claw, fire, dark, ice, bolt, water, holy, wind, poison, smoke, heal, buff, acid, light, boom, roar, cast. To use image effects, add `fx_<name>.png` strips and extend `spawnFx` to draw them. Keep the particle fallback.

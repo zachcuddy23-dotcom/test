@@ -94,14 +94,35 @@ function render() {
   if (Game.flash > 0) { ctx.globalAlpha = Game.flash / 12; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
 }
 let lastT = 0, acc = 0;
+// Errors are logged (see the Debug menu) instead of freezing the game.
+Game.errors = [];
+function logError(where, e) {
+  const msg = `${where}: ${e && e.message || e}`;
+  if (!Game.errors.length || Game.errors[Game.errors.length - 1].msg !== msg) Game.errors.push({ msg, stack: e && e.stack, t: Date.now() });
+  if (Game.errors.length > 40) Game.errors.shift();
+  console.error(where, e);
+}
+let stuckT = 0;
+function watchdog() {
+  // If the map is idle but the screen is still faded out, bring the picture back.
+  const f = Game.field, top = Game.top();
+  if (f && top === f && !f.busy && !f.moving && Game.fade > 0.05) { if (++stuckT > 90) { Game.fade = 0; stuckT = 0; logError('watchdog', 'screen was stuck faded; restored'); } }
+  else stuckT = 0;
+}
 function loop(t) {
+  requestAnimationFrame(loop);
   if (!lastT) lastT = t;
   acc += Math.min(100, t - lastT); lastT = t;
   let steps = 0;
-  while (acc >= 1000 / 60 && steps < 4) { update(); acc -= 1000 / 60; steps++; }
-  if (steps) render();
-  requestAnimationFrame(loop);
+  while (acc >= 1000 / 60 && steps < 4) {
+    try { update(); } catch (e) { logError('update', e); Input.endFrame(); }
+    try { watchdog(); } catch (e) { }
+    acc -= 1000 / 60; steps++;
+  }
+  if (steps) { try { render(); } catch (e) { logError('render', e); ctx.restore && ctx.restore(); } }
 }
+window.addEventListener('error', e => logError('script', e.error || e.message));
+window.addEventListener('unhandledrejection', e => logError('async', e.reason));
 
 // ---------------------------------------------------------------------------
 // Audio: tiny WebAudio synth for sfx and chiptune music
@@ -170,6 +191,7 @@ const Audio2 = {
       case 'water': this.noise(0.5, 0.25, 0, 300); this.tone(300, 0.4, 'sine', 0.2, 0, 0.4); break;
       case 'holy': [1047, 1319, 1568, 2093].forEach((f, i) => this.tone(f, 0.3, 'triangle', 0.12, n + i * 0.05)); break;
       case 'save': [523, 784, 1047, 1568].forEach((f, i) => this.tone(f, 0.2, 'triangle', 0.14, n + i * 0.1)); break;
+      case 'surprise': this.tone(880, 0.08, 'square', 0.14); this.tone(1320, 0.12, 'square', 0.14, n + 0.07); break;
       case 'boom': this.noise(0.8, 0.6, 0, 100); this.tone(80, 0.8, 'sawtooth', 0.3, 0, 0.3); break;
     }
   },

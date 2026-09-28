@@ -12,21 +12,28 @@ const HEROES = {
     base: { hp: 64, mp: 12, str: 12, agi: 12, mag: 8, vit: 10, spr: 8 },
     grow: { hp: 11, mp: 1.5, str: 1.0, agi: 0.8, mag: 0.6, vit: 0.8, spr: 0.6 },
     equip: { weapon: 'wardensword', head: null, body: 'wardencoat', acc: 'crescent' },
-    bio: 'Captain of the Lantern Wardens. Serious, stubborn, and very good at not saying what she feels. Wears a crescent moon she has never explained.',
+    bio: 'Captain of the Lantern Wardens, daughter of High Knight Odeaon. Grew up in Hollowmere believing her mother was killed by a dragon. Serious, stubborn, and very good at not saying what she feels.',
   },
   miasma: {
     name: 'Miasma', full: 'Miasma', img: 'miasma', face: 'miasma_face', look: 'miasma', job: 'freelancer', innate: 'breath',
     base: { hp: 72, mp: 8, str: 13, agi: 9, mag: 7, vit: 12, spr: 6 },
     grow: { hp: 13, mp: 1.0, str: 1.1, agi: 0.6, mag: 0.5, vit: 0.9, spr: 0.5 },
     equip: { weapon: 'ironclaws', head: null, body: 'leathervest', acc: null },
-    bio: 'Dragon-blooded freelancer on contract with the Wardens. Believes in payment up front and mercy on a sliding scale.',
+    bio: 'Dragon-blooded freelancer on contract with the Wardens. Believes in payment up front and mercy on a sliding scale. Watches Raine a little too closely for a contractor.',
   },
   verai: {
-    name: 'Verai', full: 'Verai Cudlar', img: 'verai', face: 'verai_face', look: 'verai', job: 'dawnsinger', innate: 'smoke',
+    name: 'Verai', full: 'Verai of Hollowmere', img: 'verai', face: 'verai_face', look: 'verai', job: 'dawnsinger', innate: 'smoke',
     base: { hp: 50, mp: 20, str: 6, agi: 11, mag: 14, vit: 7, spr: 12 },
     grow: { hp: 8, mp: 2.4, str: 0.5, agi: 0.7, mag: 1.1, vit: 0.5, spr: 0.9 },
     equip: { weapon: 'ashstaff', head: null, body: 'wovenrobe', acc: 'greyscarf' },
-    bio: 'Raine\'s younger sister. Gentle, kind, and followed everywhere by smoke that remembers a goddess nobody else does.',
+    bio: 'A foundling from the Silverleaf mist. Hollowmere feared her shadows; Raine was the only one who never did. Gentle, kind, and followed everywhere by smoke that remembers a goddess nobody else does.',
+  },
+  luna: {
+    name: 'Luna', full: 'Dame Luna of the Dawnguard', img: 'luna', face: 'luna_face', look: 'luna', job: 'oathblade', innate: 'moon',
+    base: { hp: 70, mp: 10, str: 13, agi: 12, mag: 8, vit: 12, spr: 9 },
+    grow: { hp: 12, mp: 1.2, str: 1.0, agi: 0.8, mag: 0.6, vit: 0.9, spr: 0.7 },
+    equip: { weapon: 'broadsword', head: 'ironhelm', body: 'chainmail', acc: null },
+    bio: 'A Dawnguard knight who never takes off her helmet. Polite, brave, eats a LOT of meat, and gets strangely quiet on full-moon nights.',
   },
 };
 const EXP_TABLE = [0, 0, 24, 70, 140, 240, 380, 560, 800, 1100, 1480, 1950, 2520, 3200, 4000, 4950, 6050, 7300, 8750, 10400, 12300, 14400, 16800, 19500, 22500, 26000, 30000, 34500, 39500, 45000, 9999999];
@@ -102,6 +109,7 @@ const JOB_ORDER = ['freelancer', 'oathblade', 'dawnsinger', 'arcanist', 'masquer
 const INNATE = {
   brew: { name: 'Brew', learn: [[1, 'tonicsplash'], [1, 'acidflask'], [5, 'flashpowder'], [10, 'quicksilver'], [15, 'elixirmist']] },
   breath: { name: 'Breath', learn: [[1, 'emberbreath'], [4, 'miasmacloud'], [9, 'winggale'], [14, 'dragonroar']] },
+  moon: { name: 'Moon', learn: [[1, 'moonclaw'], [1, 'moonmend'], [6, 'silverhowl'], [12, 'lunarfang']] },
   smoke: { name: 'Smoke', learn: [[1, 'smokeveil'], [1, 'umbrabolt'], [5, 'dreamwisp'], [10, 'souldrain'], [15, 'nightfall']] },
 };
 
@@ -167,6 +175,11 @@ const SKILLS = {
   miasmacloud: { name: 'Miasma Cloud', mp: 8, target: 'enemies', kind: 'dmg', elem: 'poison', pow: 14, status: 'poison', chance: 65, fx: 'poison', desc: 'Toxic mist. Damages and poisons.' },
   winggale: { name: 'Wing Gale', mp: 11, target: 'enemies', kind: 'dmg', elem: 'wind', pow: 28, fx: 'wind', desc: 'Beat the wings. Wind on all foes.' },
   dragonroar: { name: 'Dragon Roar', mp: 16, target: 'enemies', kind: 'dmg', elem: 'fire', pow: 46, status: 'fear', chance: 50, fx: 'roar', desc: 'Fire and terror.' },
+  // Luna: Moon (her hidden monster instincts - using them risks her secret)
+  moonclaw: { name: 'Moon Claw', mp: 3, target: 'enemy', kind: 'phys', mult: 1.7, fx: 'claw', reveal: true, desc: 'Strike with claws you definitely do not have.' },
+  moonmend: { name: 'Moonlit Mend', mp: 4, target: 'ally', kind: 'heal', pow: 24, fx: 'heal', field: true, reveal: true, desc: 'A pale glow that heals. Knights can totally do that. Probably.' },
+  silverhowl: { name: 'Silver Howl', mp: 10, target: 'allies', kind: 'buff', buff: 'haste', fx: 'roar', reveal: true, desc: 'A howl that speeds up the whole party. Very un-knightly.' },
+  lunarfang: { name: 'Lunar Fang', mp: 16, target: 'enemy', kind: 'drain', elem: 'dark', pow: 60, fx: 'dark', reveal: true, desc: 'Bite. Just... bite.' },
   // Verai: Smoke
   smokeveil: { name: 'Smoke Veil', mp: 4, target: 'enemies', kind: 'status', status: 'sleep', chance: 55, fx: 'smoke', desc: 'Lull all foes to sleep.' },
   umbrabolt: { name: 'Umbra Bolt', mp: 4, target: 'enemy', kind: 'dmg', elem: 'dark', pow: 18, fx: 'dark', desc: 'A bolt of old night.' },

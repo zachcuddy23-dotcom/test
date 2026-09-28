@@ -64,6 +64,7 @@ class BattleScene {
   standing() { return this.party().filter(m => alive(m) && !this.pb.get(m).jumping); }
   partyPos(i) { const n = this.party().length, sp = n > 3 ? 88 : n === 3 ? 118 : 140; return { x: 710 + i * 56, y: (n > 3 ? 150 : n === 3 ? 172 : 222) + i * sp }; }
   heroImg(m, pose) {
+    if (!IMG[`${m.id}_${m.job}_sheet`] && !IMG[`${m.id}_sheet`] && !IMG[`${m.id}_${m.job}`] && !IMG[HEROES[m.id].img]) return chibiBattle(HEROES[m.id].look);
     // Sprite sheet override: assets/<hero>_<job>_sheet.png or assets/<hero>_sheet.png,
     // a single row of 10 equal frames (see HERO_POSES). Otherwise a still image:
     // assets/<hero>_<job>.png, falling back to assets/<hero>.png.
@@ -164,6 +165,7 @@ class BattleScene {
     if (a.who.enemy) { if (!this.queue.some(q => q.who === a.who)) { a.who.gauge = 0; a.who.queued = false; } a.who.acted++; }
     else { const b = this.pb.get(a.who); b.queued = false; if (!b.jumping) b.gauge = 0; }
     this.check();
+    if (this.pendingReveal) { this.pendingReveal = false; setFlag('lunaBattleSeen'); addFlag('lunaCaught'); const who = member('miasma') ? 'Miasma' : 'Raine'; this.msg = `${who}: ...Did Luna just GROWL?`; await wait(80); this.msg = 'Luna: Knight technique! Very advanced! They teach it in... knight school.'; await wait(90); this.msg = ''; }
     await this.midLines();
     this.busy = false;
     if (this.result) this.finish();
@@ -364,6 +366,7 @@ class BattleScene {
       else { Audio2.sfx('miss'); await this.say(t.stolen || !t.d.steal ? 'Nothing to steal!' : "Couldn't steal anything.", 40); }
       return;
     }
+    if (sk.reveal && m.id === 'luna' && !flag('lunaBattleSeen')) this.pendingReveal = true;
     if (sk.kind === 'phys') {
       const ts = sk.target === 'enemies' ? this.living() : [this.retarget(target, 'enemy')].filter(Boolean);
       for (const t of ts) this.spawnFx(sk.fx || 'slash', this.enemyCenter(t));
@@ -380,6 +383,7 @@ class BattleScene {
       const r = this.physDamage(m, t, 0.8, true); this.damage(t, r.d); this.heal(m, r.d / 2);
       const mpGain = Math.min(stats(m).mmp - m.mp, rnd(3, 8)); m.mp += mpGain; await wait(34); return;
     }
+    if (sk.reveal && m.id === 'luna' && !flag('lunaBattleSeen')) this.pendingReveal = true;
     // magic-like skills
     b.cast = 30; this.spawnFx('cast', this.memberCenter(m)); Audio2.sfx('cast');
     await wait(22);
@@ -685,6 +689,14 @@ class BattleScene {
     if (this.ui && this.ui.kind === 'target' && this.ui.under) this.ui.under.draw(false);
     if (this.ui && this.ui.kind === 'cmd') text(`${this.ui.m.name} · ${JOBS[this.ui.m.job].name}`, 24, 410, JOBS[this.ui.m.job].color, 12);
   }
+}
+// Fallback battle sprite for heroes with no art yet: their field sprite, scaled up.
+const _chibiBattle = {};
+function chibiBattle(look) {
+  if (_chibiBattle[look]) return _chibiBattle[look];
+  const src = chibi(look, 'left', 0), c = mkCanvas(src.width * 5, src.height * 5), x = c.getContext('2d');
+  x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0, c.width, c.height);
+  return (_chibiBattle[look] = c);
 }
 const HERO_POSES = ['idle1', 'idle2', 'ready', 'attack1', 'attack2', 'cast1', 'cast2', 'hurt', 'kneel', 'dead', 'victory'];
 const _sheetCache = new Map();

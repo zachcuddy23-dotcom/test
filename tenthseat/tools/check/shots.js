@@ -10,6 +10,7 @@ const out = process.argv[2] || '.';
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   await page.goto('file://' + path.join(__dirname, '..', '..', 'index.html'));
   await page.waitForTimeout(1500);
+  for (let i = 0; i < 400 && !(await page.evaluate(() => Game.top() instanceof TitleScene)); i++) await page.evaluate(() => { Input.pressed.a = true; }), await page.waitForTimeout(30);
   const snap = async n => { await page.screenshot({ path: path.join(out, n + '.png') }); };
   const key = async (k, n = 1, gap = 60) => { for (let i = 0; i < n; i++) { await page.keyboard.down(k); await page.waitForTimeout(40); await page.keyboard.up(k); await page.waitForTimeout(gap); } };
   await snap('01_title');

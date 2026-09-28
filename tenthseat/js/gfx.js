@@ -146,10 +146,11 @@ function hsl2rgb(h, s, l) { if (!s) { const v = Math.round(l * 255); return [v, 
 // white silhouette version (for hit flashes)
 const _flashCache = new Map();
 function flashed(img, color = '#fff') {
-  const k = img; if (_flashCache.has(k)) return _flashCache.get(k);
+  let byColor = _flashCache.get(img); if (!byColor) _flashCache.set(img, byColor = new Map());
+  if (byColor.has(color)) return byColor.get(color);
   const c = mkCanvas(img.width, img.height), x = c.getContext('2d');
   x.drawImage(img, 0, 0); x.globalCompositeOperation = 'source-atop'; x.fillStyle = color; x.fillRect(0, 0, c.width, c.height);
-  _flashCache.set(k, c); return c;
+  byColor.set(color, c); return c;
 }
 
 // ---------------------------------------------------------------------------
@@ -175,6 +176,7 @@ function outline(c, col = '#141018') {
   x.fillStyle = col; for (const k of add) x.fillRect(k % w, Math.floor(k / w), 1, 1);
 }
 function shade(hex, f) { // f<1 darker, f>1 lighter
+  if (typeof hex !== 'string' || hex[0] !== '#') hex = '#808080';
   const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
   if (f < 1) { r *= f; g *= f; b *= f; } else { r += (255 - r) * (f - 1); g += (255 - g) * (f - 1); b += (255 - b) * (f - 1); }
   return '#' + [r, g, b].map(v => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0')).join('');

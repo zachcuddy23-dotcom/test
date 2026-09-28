@@ -3,7 +3,7 @@
 // Procedural 16x16 tile art, cached per (art, theme, variant, frame)
 // ---------------------------------------------------------------------------
 const THEMES = {
-  world: { grass: '#5aa83e' },
+  world: { grass: '#5aa83e', path: '#c8b080', floor: '#b8a078', floor2: '#ac946c', water: '#3a78c8' },
   town: { wall: '#8e887c', wallDark: '#4e4a44', floor: '#c8b088', floor2: '#bca47c', grass: '#5aa83e', roof: '#b44a36', bwall: '#e4d4b4', timber: '#6a4a30', path: '#cdb48a', water: '#3a78c8', carpet: '#a82838', wood: '#8a5a30' },
   castle: { wall: '#7a809a', wallDark: '#3e4458', floor: '#9ea4b8', floor2: '#8e94a8', grass: '#5aa83e', carpet: '#b02838', water: '#3a78c8', wood: '#7a4a28', path: '#9ea4b8' },
   temple: { wall: '#74503e', wallDark: '#3a2620', floor: '#6e625a', floor2: '#645850', grass: '#4a7a36', carpet: '#6a2020', water: '#3a58a0', wood: '#5a3a28', path: '#6e625a' },

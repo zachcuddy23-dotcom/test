@@ -1,6 +1,6 @@
 # The Tenth Seat: Chapter One, *The Unseated*
 
-A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma** and **Verai Cudlar**.
+A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
 > *Only ten gods may exist at once. One year ago, a phoenix stole the Tenth Seat. Now someone wants it back.*
 
@@ -10,6 +10,15 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **Keyboard:** arrows or WASD move · Z / Space / Enter confirm · X cancel or menu · Esc menu · hold Shift to run
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
+
+## What's new
+- **Trailer** before the title (skip with Z, or rewatch it from the title menu), plus cinematic scenes at key story moments.
+- **FF4-style acting:** in story scenes the party appears on the map and characters walk, turn, hop, shake their heads, laugh, tremble, kneel and pop emote bubbles.
+- **Secrets and choices:**
+  - Miasma is secretly Raine's mother.
+  - Verai (Raine's childhood friend) is Sonia's daughter, and **your choices decide whether she stays**.
+  - Dame Luna is a monster disguised as a knight, and you can catch her.
+- **Debug menu:** press **F2** or the **DEBUG** button. It can fix a stuck or black screen, jump to any story point, warp, and more.
 
 ## Systems
 - **Active Time Battle** with Wait and Active modes, 6 speeds, Defend, Flee, boss phases, status effects (Poison, Sleep, Blind, Fear, Doom), buffs (Protect, Haste, Regen), Guard (cover), Jump, Steal, Mug and HP-cost skills.

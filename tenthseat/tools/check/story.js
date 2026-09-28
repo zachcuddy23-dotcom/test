@@ -33,16 +33,21 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
     if (out) await page.screenshot({ path: path.join(out, 'story_' + name + '.png') });
   };
   const lv = n => `for (const m of Game.state.party) { m.lvl = ${n}; m.exp = EXP_TABLE[${n}]; for (const j of JOB_ORDER) m.jobs[j].lv = Math.max(m.jobs[j].lv, Math.min(MAX_JOB_LV, Math.floor(${n} / 3))); const st = stats(m); m.hp = st.mhp; m.mp = st.mmp; }`;
+  // press start, skip the trailer, reach the title
+  await until(() => { Input.pressed.a = true; return Game.top() instanceof TitleScene; }, 60000);
+  console.log('PASS trailer -> title');
   await page.evaluate(() => newGame());
   await until(() => Game.field && Game.field.map && Game.field.map.id === 'solanthia' && Game.top() === Game.field, 120000);
   console.log('PASS opening (barge + battle) ->', await page.evaluate(() => Game.field.map.id));
   await step('audience', `Game.field.enterMap('temple', 10, 3, 'up'); Game.field.run(() => vesperAudience());`, `flag('audience') && hasKey('censer')`);
   await step('leave_blocked', `Game.field.enterMap('solanthia', 14, 17, 'down'); Game.field.run(() => leaveSolanthia());`, `Game.field.map.id === 'solanthia'`);
+  await step('miasma_waits', `Game.field.enterMap('solanthia', 15, 4, 'up'); Game.field.run(() => MAPS.solanthia.steps['15,3']());`, `flag('miasmaWaits')`);
   await step('night', `Game.field.enterMap('quarters', 5, 4, 'up'); Game.field.run(() => quartersNight());`, `flag('mission')`);
   await step('veilstag', `${lv(8)} Game.field.enterMap('silverleaf2', 10, 4, 'left'); Game.field.run(() => veilstagEvent());`, `flag('stag') && hasKey('stagantler')`);
   await step('hollowmere', `${lv(10)} Game.field.enterPlace({ map: 'hollowmere' });`, `flag('votary') && Game.state.party.length === 3 && Game.field.map.id === 'hollowash'`);
   await step('reaper', `Game.field.run(() => ashShrine());`, `Game.state.jobsOpen.includes('reaper')`);
   await step('solanthia_gate', `Game.field.enterMap('world', 27, 12, 'up'); Game.field.run(() => Game.field.enterPlace(WORLD.places['27,11']));`, `Game.field.map.id === 'world'`);
+  await step('luna_joins', `Game.field.enterMap('goldengrove', 13, 16, 'up');`, `flag('lunaJoin') && member('luna') && Game.state.party.length === 4`);
   await step('bridge', `Game.field.enterMap('goldengrove', 13, 16, 'up'); Game.field.run(() => bridgeEvent());`, `flag('bridge')`);
   await step('harbor', `Game.field.enterMap('brightwater', 2, 9, 'right'); Game.field.run(() => grellEvent());`, `flag('harbor') && hasKey('harborpass')`);
   await step('tidecaller', `Game.field.run(() => thalaraShrine());`, `Game.state.jobsOpen.includes('tidecaller')`);
@@ -50,7 +55,10 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
   await step('chimera', `${gear({ weapon: 'dawnblade', head: 'ironhelm', body: 'chainmail' }, { weapon: 'handaxe', head: 'ironhelm', body: 'brigandine' }, { weapon: 'dawnstaff', head: 'featherhat', body: 'sagerobe' })} ${lv(16)} Game.field.enterMap('tower3', 8, 6, 'up'); Game.field.run(() => chimeraEvent());`, `flag('chimera') && Game.state.jobsOpen.includes('wyrmblood')`);
   await step('wren', `Game.field.enterMap('brightwater', 24, 7, 'right'); Game.field.run(() => grellEvent());`, `flag('wren') && Game.state.ship && Game.state.ship.x === 55`);
   await step('jobchange', `for (const m of Game.state.party) changeJob(m, 'wyrmblood');`, `Game.state.party.every(m => m.job === 'wyrmblood')`);
-  await step('colossus', `${gear({ weapon: 'gravecleaver', head: 'sunhelm', body: 'platemail' }, { weapon: 'tidespear', head: 'sunhelm', body: 'platemail' }, { weapon: 'sagerod', head: 'circlet', body: 'sagerobe' })} ${lv(20)} for (const m of Game.state.party) changeJob(m, m.id === 'verai' ? 'arcanist' : 'reaper'); Game.field.enterMap('embrace2', 12, 7, 'up'); Game.field.run(() => colossusEvent());`, `flag('colossus') && flag('ch1end')`);
+  await step('camp_miasma', `Game.field.enterMap('tower1', 8, 8, 'up'); Game.field.run(() => campTalk());`, `flag('campMiasma')`);
+  await step('camp_luna', `Game.field.enterMap('embrace1', 11, 10, 'up'); Game.field.run(() => campTalk());`, `flag('campEmbrace')`);
+  await step('colossus', `Object.assign(member('luna').equip, { weapon: 'dawnblade', head: 'sunhelm', body: 'platemail' }); ${gear({ weapon: 'gravecleaver', head: 'sunhelm', body: 'platemail' }, { weapon: 'tidespear', head: 'sunhelm', body: 'platemail' }, { weapon: 'sagerod', head: 'circlet', body: 'sagerobe' })} ${lv(20)} for (const m of Game.state.party) changeJob(m, m.id === 'verai' ? 'arcanist' : m.id === 'luna' ? 'oathblade' : 'reaper'); Game.field.enterMap('embrace2', 12, 7, 'up'); Game.field.run(() => colossusEvent());`, `flag('colossus') && flag('ch1end')`);
+  console.log('choices:', await page.evaluate(() => JSON.stringify({ bond: S().flags.bond, lunaCaught: S().flags.lunaCaught, lunaTrust: S().flags.lunaTrust, veraiStayed: flag('veraiStayed'), lunaRevealed: flag('lunaRevealed'), party: S().party.map(m => m.id) })));
   console.log('errors:', errors.length ? errors.join('\n---\n') : 'none');
   await browser.close();
 })();

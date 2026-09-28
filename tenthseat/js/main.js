@@ -6,7 +6,7 @@ class TitleScene {
   constructor() {
     this.opaque = true; this.t = 0;
     const save = hasSave();
-    this.menu = new ListMenu([{ text: 'New Game' }, { text: 'Continue', disabled: !save }], { x: 360, y: 440, w: 240, rowH: 40 });
+    this.menu = new ListMenu([{ text: 'New Game' }, { text: 'Continue', disabled: !save }, { text: 'Watch Trailer' }], { x: 360, y: 430, w: 240, rowH: 36 });
     this.menu.index = save ? 1 : 0;
   }
   enter() { Audio2.music('title'); }
@@ -14,7 +14,7 @@ class TitleScene {
     this.t++;
     if (this.t < 20) return;
     const r = this.menu.update();
-    if (r && r.select) { if (r.index === 0) newGame(); else continueGame(); }
+    if (r && r.select) { if (r.index === 0) newGame(); else if (r.index === 1) continueGame(); else playTrailer().then(() => Audio2.music('title')); }
   }
   draw() {
     drawStars('#05030c', '#2a1030');
@@ -72,13 +72,20 @@ function setupTouch() {
     const off = e => { e.preventDefault(); Input.up(btn); b.classList.remove('on'); };
     b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off);
   });
-  canvas.addEventListener('pointerdown', () => Audio2.unlock());
+  canvas.addEventListener('pointerdown', () => { Audio2.unlock(); Input.down('a'); setTimeout(() => Input.up('a'), 60); });
+  const dbg = document.getElementById('dbg'); if (dbg) dbg.addEventListener('click', e => { e.preventDefault(); Audio2.unlock(); openDebug(); dbg.blur(); });
 }
 
 (async function boot() {
   setupTouch();
   try { await Promise.race([document.fonts.load(`16px ${FONT}`), new Promise(r => setTimeout(r, 2500))]); } catch (e) { }
   await loadAssets();
-  Game.push(new TitleScene());
   requestAnimationFrame(loop);
+  // "Press any key" first, so the trailer can play with sound
+  await new Promise(res => Game.push({ opaque: true, t: 0,
+    update() { this.t++; if (this.t > 10 && (Input.ok() || Input.hit('b') || Input.hit('menu') || Input.dir())) { Game.pop(this); res(); } },
+    draw() { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); if (Math.floor(this.t / 30) % 2 === 0) text('PRESS ANY KEY', W / 2, H / 2 - 10, '#ffe070', 18, 'center'); text('(or tap the screen)', W / 2, H / 2 + 26, '#6a6a8a', 10, 'center'); } }));
+  Audio2.unlock();
+  await playTrailer();
+  Game.replaceAll(new TitleScene());
 })();

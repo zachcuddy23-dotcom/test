@@ -72,7 +72,11 @@ class FieldScene {
     const d = Input.dir();
     if (d) this.tryMove(d);
   }
-  run(fn) { this.busy++; Input.clear(); Promise.resolve().then(fn).catch(e => console.error(e)).finally(() => { this.busy--; Input.clear(); }); }
+  run(fn) {
+    this.busy++; Input.clear();
+    Promise.resolve().then(fn).catch(e => { logError('event', e); Game.fade = 0; this.scripted = false; this.moving = null; })
+      .finally(() => { this.busy = Math.max(0, this.busy - 1); Input.clear(); });
+  }
   tryMove(d) {
     const st = S(); st.dir = d;
     const [dx, dy] = DIRS[d], nx = st.x + dx, ny = st.y + dy;
@@ -147,8 +151,8 @@ class FieldScene {
   async enterPlace(place) {
     const id = typeof place.map === 'function' ? place.map() : place.map;
     if (place.check) { const ok = await place.check(); if (!ok) return; }
-    const m = prepMap(id); Audio2.sfx('stairs');
-    await fadeOut(12); this.enterMap(id, m.start[0], m.start[1], m.start[2]); await fadeIn(12);
+    const m = prepMap(id), at = place.at || m.start; Audio2.sfx('stairs');
+    await fadeOut(12); this.enterMap(id, at[0], at[1], at[2]); await fadeIn(12);
   }
   async leaveMap(c) {
     const out = c === 'Y' ? this.map.back2 : this.map.back;
@@ -220,7 +224,8 @@ class FieldScene {
   }
   draw() {
     const st = S(), [px, py] = this.playerPos();
-    let cx = px * TS + TS / 2 - W / 2, cy = py * TS + TS / 2 - H / 2;
+    const [fx, fy] = this.cam ? [this.cam.x, this.cam.y] : [px, py];
+    let cx = fx * TS + TS / 2 - W / 2, cy = fy * TS + TS / 2 - H / 2;
     const mw = this.map.w * TS, mh = this.map.h * TS;
     cx = mw <= W ? (mw - W) / 2 : clamp(cx, 0, mw - W);
     cy = mh <= H ? (mh - H) / 2 : clamp(cy, 0, mh - H);
@@ -237,9 +242,15 @@ class FieldScene {
     for (const ch of this.map._chests || []) objs.push({ y: ch.y, draw: () => ctx.drawImage(S().chests[ch.id] ? OBJ.chestOpen : OBJ.chest, ch.x * TS - cx, ch.y * TS - cy, TS, TS) });
     if (this.map.world && st.ship && !st.onShip) objs.push({ y: st.ship.y, draw: () => ctx.drawImage(OBJ.ship, st.ship.x * TS - cx, st.ship.y * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS) });
     for (const n of this.visibleNpcs()) {
+      if (this.hideNpc && this.hideNpc.has(n.key)) continue;
       let nx = n.x, ny = n.y; if (n.mv) { const k = n.mv.t / (n.mv.n || 16); nx += (n.mv.tx - n.x) * k; ny += (n.mv.ty - n.y) * k; }
       const pose = n.def.pose ? n.def.pose() : '';
-      const fr = n.mv ? (Math.floor(n.mv.t / 8) % 2 ? 1 : 2) : 0;
+      let fr = n.mv ? (Math.floor(n.mv.t / 8) % 2 ? 1 : 2) : 0;
+      // idle life: a breath every few seconds, a bob while speaking, looping chores
+      let bob = Math.floor((Game.frame + n.hx * 37 + n.hy * 11) / 24) % 8 === 0 ? 2 : 0;
+      if (n.def.act && !n.mv) { const ph = Math.floor((Game.frame + n.hx * 13) / 20) % 4; fr = ph % 2 ? 1 : 2; if (n.def.act === 'hammer' || n.def.act === 'pray') bob = ph === 0 ? 3 : 0; if (n.def.act === 'dance') { bob = ph % 2 ? -4 : 0; n.dir = ['down', 'left', 'up', 'right'][ph]; } if (n.def.act === 'sweep') n.dir = ph < 2 ? 'left' : 'right'; }
+      if (Game.speaking && n.def.name === Game.speaking) bob = Math.floor(Game.frame / 6) % 2 ? -2 : 0;
+      ny += bob / TS;
       objs.push({ y: ny, draw: () => {
         const bigImg = n.def.img && IMG[n.def.img];
         if (bigImg) { const s = n.def.scale || 0.5; ctx.drawImage(bigImg, nx * TS - cx + TS / 2 - bigImg.width * s / 2, ny * TS - cy + TS - bigImg.height * s, bigImg.width * s, bigImg.height * s); return; }
@@ -252,16 +263,19 @@ class FieldScene {
     if (!this.hidePlayer) objs.push({ y: py + 0.01, draw: () => {
       if (st.onShip) { ctx.drawImage(OBJ.ship, px * TS - cx, py * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS); return; }
       let fr = 0; if (this.moving) { const k = this.moving.t / this.moving.n; fr = k < 0.5 ? ((this.stepCount % 2) ? 1 : 2) : 0; }
-      ctx.drawImage(chibi(HEROES[lead.id].look, st.dir, fr), px * TS - cx - 3, py * TS - cy - 24, 54, 72);
+      const talk = Game.speaking === HEROES[lead.id].name && Math.floor(Game.frame / 6) % 2 ? 2 : 0;
+      ctx.drawImage(chibi(HEROES[lead.id].look, st.dir, fr), px * TS - cx - 3, py * TS - cy - 24 - talk, 54, 72);
     } });
+    for (const a of this.actors || []) objs.push({ y: a.y + 0.02, draw: () => this.drawActor(a, cx, cy) });
     objs.sort((a, b) => a.y - b.y).forEach(o => o.draw());
-    const tint = typeof this.map.tint === 'function' ? this.map.tint() : this.map.tint;
+    const tint = this.nightTint || (typeof this.map.tint === 'function' ? this.map.tint() : this.map.tint);
     if (tint) { ctx.fillStyle = tint; ctx.fillRect(0, 0, W, H); }
     if (this.map.embers && this.map.embers()) this.drawEmbers();
     if (this.banner > 0) {
       const a = Math.min(1, this.banner / 30); ctx.globalAlpha = a;
       const w = textW(this.map.name) + 80; drawWindow((W - w) / 2, 24, w, 70); text(this.map.name, W / 2, 50, '#fff', 16, 'center'); ctx.globalAlpha = 1;
     }
+    this.drawCinemaOverlay();
   }
   drawEmbers() {
     if (!this.embers) this.embers = Array.from({ length: 60 }, () => ({ x: Math.random() * W, y: Math.random() * H, s: 1 + Math.random() * 3, v: 0.5 + Math.random() * 1.5 }));
@@ -282,7 +296,8 @@ function musicFor(map) { return typeof map.music === 'function' ? map.music() : 
 async function warpTo(id, x, y, dir) { Game.field.enterMap(id, x, y, dir); }
 async function lanternEvent() {
   Audio2.sfx('save');
-  const c = await ask(null, 'A Dawn Lantern. Its steady flame makes the air feel safe.', ['Save', 'Use Bedroll', 'Leave']);
+  const c = await ask(null, 'A Dawn Lantern. Its steady flame makes the air feel safe.', ['Save', 'Use Bedroll', 'Talk with the party', 'Leave']);
+  if (c === 2) { if (!(await campTalk())) await say(null, 'Everyone sits by the lantern for a while. Miasma complains about her feet. Nobody else has anything to say right now.'); return; }
   if (c === 0) { const ok = saveGame(); await say(null, ok ? 'Your journey has been recorded.' : 'Saving is unavailable here.'); }
   if (c === 1) {
     if (!S().items.bedroll) return say(null, 'You have no Bedroll.');

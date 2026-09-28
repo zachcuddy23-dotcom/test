@@ -8,18 +8,32 @@ const NPC_FACES = {
   'High Luminar Vesper': 'face_vesper', 'Sonia': 'face_sonia', 'Vesper': 'face_vesper', 'Sunscarred Votary': 'face_votary',
   'Warden Tamsin': 'face_tamsin', 'Harbormaster Grell': 'face_grell', 'Elder Moth': 'face_moth', 'Oracle Sef': 'face_sef',
 };
-function HERO(id) { return { name: HEROES[id].name, face: HEROES[id].face }; }
+function HERO(id) { return { name: HEROES[id].name, face: HEROES[id].face, look: HEROES[id].look }; }
+// Portrait for a hero, falling back to a close-up of their field sprite.
+const _faceFallback = {};
+function faceImg(key, look) {
+  if (IMG[key]) return IMG[key];
+  if (!look) return null;
+  if (_faceFallback[look]) return _faceFallback[look];
+  const src = chibi(look, 'down', 0), c = mkCanvas(72, 72), x = c.getContext('2d');
+  x.imageSmoothingEnabled = false; x.fillStyle = '#1a1e3a'; x.fillRect(0, 0, 72, 72);
+  x.drawImage(src, 1, 0, 16, 14, 4, 6, 64, 56);
+  return (_faceFallback[look] = c);
+}
+const PARTY_ROW = () => S().party.length > 3 ? 86 : 110;
 class DialogScene {
   constructor(who, str, resolve, choices) {
     this.who = who && typeof who === 'object' ? who : (who ? { name: who, face: NPC_FACES[who] } : null);
-    this.face = this.who && this.who.face && IMG[this.who.face];
+    this.face = this.who && this.who.face && faceImg(this.who.face, this.who.look);
     this.tw = this.face ? 700 : 860;
     this.pages = []; const lines = wrapText(str, this.tw);
     for (let i = 0; i < lines.length; i += 4) this.pages.push(lines.slice(i, i + 4));
     this.page = 0; this.chars = 0; this.resolve = resolve; this.choices = choices; this.menu = null;
   }
   get full() { return this.pages[this.page].join('\n'); }
+  leave() { Game.speaking = null; }
   update() {
+    Game.speaking = this.who && this.chars < this.full.length ? this.who.name : null;
     if (this.menu) {
       const r = this.menu.update();
       if (r && r.select) { Game.pop(this); this.resolve(r.index); }
@@ -61,7 +75,7 @@ function notify(str, sfx = 'chest') { if (sfx) Audio2.sfx(sfx); return new Promi
 // Party panel helper
 // ---------------------------------------------------------------------------
 function drawMemberRow(m, x, y) {
-  const face = IMG[HEROES[m.id].face], st = stats(m), J = JOBS[m.job];
+  const face = faceImg(HEROES[m.id].face, HEROES[m.id].look), st = stats(m), J = JOBS[m.job];
   ctx.fillStyle = '#000'; ctx.fillRect(x - 2, y - 2, 76, 76);
   if (face) { if (!alive(m)) ctx.globalAlpha = 0.35; ctx.drawImage(face, x, y, 72, 72); ctx.globalAlpha = 1; }
   const tx = x + 92;
@@ -77,7 +91,7 @@ function drawMemberRow(m, x, y) {
 }
 function partyPicker(o = {}) {
   const items = S().party.map(m => ({ text: '', m, disabled: o.filter ? !o.filter(m) : false }));
-  return new ListMenu(items, { x: 0, y: 0, w: 1, rowH: 110, window: false, pad: 0 });
+  return new ListMenu(items, { x: 0, y: 0, w: 1, rowH: PARTY_ROW(), window: false, pad: 0 });
 }
 function canSaveHere() { const f = Game.field; return !!f && (f.map.world || f.nearLantern()); }
 
@@ -119,8 +133,8 @@ class MenuScene {
   drawParty(cursorIdx) {
     drawWindow(12, 12, 680, 360);
     S().party.forEach((m, i) => {
-      drawMemberRow(m, 40, 36 + i * 110);
-      if (cursorIdx === i) drawCursor(40, 60 + i * 110);
+      drawMemberRow(m, 40, 30 + i * PARTY_ROW());
+      if (cursorIdx === i) drawCursor(40, 54 + i * PARTY_ROW());
     });
   }
   draw() {
@@ -169,7 +183,7 @@ class ItemsPanel {
     return false;
   }
   draw() {
-    if (this.pick) drawCursor(40, 60 + this.pick.index * 110);
+    if (this.pick) drawCursor(40, 54 + this.pick.index * PARTY_ROW());
     this.list.draw(!this.pick);
     if (this.list.cur && this.list.cur.key) { const d = KEY_ITEMS[this.list.cur.id].desc; drawWindow(12, 380, 680, 60); text(d.length > 60 ? d.slice(0, 58) + '…' : d, 30, 404, '#ffe070', 11); }
   }
@@ -235,7 +249,7 @@ class SkillPanel {
     }
     return false;
   }
-  draw() { if (this.pick) drawCursor(40, 60 + this.pick.index * 110); this.list.draw(!this.pick); }
+  draw() { if (this.pick) drawCursor(40, 54 + this.pick.index * PARTY_ROW()); this.list.draw(!this.pick); }
 }
 
 // ---------------------------------------------------------------------------
@@ -338,7 +352,7 @@ class StatusPanel {
   constructor(menu, m) { this.menu = menu; this.m = m; this.fullscreen = true; }
   update() { if (Input.cancel() || Input.ok()) { Audio2.sfx('cancel'); return true; } const p = S().party, i = p.indexOf(this.m); if (Input.rep('right') || Input.rep('down')) this.m = p[(i + 1) % p.length]; if (Input.rep('left') || Input.rep('up')) this.m = p[(i + p.length - 1) % p.length]; return false; }
   draw() {
-    const m = this.m, st = stats(m), img = IMG[`${m.id}_${m.job}`] || IMG[HEROES[m.id].img], J = JOBS[m.job];
+    const m = this.m, st = stats(m), img = IMG[`${m.id}_${m.job}`] || IMG[HEROES[m.id].img] || chibiBattle(HEROES[m.id].look), J = JOBS[m.job];
     drawWindow(12, 12, 936, 616);
     ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fillRect(40, 40, 320, 560);
     if (img) { const s = 2; ctx.drawImage(img, 40 + (320 - img.width * s) / 2, 60 + (300 - img.height * s) / 2 + 40, img.width * s, img.height * s); }
@@ -444,7 +458,7 @@ class ShopScene {
     S().party.forEach((m, i) => {
       let ok = true, note = '';
       if (EQUIP[id]) { ok = canEquip(m, id); const e = EQUIP[id], c2 = EQUIP[m.equip[e.slot]]; if (ok) { const k = e.slot === 'weapon' ? 'atk' : 'def'; const dv = (e[k] || 0) - ((c2 && c2[k]) || 0); note = dv > 0 ? `▲${dv}` : dv < 0 ? `▼${-dv}` : '='; } }
-      const y = 470 + i * 50, face = IMG[HEROES[m.id].face];
+      const y = 440 + i * 44, face = faceImg(HEROES[m.id].face, HEROES[m.id].look);
       ctx.globalAlpha = ok ? 1 : 0.3; if (face) ctx.drawImage(face, 564, y - 6, 40, 40); text(m.name, 616, y + 6, ok ? '#fff' : '#777', 14); ctx.globalAlpha = 1;
       if (note) text(note, 920, y + 6, note[0] === '▲' ? '#60ff80' : note[0] === '▼' ? '#ff6060' : '#ffe070', 14, 'right');
     });
