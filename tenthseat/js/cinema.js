@@ -64,6 +64,13 @@ Object.assign(FieldScene.prototype, {
     const out = {};
     st.party.filter(m => !(skip || []).includes(m.id)).forEach((m, i) => {
       if (this.actor(m.id)) { out[m.id] = this.actor(m.id); return; }
+      // a party member already standing on the map as an NPC plays herself (no clone)
+      const npc = this.visibleNpcs().find(n => n.def.look === HEROES[m.id].look && !(this.hideNpc && this.hideNpc.has(n.key)));
+      if (npc && !(layout && layout[m.id])) {
+        this.hideNpc = this.hideNpc || new Set(); this.hideNpc.add(npc.key);
+        out[m.id] = this.spawn({ id: m.id, look: HEROES[m.id].look, x: npc.x, y: npc.y, dir: npc.dir });
+        return;
+      }
       const p = layout && layout[m.id] ? layout[m.id] : [st.x + spots[i % 4][0], st.y + spots[i % 4][1]];
       out[m.id] = this.spawn({ id: m.id, look: HEROES[m.id].look, x: p[0], y: p[1], dir: (layout && layout[m.id] && layout[m.id][2]) || st.dir });
     });
