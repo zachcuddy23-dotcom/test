@@ -20,6 +20,8 @@ BOSSES = {
     'votary': ('boss_votary.webp', 320, 40),
     'chimera': ('boss_chimera.webp', 300, 48),
     'sonia': ('boss_sonia.webp', 340, 48),
+    'bookdragon': ('boss_bookdragon.webp', 340, 48),
+    'hollowgrin': ('boss_hollowgrin.webp', 300, 40),
 }
 
 

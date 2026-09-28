@@ -125,7 +125,7 @@ class MenuScene {
     if (t === 'Order') this.choose((m, i) => { this.msg = 'Swap with whom?'; this.choose((m2, j) => { const p = S().party;[p[i], p[j]] = [p[j], p[i]]; Audio2.sfx('ok'); this.msg = ''; }); });
     if (t === 'Config') this.sub = new ConfigPanel(this);
     if (t === 'Save') {
-      if (!canSaveHere()) { this.msg = 'Save on the world map or beside a Dawn Lantern.'; Audio2.sfx('error'); }
+      if (!canSaveHere()) { this.msg = Game.field && Game.field.map.noSaveMsg ? Game.field.map.noSaveMsg : 'Save on the world map or beside a Dawn Lantern.'; Audio2.sfx('error'); }
       else { this.msg = saveGame() ? 'Game saved.' : 'Saving is unavailable here.'; if (this.msg === 'Game saved.') Audio2.sfx('save'); }
     }
   }

@@ -24,7 +24,7 @@ Upload this zip **and** ChatGPT's latest Chapter One zip, then paste:
 
 > Here is Chapter Two of "The Tenth Seat". Unzip it and read `CHAPTER2_UPDATE_FOR_CHATGPT.md` first. Merge it with your Chapter One work exactly as section 1 says: run `python3 tools/merge_chapter2.py <your chapter one folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
 >
-> Then make the new Chapter Two art from section 3, starting with Brakka (3.1) and the six bosses (3.3). Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
+> Then make the new Chapter Two art from section 3, starting with Brakka (3.1), the six bosses (3.3), then the secret-dungeon art in 3.3b (the Ink Warden and the portraits). Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
 
 ## What's inside
 | Path | What it is |

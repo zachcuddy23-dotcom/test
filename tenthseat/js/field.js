@@ -187,7 +187,7 @@ class FieldScene {
     }
   }
   async openChest(ch) {
-    if (S().chests[ch.id]) { await say(null, 'The chest is empty.'); return; }
+    if (S().chests[ch.id]) { if (ch.again) { await ch.again(ch); return; } await say(null, 'The chest is empty.'); return; }
     if (ch.guard && !(await ch.guard())) return;
     S().chests[ch.id] = true; Audio2.sfx('chest');
     if (ch.gold) { S().gold += ch.gold; await notify(`Found ${ch.gold} gold!`, null); }

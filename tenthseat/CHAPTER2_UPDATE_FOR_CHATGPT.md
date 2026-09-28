@@ -49,6 +49,7 @@ A player who has just finished Chapter One goes straight from the save screen in
 |---|---|---|
 | `js/data2.js` | NEW | Brakka, the Chainbearer and Phoenix Warlock jobs, skills, items, tier-3 gear, Chapter Two monsters and bosses, shops |
 | `js/maps2.js` | NEW | The Ashkar world map (`MAPS.ashkar`) and 9 new maps |
+| `js/secrets.js` | NEW | Secrets and mini-games: the Ashen Athenaeum, the Index shelf puzzle, the Book Dragon, the Ink Warden, Hollowgrin's chest, and the Bell-Ringer's memory game |
 | `js/events2.js` | NEW | Every Chapter Two scene, plus the Chapter Two portraits list (`NPC_FACES`) |
 | `index.html` | changed | Loads the three new files. `events2.js` must stay **after** `cinema.js`. |
 | `js/events.js` | changed | The Chapter One ending now flows into Chapter Two; `saveScreen()` takes a title |
@@ -100,6 +101,33 @@ A player who has just finished Chapter One goes straight from the save screen in
 | Mount Terminus (Verai left) | "Come back" or "I'll wait" | `veraiRejoined` / `veraiWaits` | "Come back" works only if `bond` ≥ 1. "I'll wait" raises `bond`. |
 | Throne of Cinders | Give Ashkar the Anvil Shard, or refuse | `ashkarAlly` / `ashkarRival` | Ally: fight Kargath. Rival: fight Ashkar, then Kargath's fate plays as a cinematic. |
 
+### Secrets and mini-games (`js/secrets.js`)
+
+**The Ashen Athenaeum** is a hard optional library dungeon on the north-east coast of Ashkar, reachable after the Gunworks. Its monsters are about 1.5 times tougher than the rest of Chapter Two.
+- **Reading Room: the Index of Myndra.** A shelf puzzle: put five tomes in order using logic clues. The clues are generated fresh each time, and there is always exactly one answer.
+  - **Solved first try:** you get the Starbound Rod, and the stairs open.
+  - **Misfiled:** the **Book Dragon** tears itself out of the shelves. You choose between **re-shelving against a 1-minute clock**, or **fighting it**. Running out of time also means a fight.
+  - **After solving:** you can misfile on purpose to wake the dragon for its reward (Dragonscript).
+  - The dragon is weak to fire. Paper, after all.
+- **Deep Stacks: the Ink Warden** guards the Ledger of Seats, a lore page and hook for Chapter Three: "Nyxia's seat was STOLEN, and what is stolen can be stolen back."
+
+**Hollowgrin's chest.** The chest in the corner of Charnoch (bottom right) seems normal: open it and it gives Mega-Tonics.
+- **Open it a second time** and you get "Hey... it looks like there's something in there."
+- **Reach in:** a warning follows, then an offer to save first.
+- The party is shrunk into the chest. **There are no exits and no saving inside.** The game doesn't say so in advance, which is why it offers a save first.
+- The boss is **Hollowgrin, the Chest-Fey**, a crowd-control specialist. He uses Sleep, Silence, Stop, Blind and Fear.
+- His stats and his minions' **scale to the party's level**, so he's a fair fight whenever it's found.
+- **Rewards:**
+  - The Fey Ribbon (blocks all five of those statuses), the Grinning Knife, the Thimble Helm (in a chest inside), and 5000 gold.
+  - **A special skill:** **Hollow Night** for Verai if she's in the active party; otherwise **Twin Moon Oath** for Luna.
+
+**New statuses:**
+- **Stop** freezes the time gauge for a few seconds.
+- **Silence** blocks job and innate commands.
+- Both are cured by **Echo Mint** (new, sold in Charnoch, Kharak Yr and Draumond) and by every item or spell that already cured Sleep.
+
+**The Bell-Ringer (Draumond's Gate)** runs a memory mini-game: repeat the bell pattern with the arrow keys, over three rounds of 4, 6 and 8 bells. Each round's prize is given once: Ash Salves, Mega-Tonics, and a Grave Charm.
+
 ---
 
 ## 3. New art for Chapter Two (everything, with filenames)
@@ -139,6 +167,19 @@ These use scaled placeholders until the file exists. **Once the PNG is added, de
 | `b_veiledverai` | Veiled Daughter | **Verai** in a violet-black veil and Sonia-style shadow robes, smoke gone violet and cold. She must look like Verai, just lost. |
 | `b_ashkargod` | Ashkar, the Tenth Flame | A towering phoenix-man of fire with gold eyes, a black crescent on his chest, wings of flame, a smug grin |
 | `b_kargath` | Warlord Kargath | A hulking warlord in black-and-crimson plate, a split mask (half smiling, half burned), a black greatsword |
+
+### 3.3b Secret bosses and places (`js/secrets.js`)
+| File | Status | Notes |
+|---|---|---|
+| `b_bookdragon` | **Done** (from the user's painting, `tools/source/boss_bookdragon.webp`) | Optional: `b_bookdragon_2` idle frame with pages swirling |
+| `b_hollowgrin` | **Done** (from the user's painting, `tools/source/boss_hollowgrin.webp`) | Optional: `b_hollowgrin_2` with a wider grin |
+| `b_inkwarden` | Needed; placeholder until then | A tall librarian-wraith made of dripping black ink, a quill as long as a spear, a ledger chained to its chest, and crossed-out names floating around it. Delete its `ph` in `js/secrets.js` once added. |
+| `face_hollowgrin`, `face_bookdragon`, `face_inkwarden`, `face_bellringer` | Needed (128×128) | Already wired in `NPC_FACES` |
+| `bg_library` (960×440) | Optional | Towering shelves in a half-buried library, teal star-light, drifting pages |
+| `bg_fey` (960×440) | Optional | The inside of a chest from a tiny person's view: giant buttons, a thimble, spools, a keyhole of light far above |
+| `cine_shrink` (960×640) | Optional | The party being pulled into a chest, shrinking |
+| Monsters `m_inkwraith`, `m_paperwing`, `m_tomemimic`, `m_gargoyle`, `m_lostscholar`, `m_thimblepixie`, `m_buttonimp`, `m_needlesprite` | Optional | They use tinted art now. Same rule as 3.4: set `art:` and delete `tint`. |
+| Tiles, theme `archive` / `fey` | Optional | `tile_<art>_archive.png`, `tile_<art>_fey.png` (shelf, floor, carpet, pillar and so on) |
 
 ### 3.4 Chapter Two monsters (optional unique art)
 These currently use tinted Chapter One art. To give one its own art: make `m_<key>.png`, then in `js/data2.js` set `art: '<key>'` and **delete its `tint`**.

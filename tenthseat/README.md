@@ -24,6 +24,11 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
   - Take or destroy the blackpowder.
   - Give Ashkar the Anvil, or refuse him.
 - Chapter Two ends with its own cinematic, an end card and a save screen.
+- **Secrets and mini-games:**
+  - **The Ashen Athenaeum** (a hard optional dungeon). Its Index shelf puzzle wakes the **Book Dragon** if you get it wrong: beat the 1-minute clock or fight it.
+  - **Hollowgrin's chest.** Open the Charnoch chest twice. No exits and no saving inside; a special skill for Verai or Luna waits at the end.
+  - **The Bell-Ringer's memory game** in Draumond.
+  - Two new statuses, **Stop** and **Silence**.
 
 ## What was new in Chapter One
 - **Trailer** before the title (skip with Z, or rewatch it from the title menu), plus cinematic scenes at key story moments.

@@ -28,6 +28,9 @@ CHECKPOINTS.push(
   CH2('Kharak Yr / Brakka', ['veraiLeft', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken'], RML, 23, ['kharakyr', 13, 16, 'up']),
   CH2('Draumond', ['veraiSonia', 'sanctuarySunk', 'ch2start', 'emberGate', 'bribed', 'coalToken', 'gunworks', 'blewPowder'], [...RML, 'brakka'], 25, ['draumond', 13, 16, 'up'], { keys: ['gunpass'] }),
   CH2('Mount Terminus (Verai with Sonia)', ['veraiSonia', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'coalToken', 'gunworks', 'tookPowder', 'draumond'], [...RML, 'brakka'], 26, ['terminus2', 1, 11, 'right'], { keys: ['gunpass', 'deathpage'] }),
+  CH2('Secret: Ashen Athenaeum', ['veraiLeft', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken', 'gunworks', 'tookPowder', 'draumond'], [...RML, 'brakka'], 29, ['athenaeum1', 11, 14, 'up'], { keys: ['gunpass'] }),
+  CH2('Secret: Hollowgrin\'s chest (Charnoch)', ['veraiStayed', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken'], RMVL, 25, ['charnoch', 22, 13, 'right'], { run: () => { S().chests.c2_charnoch1 = true; } }),
+  CH2('Mini-game: Bell-Ringer (Draumond)', ['veraiSonia', 'sanctuarySunk', 'ch2start', 'emberGate', 'bribed', 'coalToken', 'gunworks', 'blewPowder'], [...RML, 'brakka'], 25, ['draumond', 13, 16, 'up'], { keys: ['gunpass'] }),
   CH2('Throne of Cinders', ['veraiStayed', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken', 'gunworks', 'tookPowder', 'draumond', 'ferryman'], [...RMVL], 28, ['cinders', 10, 13, 'up'], { keys: ['gunpass', 'anvilshard'] }),
 );
 function applyCheckpoint(cp) {

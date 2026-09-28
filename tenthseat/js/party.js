@@ -76,7 +76,7 @@ function canEquip(m, id, job) {
 }
 // skills a member can use right now: job skills by job level, innate by hero level
 function jobSkills(m, job) { const j = job || m.job, lv = m.jobs[j].lv; return JOBS[j].learn.filter(([l]) => lv >= l).map(([, s]) => s); }
-function innateSkills(m) { const inn = INNATE[HEROES[m.id].innate]; return inn.learn.filter(([l]) => m.lvl >= l).map(([, s]) => s); }
+function innateSkills(m) { const inn = INNATE[HEROES[m.id].innate]; return [...inn.learn.filter(([l]) => m.lvl >= l).map(([, s]) => s), ...(m.bonus || [])]; }
 function allSkills(m) { return [...jobSkills(m), ...innateSkills(m)]; }
 
 function changeJob(m, job) {
@@ -139,6 +139,7 @@ function nextJp(m) { const r = m.jobs[m.job]; return r.lv >= MAX_JOB_LV ? 0 : JP
 // ---------------------------------------------------------------------------
 const SAVE_KEY = 'tenth-seat-save-v1';
 function saveGame() {
+  if (Game.field && Game.field.map && Game.field.map.noSave) return false;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(S())); return true; } catch (e) { return false; }
 }
 function loadSave() {

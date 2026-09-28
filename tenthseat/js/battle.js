@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 const FIELD_H = 432;
 const GAUGE_MAX = 1000;
-const STATUS_LABEL = { poison: 'Poison', sleep: 'Sleep', blind: 'Blind', fear: 'Fear', doom: 'Doom' };
+const STATUS_LABEL = { poison: 'Poison', sleep: 'Sleep', blind: 'Blind', fear: 'Fear', doom: 'Doom', stop: 'Stop', silence: 'Silence' };
 function startBattle(opts) {
   return new Promise(async res => {
     Audio2.sfx('enc');
@@ -133,6 +133,7 @@ class BattleScene {
     for (const m of this.party()) {
       const b = this.pb.get(m);
       if (!alive(m) || b.ready || b.queued) continue;
+      if (m.status.stop) { if (--m.status.stop <= 0) { delete m.status.stop; this.num(m, 'Moving', '#e0e0ff'); } continue; }
       b.gauge += this.rate(stats(m).agi, b.haste) * (m.status.sleep ? 0.6 : 1);
       if (b.gauge < GAUGE_MAX) continue;
       b.gauge = GAUGE_MAX;
@@ -140,6 +141,7 @@ class BattleScene {
     }
     for (const e of this.living()) {
       if (e.queued) continue;
+      if (e.status.stop) { if (--e.status.stop <= 0) delete e.status.stop; continue; }
       e.gauge += this.rate(e.d.agi, e.buff.haste) * (e.status.sleep ? 0.6 : 1);
       if (e.gauge < GAUGE_MAX) continue;
       e.gauge = GAUGE_MAX;
@@ -198,8 +200,9 @@ class BattleScene {
   openCmdMenu(m) {
     const J = JOBS[m.job], inn = INNATE[HEROES[m.id].innate];
     const items = [{ text: 'Attack', k: 'attack' }];
-    if (J.cmd) items.push({ text: J.cmd, k: 'job', disabled: !jobSkills(m).length });
-    items.push({ text: inn.name, k: 'innate', disabled: !innateSkills(m).length });
+    const hush = !!m.status.silence;
+    if (J.cmd) items.push({ text: J.cmd, k: 'job', disabled: hush || !jobSkills(m).length });
+    items.push({ text: inn.name, k: 'innate', disabled: hush || !innateSkills(m).length });
     items.push({ text: 'Item', k: 'item' }, { text: 'Defend', k: 'defend' }, { text: 'Flee', k: 'flee', disabled: !!this.opts.noRun });
     const menu = new ListMenu(items, { x: 12, y: 424, w: 300, rowH: 27, rows: 6, size: 14 });
     menu.h = 206;
@@ -330,6 +333,7 @@ class BattleScene {
     const b = this.pb.get(m);
     if (c.type === 'item') this.reserved[c.item] = Math.max(0, (this.reserved[c.item] || 1) - 1);
     if (c.type === 'land') return this.land(m, c);
+    if (c.type === 'skill' && m.status.silence) { this.msg = `${m.name} is silenced!`; this.num(m, 'Silence', '#c0a0ff'); await wait(40); this.msg = ''; return; }
     if (c.type !== 'defend') await this.lunge(m);
     if (c.type === 'attack') {
       const t = this.retarget(c.target, 'enemy'); if (!t) return this.unlunge(m);
@@ -539,7 +543,7 @@ class BattleScene {
       Audio2.sfx('status'); await wait(26);
       for (const t of ts) {
         const st = stats(t);
-        if (!st.immune.includes(act.status) && Math.random() * 100 < act.chance - st.spr / 3) { t.status[act.status] = act.status === 'doom' ? 4 : true; this.num(t, STATUS_LABEL[act.status], '#ffd060'); }
+        if (!st.immune.includes(act.status) && Math.random() * 100 < act.chance - st.spr / 3) { t.status[act.status] = act.status === 'doom' ? 4 : act.status === 'stop' ? (act.frames || 300) : true; this.num(t, STATUS_LABEL[act.status], '#ffd060'); }
         else this.num(t, 'Miss', '#c0c0c0');
       }
       await wait(30);
@@ -571,7 +575,7 @@ class BattleScene {
         for (const l of gainExp(m, exp)) { Audio2.sfx('levelup'); await this.message(l); }
         for (const l of gainJp(m, jp)) { Audio2.sfx('levelup'); await this.message(l); }
       }
-      for (const m of this.party()) { delete m.status.sleep; delete m.status.fear; delete m.status.doom; }
+      for (const m of this.party()) { delete m.status.sleep; delete m.status.fear; delete m.status.doom; delete m.status.stop; delete m.status.silence; }
       await this.leave(); done('win');
     } else if (this.result === 'run') {
       await this.leave(12); done('run');
@@ -659,6 +663,8 @@ class BattleScene {
       if (b.guard || b.defend) { ctx.fillStyle = 'rgba(160,200,255,0.25)'; ctx.fillRect(Math.round(x) - 8, Math.round(y) + 10, img.width + 16, img.height - 10); }
       ctx.drawImage(im, Math.round(x), Math.round(y + bob));
       if (m.status.sleep) text('Zz', x + img.width - 20, y + 10, '#e0e0ff', 12);
+      if (m.status.stop) text('STOP', x + img.width / 2 - 20, y - 4, '#a0e0ff', 11);
+      if (m.status.silence) text('...', x + img.width - 24, y + 26, '#c0a0ff', 14);
       if (b.ready && !this.busy && Math.floor(Game.frame / 20) % 2) text('▼', p.x, y - 16, JOBS[m.job].color, 12, 'center');
     });
     for (const p of this.parts) {
@@ -772,6 +778,8 @@ function battleBg(name) {
     case 'volcano': grad(0, 70, '#200808', '#a03010'); x.fillStyle = '#1a0a08'; x.beginPath(); x.moveTo(60, 72); x.lineTo(120, 10); x.lineTo(180, 72); x.fill(); x.fillStyle = '#ff7020'; x.fillRect(114, 10, 12, 4); x.fillRect(118, 14, 4, 30); ground(72, '#2a1a14', '#100806', true); x.fillStyle = '#8a8aa0'; x.fillRect(104, 40, 32, 34); x.fillStyle = '#100806'; x.fillRect(110, 46, 20, 28); break;
     case 'caldera': grad(0, 72, '#1a0404', '#e06020'); disc(120, 30, 20, 'rgba(255,200,80,0.45)'); disc(120, 30, 12, '#fff0a0'); x.fillStyle = '#140808'; x.fillRect(98, 40, 44, 34); x.fillRect(92, 50, 56, 6); ground(74, '#2a1410', '#0a0404', true); x.fillStyle = '#ffb040'; for (let i = 0; i < 40; i++) x.fillRect(R() * w, R() * 72, 1, 2); break;
     case 'port2': grad(0, 50, '#301010', '#c08060'); grad(50, 68, '#2a2a3a', '#4a4a5a'); x.fillStyle = '#1a1414'; x.fillRect(20, 20, 10, 50); x.fillRect(210, 20, 10, 50); x.fillStyle = '#ff6030'; x.fillRect(22, 18, 6, 4); x.fillRect(212, 18, 6, 4); ground(68, '#4a4040', '#2a2424', true); break;
+    case 'library': grad(0, 72, '#140c18', '#3a2a3a'); for (let i = 0; i < 8; i++) { const sx = i * 30 + 2; x.fillStyle = '#3a2418'; x.fillRect(sx, 8, 26, 64); for (let r = 0; r < 5; r++) for (let k = 0; k < 6; k++) { x.fillStyle = pick(['#8a2a20', '#2a6a4a', '#3a4a8a', '#8a6a2a', '#5a2a5a']); x.fillRect(sx + 2 + k * 4, 11 + r * 12, 3, 9); } } x.fillStyle = 'rgba(64,224,208,0.25)'; x.fillRect(0, 60, w, 14); ground(74, '#4a3428', '#1a1010', true); x.fillStyle = '#f0e8d0'; for (let i = 0; i < 16; i++) x.fillRect(R() * w, R() * 70, 3, 2); break;
+    case 'fey': grad(0, 72, '#2a1030', '#6a3a4a'); x.fillStyle = '#8a5a30'; x.fillRect(0, 60, w, 14); disc(40, 40, 18, '#c0a060'); disc(40, 40, 12, '#e0c080'); x.fillStyle = '#e8e0f0'; x.fillRect(170, 16, 18, 50); x.fillRect(166, 12, 26, 6); x.fillStyle = '#7a3a8a'; for (let i = 0; i < 4; i++) disc(90 + i * 22, 30 + (i % 2) * 8, 6, i % 2 ? '#c04080' : '#4080c0'); ground(74, '#8a5a30', '#3a2010', true); x.fillStyle = '#ffe080'; for (let i = 0; i < 30; i++) x.fillRect(R() * w, R() * 72, 1, 1); break;
     default: grad(0, h, '#222', '#444');
   }
   const big = mkCanvas(W, FIELD_H + 8), bx = big.getContext('2d'); bx.imageSmoothingEnabled = false; bx.drawImage(c, 0, 0, w, h, 0, 0, W, FIELD_H + 8);

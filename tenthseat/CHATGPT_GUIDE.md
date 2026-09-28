@@ -405,6 +405,7 @@ tenthseat/
   js/data2.js         Chapter Two data (Brakka, 2 jobs, gear, monsters, bosses, shops)
   js/maps2.js         Chapter Two maps (the Ashkar world map + 9 maps)
   js/events2.js       Chapter Two scenes (loads after cinema.js)
+  js/secrets.js       optional secrets and mini-games (Athenaeum, Book Dragon, Hollowgrin's chest, bells)
   js/ui.js            dialog, field menu (Items/Skills/Job/Equip/Status/Order/Config/Save), shops, inn, chapel
   js/field.js         exploration, encounters, cutscene helpers (walk, npcWalk, card, crawl)
   js/battle.js        ATB battle system, effects, backgrounds (+ bg_*, sheet overrides)
@@ -459,6 +460,7 @@ node tools/check/validate.js     # map shapes, reachability, data references  ->
 node tools/check/sim.js          # real battles, auto-played (win rates, length, HP left)
 NODE_PATH=$(npm root -g) node tools/check/story.js   # plays every story event in headless Chromium (needs playwright)
 NODE_PATH=$(npm root -g) node tools/check/story2.js stay   # Chapter Two from a Chapter One save (also: leave, sonia)
+NODE_PATH=$(npm root -g) node tools/check/secrets.js       # secrets and mini-games
 ```
 
 ---
