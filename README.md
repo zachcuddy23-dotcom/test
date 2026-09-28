@@ -1,3 +1,14 @@
+# Raine, Miasma & Verai: Browser RPGs
+
+This repo holds two games starring the same three heroes:
+
+| Game | Style | Folder |
+|---|---|---|
+| **The Tenth Seat, Chapter One: The Unseated** (new) | FF4-era ATB battles, a job system you can change any time, set in the world of Cael'Brithar | [`tenthseat/`](tenthseat/README.md). Art handoff: [`tenthseat/CHATGPT_GUIDE.md`](tenthseat/CHATGPT_GUIDE.md) |
+| Shards of the Dawn, Chapter I | FF1-style | [`game/`](game/) (details below) |
+
+---
+
 # Shards of the Dawn: Chapter I
 
 A browser RPG in the style of the first Final Fantasy, starring three original characters:

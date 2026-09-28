@@ -1,0 +1,45 @@
+# The Tenth Seat: Chapter One, *The Unseated*
+
+A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma** and **Verai Cudlar**.
+
+> *Only ten gods may exist at once. One year ago, a phoenix stole the Tenth Seat. Now someone wants it back.*
+
+## Play
+Open `tenthseat/index.html` in a browser. There's no build step or server.
+
+- **Keyboard:** arrows or WASD move · Z / Space / Enter confirm · X cancel or menu · Esc menu · hold Shift to run
+- **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
+- **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
+
+## Systems
+- **Active Time Battle** with Wait and Active modes, 6 speeds, Defend, Flee, boss phases, status effects (Poison, Sleep, Blind, Fear, Doom), buffs (Protect, Haste, Regen), Guard (cover), Jump, Steal, Mug and HP-cost skills.
+- **8 jobs, one per patron god**, changeable any time from **Menu → Job**. Each job has its own command, stat profile and equipment types, and ranks 1 to 8 earned with JP from battles.
+
+  | Job | Patron | Command |
+  |---|---|---|
+  | Freelancer | none | none (fast JP) |
+  | Oathblade | Valerion | **Oath**: Guard, Valor Strike, Rally, Honorbound |
+  | Dawnsinger | Sylara | **Dawn**: Mend, Purge, Dawnward, Kindle, Radiance, New Dawn |
+  | Arcanist | Myndra | **Arcana**: Spark, Frost, Bolt, Lull, Blaze, Glacier, Tempest, Starfall |
+  | Masquer | Malakar | **Trick**: Steal, Flee, Mug, Smoke Bomb, Double Cut |
+  | Tidecaller | Thalara | **Tide**: Undertow, Regen, Squall, Riptide, Tidal Renewal, Maelstrom |
+  | Ash Reaper | Grimnar | **Ash**: Ashblade, Funeral Pyre, Final Gate, Soulforge |
+  | Wyrmblood | old dragon blood | **Wyrm**: Jump, Lancet, Wyrm Cry, Skyfall |
+
+- **Innate commands** stay with each hero in every job: Raine's **Brew** (alchemy), Miasma's **Breath** (dragon breath), Verai's **Smoke** (the dream-smoke of the lost goddess Nyxia).
+- **Other features:**
+  - Shops, inns, chapels and treasure chests.
+  - Five hand-painted bosses: the Veilstag, the Sunscarred Votary, the Sunforged Chimera, the Bloomheart Colossus, and Sonia.
+  - A boat for the late game.
+  - 15 maps plus a world map of Aurelion.
+
+## Handing off to ChatGPT for art
+See **[CHATGPT_GUIDE.md](CHATGPT_GUIDE.md)**. It's a complete brief for generating every sprite, portrait, background and animation sheet, plus the exact filenames the game picks up automatically.
+
+## Developer checks
+```bash
+node tools/check/validate.js                          # maps + data
+node tools/check/sim.js                               # auto-played balance runs
+NODE_PATH=$(npm root -g) node tools/check/story.js    # full story smoke test (playwright)
+python3 tools/bosses.py && python3 tools/build_assets.py   # rebuild boss sprites + embed art
+```
