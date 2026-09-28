@@ -39,9 +39,9 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
   await page.evaluate(() => newGame());
   await until(() => Game.field && Game.field.map && Game.field.map.id === 'solanthia' && Game.top() === Game.field, 120000);
   console.log('PASS opening (barge + battle) ->', await page.evaluate(() => Game.field.map.id));
+  await step('miasma_waits', `Game.field.enterMap('solanthia', 15, 4, 'up'); Game.field.run(() => MAPS.solanthia.steps['15,3']());`, `flag('miasmaWaits')`);
   await step('audience', `Game.field.enterMap('temple', 10, 3, 'up'); Game.field.run(() => vesperAudience());`, `flag('audience') && hasKey('censer')`);
   await step('leave_blocked', `Game.field.enterMap('solanthia', 14, 17, 'down'); Game.field.run(() => leaveSolanthia());`, `Game.field.map.id === 'solanthia'`);
-  await step('miasma_waits', `Game.field.enterMap('solanthia', 15, 4, 'up'); Game.field.run(() => MAPS.solanthia.steps['15,3']());`, `flag('miasmaWaits')`);
   await step('night', `Game.field.enterMap('quarters', 5, 4, 'up'); Game.field.run(() => quartersNight());`, `flag('mission')`);
   await step('veilstag', `${lv(8)} Game.field.enterMap('silverleaf2', 10, 4, 'left'); Game.field.run(() => veilstagEvent());`, `flag('stag') && hasKey('stagantler')`);
   await step('hollowmere', `${lv(10)} Game.field.enterPlace({ map: 'hollowmere' });`, `flag('votary') && Game.state.party.length === 3 && Game.field.map.id === 'hollowash'`);
