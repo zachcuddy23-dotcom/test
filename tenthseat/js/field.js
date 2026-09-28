@@ -311,6 +311,8 @@ async function lanternEvent() {
 // ---------------------------------------------------------------------------
 class CrawlScene {
   constructor(lines, res, o = {}) { this.lines = lines; this.res = res; this.t = 0; this.opaque = true; this.title = o.title; this.speed = o.speed || 0.5; this.bg = o.bg; }
+  enter() { this._fade = Game.fade; Game.fade = 0; }
+  leave() { Game.fade = this._fade || 0; }
   update() {
     this.t++;
     const total = this.lines.length * 34 + 700;
@@ -335,6 +337,8 @@ function drawStars(top = '#02030c', bot = '#141040') {
 // A still "card" scene with a picture and caption, used in cutscenes
 class CardScene {
   constructor(o, res) { this.o = o; this.res = res; this.t = 0; this.opaque = true; }
+  enter() { this._fade = Game.fade; Game.fade = 0; }
+  leave() { Game.fade = this._fade || 0; }
   update() { this.t++; if (this.t > 40 && (Input.ok() || this.t > (this.o.time || 400))) { Game.pop(this); this.res(); } }
   draw() {
     drawStars(this.o.top || '#02030c', this.o.bot || '#141040');

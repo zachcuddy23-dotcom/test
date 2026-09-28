@@ -123,8 +123,12 @@ function drawEmote(ch, x, y, t) {
 // shot: { dur, bg, layers: [{ img | look | text, x, y, s, a, to: {x,y,s,a}, dir, size, color }],
 //         caption, sub, flash, shake, sfx, music }
 // ---------------------------------------------------------------------------
+// Full-screen scenes clear any fade-to-black while they show, and put it back after.
+const FULLSCREEN = { enter() { this._fade = Game.fade; Game.fade = 0; }, leave() { Game.fade = this._fade || 0; } };
 class CinemaScene {
   constructor(shots, res, o = {}) { this.shots = shots; this.res = res; this.i = 0; this.t = 0; this.opaque = true; this.o = o; this.start(); }
+  enter() { FULLSCREEN.enter.call(this); }
+  leave() { FULLSCREEN.leave.call(this); }
   start() { const s = this.shots[this.i]; if (!s) return; if (s.music !== undefined) Audio2.music(s.music); if (s.sfx) Audio2.sfx(s.sfx); if (s.flash) Game.flash = s.flash; if (s.shake) Game.shake = s.shake; }
   update() {
     this.t++;

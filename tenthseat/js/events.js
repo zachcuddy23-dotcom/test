@@ -898,16 +898,38 @@ async function lunaResolution() {
     ], { skipAll: false });
   }
 }
+function endingShots(result) {
+  const party = S().party.map(m => m.id);
+  const walkers = (ids, y = 560) => ids.map((id, i) => ({ look: HEROES[id].look, dir: 'right', walk: true, x: 120 + i * 70, y, s: 3, to: { x: 520 + i * 70 }, linear: true }));
+  if (result === 'stay') return [
+    { dur: 240, bg: 'falls', music: 'vale', sub: 'Elaris\'s Embrace', caption: 'The twin falls keep roaring. Someone has to take the first step.', layers: walkers(party) },
+    { dur: 220, bg: 'dawn', caption: 'Verai walks beside Raine, the way she did when they were small.', layers: [{ look: 'verai', dir: 'right', x: 430, y: 560, s: 5, bob: 2 }, { look: 'raine', dir: 'left', x: 530, y: 560, s: 5, bob: 2 }] },
+    { dur: 200, bg: 'dawn', caption: '"Next time you promise to write..."   "I\'ll write. Every week."   "Liar."', layers: [{ look: 'verai', dir: 'right', x: 430, y: 560, s: 5 }, { look: 'raine', dir: 'left', x: 530, y: 560, s: 5 }] },
+  ];
+  if (result === 'leave') return [
+    { dur: 260, bg: 'forest', music: 'sorrow', sub: 'The Silverleaf, the same mist she was left in', caption: 'Verai walks into the mist alone. Her smoke goes with her.', layers: [{ look: 'verai', dir: 'right', walk: true, x: 300, y: 560, s: 4, to: { x: 1000, a: 0.2 }, linear: true }] },
+    { dur: 230, bg: 'dawn', caption: 'Raine stands at the edge of the wood until the sun comes up.', layers: [{ look: 'raine', dir: 'up', x: W / 2, y: 560, s: 5 }] },
+    { dur: 200, bg: 'dawn', caption: '"I left her once. I won\'t lose her twice."', layers: [{ look: 'raine', dir: 'up', x: W / 2, y: 560, s: 5 }, { look: 'miasma', dir: 'up', x: W / 2 + 110, y: 560, s: 5, fadeIn: 60 }] },
+  ];
+  return [
+    { dur: 240, bg: 'void', music: 'sonia', sub: 'Somewhere between the seats', caption: 'Mother and daughter rise into the dark, hand in hand.', layers: [{ img: 'b_sonia', x: 400, y: 620, s: 1.2, to: { y: 560 } }, { look: 'verai', dir: 'up', x: 620, y: 560, s: 4, to: { y: 480 } }] },
+    { dur: 220, bg: 'void', caption: 'Verai\'s smoke burns violet. For the first time, it doesn\'t hide from anything.', layers: [{ look: 'verai', dir: 'down', x: W / 2, y: 560, s: 6, silhouette: '#5a20a0' }] },
+    { dur: 200, bg: 'dawn', caption: 'On the shore of the falls, Raine holds a grey scarf that smells of smoke.', layers: [{ look: 'raine', dir: 'down', x: W / 2, y: 560, s: 5 }] },
+  ];
+}
 async function chapterEnd(result) {
-  Audio2.music('title');
+  Audio2.music(null);
   await fadeOut(60);
+  await cinema([...endingShots(result),
+    { dur: 230, bg: 'seats', music: 'title', caption: 'In the ring of the Ten, one flame begins to gutter. Elaris is fading.' },
+    { dur: 200, bg: 'moon', caption: 'And far across the sea, in the land of ash and flame, a phoenix god opens one golden eye...', layers: [{ text: '◉', x: W / 2, y: 230, size: 40, color: '#ffb030', glow: 'rgba(255,160,40,0.9)', fadeIn: 60 }] },
+  ], { skipAll: false });
   const st = S(), t = Math.floor(st.playTime / 60);
   const veraiLine = result === 'stay' ? ['Verai learned who her mother is,', 'and chose her family anyway.']
     : result === 'leave' ? ['Verai walked into the dark alone,', 'to learn what Nyxia left inside her.']
       : ['Verai took her mother\'s hand.', 'Somewhere, a seat begins to warm.'];
   await crawl([
     'The Heartseed is gone.',
-    'Somewhere, a goddess of love grows quiet.',
     '',
     ...veraiLine,
     '',
@@ -915,23 +937,44 @@ async function chapterEnd(result) {
     'Her father still has not told her the truth.',
     'Miasma is still, technically, unpaid.',
     flag('lunaRevealed') ? 'Luna no longer hides her ears from her friends.' : 'Luna still keeps her helmet on.',
-    '',
-    'And far across the sea, in the land of ash and flame,',
-    'a phoenix god opens one golden eye...',
-    '',
-    ...st.party.map(m => `${m.name}  Lv ${m.lvl}  ${JOBS[m.job].name}`),
-    `Play time ${Math.floor(t / 3600)}h ${Math.floor(t / 60) % 60}m   Battles ${st.battles}`,
-    '',
-    '- END OF CHAPTER ONE: THE UNSEATED -',
-    '',
-    'Chapter Two: The Tenth Flame',
-    '',
-    'Thank you for playing!',
-    '(Your game has been saved. You can keep exploring.)',
-  ], { title: 'CHAPTER ONE COMPLETE', speed: 0.6 });
-  saveGame();
+  ], { speed: 0.7 });
+  await cinema([
+    { dur: 330, bg: 'seats', sfx: 'holy', flash: 14, layers: [
+      { text: 'END OF CHAPTER ONE', x: W / 2, y: 210, size: 36, color: '#ffe070', glow: 'rgba(255,200,80,0.8)', fadeIn: 40 },
+      { text: 'THE UNSEATED', x: W / 2, y: 270, size: 18, color: '#e8e0ff', fadeIn: 80 },
+      { text: 'Next: Chapter Two - The Tenth Flame', x: W / 2, y: 360, size: 12, color: '#a8a8d0', fadeIn: 140 },
+    ] },
+  ], { skipAll: false });
+  setFlag('ch1done');
+  await saveScreen(result, t);
   await fadeIn(40);
   Audio2.music(musicFor(F().map));
+}
+// Chapter-complete save screen
+function saveScreen(result, mins) {
+  return new Promise(res => Game.push({
+    opaque: true, t: 0, saved: null,
+    enter() { this._fade = Game.fade; Game.fade = 0; }, leave() { Game.fade = this._fade || 0; },
+    menu: new ListMenu([{ text: 'Save' }, { text: 'Continue without saving' }], { x: 300, y: 450, w: 360, rowH: 38 }),
+    update() {
+      this.t++; if (this.t < 30) return;
+      if (this.saved !== null) { if (Input.ok() || Input.cancel()) { Game.pop(this); res(); } return; }
+      const r = this.menu.update(); if (!r) return;
+      if (r.cancel || r.index === 1) { Game.pop(this); res(); return; }
+      this.saved = saveGame(); Audio2.sfx(this.saved ? 'save' : 'error');
+    },
+    draw() {
+      drawStars('#05030c', '#2a1030');
+      drawWindow(120, 40, 720, 390);
+      text('CHAPTER ONE COMPLETE', W / 2, 66, '#ffe070', 20, 'center');
+      text(`Play time ${Math.floor(mins / 60)}h ${mins % 60}m    Battles ${S().battles}    Gold ${S().gold}`, W / 2, 104, '#c8c8e0', 11, 'center');
+      S().party.forEach((m, i) => { const y = 136 + i * 56, face = faceImg(HEROES[m.id].face, HEROES[m.id].look); if (face) ctx.drawImage(face, 170, y, 48, 48); text(`${m.name}`, 236, y + 6, '#fff', 14); text(`Lv ${m.lvl}  ${JOBS[m.job].name}`, 236, y + 28, JOBS[m.job].color, 11); });
+      const notes = [result === 'stay' ? 'Verai stayed with you.' : result === 'leave' ? 'Verai left to find herself.' : 'Verai went with Sonia.', flag('lunaRevealed') ? 'You know Luna\'s secret.' : 'Luna kept her secret.', 'Miasma\'s secret is still hers.'];
+      notes.forEach((n, i) => text(n, 560, 150 + i * 34, '#e8e0ff', 11));
+      if (this.saved === null) { text('Save your progress? Chapter Two will continue from this file.', W / 2, 410, '#a8a8d0', 11, 'center'); if (this.t >= 30) this.menu.draw(); }
+      else { drawWindow(240, 450, 480, 80); text(this.saved ? 'Saved! Press Z to keep exploring.' : 'Saving is unavailable here. Press Z.', W / 2, 482, this.saved ? '#80ff90' : '#ff9090', 13, 'center'); }
+    },
+  }));
 }
 
 // ------------------------------------------------------------------ map hooks
