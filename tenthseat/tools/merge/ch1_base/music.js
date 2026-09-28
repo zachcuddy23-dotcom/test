@@ -108,32 +108,6 @@ const MUSIC = {
     { type: 'triangle', vol: 0.3, seq: bass('Em Em C Em Am Em C Em') },
     { type: 'noise', vol: 0.06, seq: drums(8, 'x.x.xx.xx.x.xx.x') },
   ] },
-  // ---- Chapter Two: Ashkar ----
-  ashkar: { bpm: 112, loop: true, voices: [
-    { type: 'square', vol: 0.07, seq: mel('D5:4 F5:2 A5:2 G#5:4 F5:4  E5:2 F5:2 D5:4 A4:8  D5:4 F5:2 A5:2 C6:4 A#5:4  A5:8 E5:8  F5:4 A5:2 C6:2 D6:4 C6:4  A#5:2 A5:2 G5:4 F5:8  E5:2 F5:2 G5:2 A5:2 A#5:4 G5:4  A5:16') },
-    { type: 'triangle', vol: 0.27, seq: bass('Dm Dm Bb A Dm Bb Gm A') },
-    { type: 'noise', vol: 0.04, seq: drums(8, 'x...x.x.x...xx..') },
-  ] },
-  emberport: { bpm: 104, loop: true, voices: [
-    { type: 'square', vol: 0.07, seq: mel('A4:2 A4:2 C5:2 A4:2 E5:4 D5:4  C5:2 B4:2 A4:4 E4:8  A4:2 A4:2 C5:2 E5:2 A5:4 G5:4  F5:4 E5:4 D5:8') },
-    { type: 'triangle', vol: 0.25, seq: bass('Am G Am E') },
-    { type: 'noise', vol: 0.05, seq: drums(4, 'x...x...x.x.x...') },
-  ] },
-  forge: { bpm: 132, loop: true, voices: [
-    { type: 'square', vol: 0.06, seq: mel('E4:2 E4:2 G4:2 E4:2 A#4:4 A4:4  G4:2 E4:2 D4:4 E4:8  E4:2 E4:2 G4:2 B4:2 D5:4 C5:4  B4:4 A#4:4 A4:8') },
-    { type: 'triangle', vol: 0.28, seq: mel('E2:2 E2:2 E3:2 E2:2 E2:2 E2:2 D3:2 E2:2  E2:2 E2:2 E3:2 E2:2 C3:2 C3:2 D3:2 D3:2  E2:2 E2:2 E3:2 E2:2 E2:2 E2:2 G3:2 E2:2  C3:2 C3:2 C3:2 C3:2 B2:2 B2:2 B2:2 B2:2') },
-    { type: 'noise', vol: 0.06, seq: drums(4, 'x.xx.x.xx.xx.x.x') },
-  ] },
-  grave: { bpm: 66, loop: true, voices: [
-    { type: 'triangle', vol: 0.2, seq: mel('A4:8 G4:4 F4:4  E4:12 r:4  F4:8 E4:4 D4:4  C#4:12 r:4  D4:8 F4:4 A4:4  G4:8 F4:8  E4:8 D4:4 C#4:4  D4:16') },
-    { type: 'square', vol: 0.03, seq: mel('r:14 A5:2 r:16 r:14 E5:2 r:16 r:14 F5:2 r:16 r:14 D5:2 r:16') },
-    { type: 'triangle', vol: 0.2, seq: mel('D2:16 A1:16 D2:16 A1:16 D2:16 C2:16 A1:16 D2:16') },
-  ] },
-  phoenix: { bpm: 88, loop: true, voices: [
-    { type: 'sawtooth', vol: 0.04, seq: mel('C5:6 D5:2 D#5:4 G5:4  F5:4 D#5:4 D5:8  C5:6 D5:2 D#5:4 A#5:4  G5:16  G#5:6 G5:2 F5:4 D#5:4  D5:4 D#5:4 F5:8  G5:4 D#5:4 D5:4 A#4:4  C5:16') },
-    { type: 'triangle', vol: 0.26, seq: bass('Cm Cm Ab Eb Ab Fm Gm Cm') },
-    { type: 'square', vol: 0.03, seq: mel('r:8 G5:2 r:6 r:8 D#5:2 r:6 r:8 G5:2 r:6 r:8 A#5:2 r:6 r:8 C6:2 r:6 r:8 G#5:2 r:6 r:8 G5:2 r:6 r:8 D#5:2 r:6') },
-  ] },
   victory: { bpm: 140, loop: false, voices: [
     { type: 'square', vol: 0.1, seq: mel('G4:2 C5:2 E5:2 G5:6 E5:2 G5:2 C6:12 r:4 A5:2 G5:2 F5:2 E5:2 D5:2 E5:2 F5:2 D5:2 C5:16') },
     { type: 'triangle', vol: 0.26, seq: mel('C3:6 G3:6 C4:12 r:8 F3:8 G3:8 C3:16') },

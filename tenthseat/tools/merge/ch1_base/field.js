@@ -37,11 +37,10 @@ class FieldScene {
   }
   tileAt(x, y) { if (x < 0 || y < 0 || x >= this.map.w || y >= this.map.h) return null; return this.map._grid[y][x]; }
   tileDef(c) {
-    if (this.map.id === 'world') {
+    if (this.map.world) {
       if (c === 'B' && !flag('bridge')) return WORLD_TILES.r;
       if (c === 'G') return flag('pass') ? WORLD_TILES.g : WORLD_TILES['^'];
     }
-    if (this.map.gates && this.map.gates[c]) { const [fl, open, closed] = this.map.gates[c]; return WORLD_TILES[flag(fl) ? open : closed]; }
     if (this.map.tileOverride) { const o = this.map.tileOverride(c); if (o) return o; }
     return this.tiles[c] || { solid: true };
   }
@@ -90,7 +89,7 @@ class FieldScene {
         if (!t.solid) { st.ship = { x: st.x, y: st.y }; st.onShip = false; Audio2.music(this.map.music); return this.startMove(nx, ny, 10); }
         return;
       }
-      if (this.map.id === 'world' && st.ship && st.ship.x === nx && st.ship.y === ny) { st.onShip = true; Audio2.music('sea'); return this.startMove(nx, ny, 10); }
+      if (st.ship && st.ship.x === nx && st.ship.y === ny) { st.onShip = true; Audio2.music('sea'); return this.startMove(nx, ny, 10); }
       if (t.solid) { if (this.bumpT !== Game.frame - 1) Audio2.sfx('bump'); this.bumpT = Game.frame; return; }
       return this.startMove(nx, ny, speed);
     }
@@ -159,7 +158,7 @@ class FieldScene {
     const out = c === 'Y' ? this.map.back2 : this.map.back;
     if (out && !Array.isArray(out)) return this.warp(out.map, out.x, out.y, out.dir);
     const [bx, by] = out || [S().x, S().y];
-    await fadeOut(12); this.enterMap(this.map.worldId || 'world', bx, by, 'down'); await fadeIn(12);
+    await fadeOut(12); this.enterMap('world', bx, by, 'down'); await fadeIn(12);
   }
   async warp(id, x, y, dir) { await fadeOut(12); this.enterMap(id, x, y, dir); await fadeIn(12); }
   // -------------------------------------------------------------- interaction
@@ -212,7 +211,7 @@ class FieldScene {
   // -------------------------------------------------------------- draw
   tileArt(c, x, y) {
     const t = this.tileDef(c); let art = t.art, v = 0;
-    const th = this.map.world ? (this.map.theme || 'world') : this.map.theme;
+    const th = this.map.world ? 'world' : this.map.theme;
     if (art === 'wall') { const b = this.tileAt(x, y + 1); art = (b == null || b === '#' || b === ' ' || b === '*') ? 'wallTop' : 'wallFace'; }
     else if (art === 'exit') { art = this.map.exitArt || 'path'; }
     if (art === 'roof') { const a = this.tileAt(x, y - 1), b = this.tileAt(x, y + 1); v = (a !== 'R' ? 1 : 0) | (b && b !== 'R' ? 2 : 0); }
@@ -241,7 +240,7 @@ class FieldScene {
     }
     const objs = [];
     for (const ch of this.map._chests || []) objs.push({ y: ch.y, draw: () => ctx.drawImage(S().chests[ch.id] ? OBJ.chestOpen : OBJ.chest, ch.x * TS - cx, ch.y * TS - cy, TS, TS) });
-    if (this.map.id === 'world' && st.ship && !st.onShip) objs.push({ y: st.ship.y, draw: () => ctx.drawImage(OBJ.ship, st.ship.x * TS - cx, st.ship.y * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS) });
+    if (this.map.world && st.ship && !st.onShip) objs.push({ y: st.ship.y, draw: () => ctx.drawImage(OBJ.ship, st.ship.x * TS - cx, st.ship.y * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS) });
     for (const n of this.visibleNpcs()) {
       if (this.hideNpc && this.hideNpc.has(n.key)) continue;
       let nx = n.x, ny = n.y; if (n.mv) { const k = n.mv.t / (n.mv.n || 16); nx += (n.mv.tx - n.x) * k; ny += (n.mv.ty - n.y) * k; }
@@ -253,7 +252,7 @@ class FieldScene {
       if (Game.speaking && n.def.name === Game.speaking) bob = Math.floor(Game.frame / 6) % 2 ? -2 : 0;
       ny += bob / TS;
       objs.push({ y: ny, draw: () => {
-        const bigImg = (n.def.img && IMG[n.def.img]) || (n.def.enemy && enemyImg(ENEMIES[n.def.enemy]));
+        const bigImg = n.def.img && IMG[n.def.img];
         if (bigImg) { const s = n.def.scale || 0.5; ctx.drawImage(bigImg, nx * TS - cx + TS / 2 - bigImg.width * s / 2, ny * TS - cy + TS - bigImg.height * s, bigImg.width * s, bigImg.height * s); return; }
         const img = chibi(n.def.look, pose === 'sleep' ? 'down' : n.dir, fr, pose);
         if (pose === 'sleep') { ctx.save(); ctx.beginPath(); ctx.rect(nx * TS - cx - 6, ny * TS - cy - 30, TS + 12, 48); ctx.clip(); ctx.drawImage(img, nx * TS - cx - 3, ny * TS - cy - 18, 54, 72); ctx.restore(); if (Math.floor(Game.frame / 30) % 2) text('z', nx * TS - cx + 40, ny * TS - cy - 30, '#fff', 12); }

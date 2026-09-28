@@ -18,7 +18,7 @@ function newState() {
     party: [makeMember('raine', 1), makeMember('miasma', 1)],
     gold: 300, items: { tonic: 5, antidote: 2, bellflower: 1 }, bag: {}, keys: [], flags: {}, chests: {},
     jobsOpen: [...START_JOBS], map: 'barge', x: 7, y: 6, dir: 'up',
-    bench: [], ship: null, onShip: false, steps: 0, playTime: 0, battles: 0, cfg: { atb: 'wait', speed: 3 },
+    ship: null, onShip: false, steps: 0, playTime: 0, battles: 0, cfg: { atb: 'wait', speed: 3 },
   };
 }
 const S = () => Game.state;
@@ -143,19 +143,5 @@ function saveGame() {
 }
 function loadSave() {
   try { const s = localStorage.getItem(SAVE_KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; }
-}
-// Bring an older save (e.g. a Chapter One file) up to date with the current data.
-function migrateSave(s) {
-  const d = newState();
-  for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
-  s.cfg = Object.assign({}, d.cfg, s.cfg || {});
-  for (const m of s.party || []) {
-    m.jobs = m.jobs || {}; m.status = m.status || {}; m.equip = m.equip || {};
-    for (const j of JOB_ORDER) if (!m.jobs[j]) m.jobs[j] = { lv: 1, jp: 0 };
-    if (!JOBS[m.job]) m.job = HEROES[m.id].job;
-  }
-  s.jobsOpen = s.jobsOpen.filter(j => JOBS[j]);
-  if (!MAPS[s.map]) { s.map = 'embrace2'; s.x = 12; s.y = 9; s.dir = 'up'; }
-  return s;
 }
 function hasSave() { return !!loadSave(); }

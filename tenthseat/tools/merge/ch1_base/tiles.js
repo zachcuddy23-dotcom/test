@@ -18,11 +18,6 @@ const THEMES = {
   tower: { wall: '#c8a868', wallDark: '#6a5430', floor: '#d8c090', floor2: '#ccb484', grass: '#6ab04a', carpet: '#b02030', water: '#3a78c8', wood: '#7a4a28', path: '#d8c090' },
   vale: { wall: '#7a6a8a', wallDark: '#3a2e46', floor: '#7a9a5a', floor2: '#709050', grass: '#6aa04a', mud: '#6a5a44', water: '#6aa8e8', wood: '#6a4a3a', path: '#b8a888' },
   barge: { wall: '#6a4a28', wallDark: '#2a1a0c', floor: '#a07040', floor2: '#946838', grass: '#5aa83e', water: '#1a2a60', wood: '#6a4424', path: '#a07040', carpet: '#c8a030' },
-  ashworld: { grass: '#5a4a40', path: '#6a5a4a', floor: '#5a4a40', floor2: '#524438', water: '#3a4a6a' },
-  forge: { wall: '#3a3434', wallDark: '#1a1616', floor: '#4a4240', floor2: '#443c3a', grass: '#4a4036', water: '#d04010', wood: '#4a2a18', path: '#5a4a40', carpet: '#6a1a10', bwall: '#4a4040', timber: '#1a1414', roof: '#3a2a2a' },
-  necro: { wall: '#5a5a66', wallDark: '#2a2a32', floor: '#6a6a72', floor2: '#62626a', grass: '#3a4a3a', water: '#2a3a5a', wood: '#4a3a30', path: '#7a7a80', carpet: '#3a2a4a', bwall: '#7a7a84', timber: '#3a3a44', roof: '#3a3a4a' },
-  caldera: { wall: '#2a1a18', wallDark: '#140a08', floor: '#3a2622', floor2: '#34221e', grass: '#3a2a20', water: '#e05010', wood: '#3a2010', path: '#4a3028', carpet: '#8a2010' },
-  emberport: { wall: '#4a3a34', wallDark: '#221816', floor: '#6a5a50', floor2: '#62524a', grass: '#4a4036', roof: '#6a2a20', bwall: '#6a5a50', timber: '#2a1a14', path: '#7a6a5a', water: '#3a4a6a', carpet: '#8a2020', wood: '#4a2a18' },
   house: { wall: '#8a6a44', wallDark: '#4a3622', floor: '#a88050', floor2: '#9c7446', grass: '#5aa83e', carpet: '#3a7a5a', wood: '#6a4424', path: '#a88050' },
 };
 const _tileCache = {};
@@ -267,17 +262,6 @@ const TILE_ART = {
   gilded(P, th, rng) { TILE_ART.floor(P, th, rng, 0, 0); P.r(3, 3, 12, 12, '#e0b030'); P.r(5, 5, 10, 10, '#fff0a0'); P.r(7, 1, 8, 14, '#e0b030'); P.r(1, 7, 14, 8, '#e0b030'); },
   bloom(P, th, rng) { TILE_ART.grass(P, th, rng); for (let i = 0; i < 6; i++) { const x = 1 + Math.floor(rng() * 13), y = 1 + Math.floor(rng() * 13); P.p(x, y, pick(['#c060ff', '#ff80d0', '#a040e0'])); P.p(x + 1, y, '#ffe0ff'); P.p(x, y + 1, '#2a6a20'); } },
   cliff(P, th, rng) { speckle(P, rng, '#6a5a7a', 20, ['#5a4a6a', '#7a6a8a']); P.r(0, 12, 15, 15, '#3a2e46'); P.r(0, 11, 15, 11, '#8a7a9a'); },
-  ashplain(P, th, rng) { speckle(P, rng, '#5a4a40', 30, ['#4a3c34', '#6a5a4e', '#3a302a']); if (rng() < 0.3) P.p(Math.floor(rng() * 16), Math.floor(rng() * 16), '#ff7030'); },
-  obsidian(P, th, rng) { speckle(P, rng, '#1e1a24', 20, ['#2a2634', '#141018']); for (let i = 0; i < 3; i++) { const x = Math.floor(rng() * 12), y = Math.floor(rng() * 12); P.r(x, y, x + 3, y, '#5a5a78'); P.p(x + 1, y + 1, '#8a8ab0'); } },
-  lavaflow(P, th, rng, f) { P.r(0, 0, 15, 15, '#c03010'); for (let i = 0; i < 5; i++) { const x = (i * 5 + f * 2) % 16, y = (i * 7 + f) % 16; P.r(x, y, Math.min(15, x + 3), y, '#ff9020'); P.p((x + 7) % 16, (y + 3) % 16, '#ffe060'); } P.p((f * 5) % 16, 8, '#401008'); },
-  deadwood(P, th, rng) { TILE_ART.ashplain(P, th, rng); for (const [x, y] of [[3, 3], [11, 5], [7, 11]]) { P.r(x, y, x, y + 4, '#2a1a14'); P.p(x - 1, y, '#2a1a14'); P.p(x + 1, y + 1, '#2a1a14'); P.p(x - 2, y - 1, '#2a1a14'); P.p(x + 2, y, '#2a1a14'); } },
-  port2(P, th, rng) { TILE_ART.ashplain(P, th, rng); const h = (x, y) => { P.r(x, y + 3, x + 5, y + 7, '#6a5a50'); P.r(x - 1, y + 1, x + 6, y + 3, '#6a2a20'); P.r(x + 2, y + 5, x + 3, y + 7, '#1a1010'); }; h(1, 1); h(8, 2); P.r(9, 12, 15, 13, '#4a2a18'); P.r(2, 9, 3, 15, '#2a2020'); P.p(2, 8, '#ff6030'); P.r(12, 8, 13, 15, '#2a2020'); P.p(12, 7, '#ff6030'); },
-  fortress(P, th, rng) { TILE_ART.ashplain(P, th, rng); const st = '#3a3434', hi = '#5a5050'; P.r(2, 4, 13, 14, st); P.r(1, 1, 4, 14, st); P.r(11, 1, 14, 14, st); P.r(1, 1, 1, 14, hi); P.r(6, 9, 9, 14, '#0a0606'); P.r(6, 8, 9, 8, '#ff7030'); P.r(7, 0, 8, 3, '#2a2a2a'); P.p(7, 0, '#8a8a8a'); P.p(12, 0, '#ff5020'); P.r(1, 15, 14, 15, '#1a1210'); },
-  necropolis(P, th, rng) { TILE_ART.ashplain(P, th, rng); const st = '#7a7a84'; P.r(3, 6, 12, 14, st); P.r(6, 1, 9, 6, st); P.r(7, 0, 8, 0, '#a0a0aa'); P.r(7, 3, 8, 4, '#1a1a22'); P.r(6, 10, 9, 14, '#1a1a22'); for (const x of [1, 14]) { P.r(x, 10, x, 14, st); P.p(x, 9, '#a0a0aa'); } },
-  volcano(P, th, rng, f) { TILE_ART.ashplain(P, th, rng); for (let y = 2; y <= 15; y++) { const half = Math.floor((y - 2) * 0.55) + 2; P.r(8 - half, y, 7 + half, y, y < 5 ? '#3a2a24' : '#2a1c18'); } P.r(6, 1, 9, 2, f % 2 ? '#ffb030' : '#ff6010'); P.r(7, 3, 8, 9, f % 2 ? '#ff6010' : '#ff9020'); P.p(7, 0, '#8a8a8a'); },
-  cinderthrone(P, th, rng, f) { TILE_ART.obsidian(P, th, rng); P.r(4, 4, 11, 14, '#2a1410'); P.r(5, 2, 10, 4, '#2a1410'); P.r(3, 9, 12, 11, '#3a1c14'); P.r(6, 5, 9, 8, f % 2 ? '#ffb030' : '#ff7020'); P.p(7, 0, '#ffd060'); P.p(8, 1, '#ff7020'); },
-  grave(P, th, rng) { TILE_ART.floor(P, th, rng, 0, 0); P.r(5, 3, 10, 13, '#8a8a94'); P.r(6, 2, 9, 2, '#8a8a94'); P.r(5, 3, 5, 13, '#a8a8b2'); P.r(7, 5, 8, 9, '#5a5a66'); P.r(6, 6, 9, 6, '#5a5a66'); P.r(4, 14, 11, 15, '#4a4a54'); },
-  bell(P, th, rng, f) { TILE_ART.floor(P, th, rng, 0, 0); P.r(3, 2, 12, 3, '#4a3a2a'); P.r(5, 4, 10, 11, '#b08a40'); P.r(4, 11, 11, 12, '#d0a850'); P.r(7, 12 + (f % 2), 8, 13 + (f % 2), '#6a5020'); },
   reeds(P, th, rng) { TILE_ART.mud(P, th, rng); for (const x of [3, 6, 11, 13]) { P.r(x, 4, x, 12, '#6a7a2a'); P.p(x, 3, '#8a6a3a'); } },
 };
 
@@ -292,10 +276,6 @@ const WORLD_TILES = {
   'L': { art: 'elfvillage', place: true }, 'M': { art: 'cave', place: true }, 'K': { art: 'keep', place: true },
   'V': { art: 'village', place: true }, 'D': { art: 'woodgate', place: true }, 'H': { art: 'lighthouse', place: true, anim: 2 }, 'E': { art: 'waterfall', place: true, anim: 3 },
   'g': { art: 'path', enc: 0.5 },
-  // Ashkar (Chapter Two)
-  'a': { art: 'ashplain', enc: 1 }, 'o': { art: 'obsidian', enc: 1.3 }, 'j': { art: 'lavaflow', solid: true, anim: 4 }, 'd': { art: 'deadwood', enc: 1.5 },
-  'Q': { art: 'port2', place: true }, 'W': { art: 'ashvillage', place: true }, 'X': { art: 'fortress', place: true }, 'U': { art: 'necropolis', place: true },
-  'Z': { art: 'volcano', place: true, anim: 2 }, 'N': { art: 'cinderthrone', place: true, anim: 2 },
 };
 const IN_TILES = {
   ' ': { art: 'void', solid: true }, '#': { art: 'wall', solid: true }, '*': { art: 'torch', solid: true, anim: 2 },
@@ -311,5 +291,4 @@ const IN_TILES = {
   'Y': { art: 'exit', exit: true }, 'L': { art: 'lantern', solid: true, anim: 2 }, 'h': { art: 'ash' }, 'x': { art: 'ruin', solid: true, anim: 2 },
   'B': { art: 'birch', solid: true }, 'j': { art: 'silverwood', enc: 1 }, 'd': { art: 'deck' }, 'v': { art: 'veilcage', solid: true, anim: 2 }, 'q': { art: 'rail', solid: true, anim: 4 }, 'G': { art: 'gilded' },
   'l': { art: 'bloom' }, 'K': { art: 'cliff', solid: true }, 'z': { art: 'floor', solid: true },
-  'J': { art: 'grave', solid: true }, 'Z': { art: 'bell', solid: true, anim: 2 }, 'D': { art: 'lavaflow', solid: true, anim: 4 }, 'U': { art: 'obsidian' },
 };

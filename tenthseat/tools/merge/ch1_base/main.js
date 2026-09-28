@@ -52,14 +52,11 @@ async function newGame() {
 }
 function continueGame() {
   const s = loadSave(); if (!s) return;
-  Game.state = migrateSave(s);
+  Game.state = s;
   const f = new FieldScene(); Game.field = f;
   Game.replaceAll(f);
   f.enterMap(s.map, s.x, s.y, s.dir);
-  Game.fade = 1;
-  // A finished Chapter One save rolls straight into Chapter Two
-  if (flag('ch1done') && !flag('ch2start') && typeof chapter2Opening === 'function') f.run(() => chapter2Opening());
-  else fadeIn(30);
+  Game.fade = 1; fadeIn(30);
 }
 
 // ---------------------------------------------------------------------------

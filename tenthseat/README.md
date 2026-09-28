@@ -1,4 +1,4 @@
-# The Tenth Seat: Chapter One, *The Unseated*
+# The Tenth Seat: Chapter One, *The Unseated*, and Chapter Two, *The Tenth Flame*
 
 A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
@@ -11,7 +11,21 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
 
-## What's new
+## What's new in Chapter Two
+- **Chapter One saves carry over.** Continue a save made on the "Chapter One Complete" screen and Chapter Two begins, with all your choices intact.
+- **The sanctuary falls into the sea** right after Verai's choice (Chapter Four will return there). Then Raine sails to **Ashkar** for answers about her crescent pendant.
+- **A new continent:** Emberport, Charnoch, Kharak Yr and its Gunworks, Draumond's Gate, Mount Terminus, and the Throne of Cinders.
+- **New ally:** Brakka Sootfinger, a goblin gunsmith with the **Powder** command.
+- **New jobs:** Chainbearer (Zariel: counters, vengeance) and Phoenix Warlock (Ashkar: fire, auto-life).
+- **Choices that branch:**
+  - Where Verai ended up in Chapter One changes the whole Mount Terminus scene.
+  - Bribe or fight your way out of Emberport.
+  - Push Miasma for the truth, or let her keep it.
+  - Take or destroy the blackpowder.
+  - Give Ashkar the Anvil, or refuse him.
+- Chapter Two ends with its own cinematic, an end card and a save screen.
+
+## What was new in Chapter One
 - **Trailer** before the title (skip with Z, or rewatch it from the title menu), plus cinematic scenes at key story moments.
 - **FF4-style acting:** in story scenes the party appears on the map and characters walk, turn, hop, shake their heads, laugh, tremble, kneel and pop emote bubbles.
 - **Secrets and choices:**

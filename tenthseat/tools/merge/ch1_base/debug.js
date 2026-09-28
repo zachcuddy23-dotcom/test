@@ -16,20 +16,6 @@ const CHECKPOINTS = [
   { name: 'Elaris\'s Embrace', flags: ['intro', 'audience', 'mission', 'stag', 'votary', 'pass', 'arrived', 'bridge', 'lunaJoin', 'harbor', 'chimera', 'wren'], party: ['raine', 'miasma', 'verai', 'luna'], lvl: 19, map: ['embrace1', 12, 13, 'up'], keys: ['harborpass', 'wrenkey'], ship: { x: 40, y: 33 } },
   { name: 'Twin Falls (final boss)', flags: ['intro', 'audience', 'mission', 'stag', 'votary', 'pass', 'arrived', 'bridge', 'lunaJoin', 'harbor', 'chimera', 'wren'], party: ['raine', 'miasma', 'verai', 'luna'], lvl: 20, map: ['embrace2', 12, 10, 'up'], keys: ['harborpass', 'wrenkey'], ship: { x: 40, y: 33 } },
 ];
-// Chapter Two checkpoints (everything from Chapter One is done)
-const CH1_DONE = ['intro', 'audience', 'mission', 'stag', 'votary', 'pass', 'arrived', 'bridge', 'lunaJoin', 'harbor', 'chimera', 'wren', 'colossus', 'ch1end', 'ch1done'];
-const CH2 = (name, extra, party, lvl, map, more = {}) => ({ name: 'Ch2: ' + name, flags: [...CH1_DONE, ...extra], party, lvl, map, keys: ['harborpass', 'wrenkey', ...(more.keys || [])], ship: { x: 40, y: 33 }, ...more });
-const RMVL = ['raine', 'miasma', 'verai', 'luna'], RML = ['raine', 'miasma', 'luna'];
-CHECKPOINTS.push(
-  CH2('Sanctuary falls (Verai stayed)', ['veraiStayed'], RMVL, 20, ['embrace2', 12, 9, 'up'], { run: () => chapter2Opening() }),
-  CH2('Sanctuary falls (Verai left)', ['veraiLeft'], RML, 20, ['embrace2', 12, 9, 'up'], { run: () => chapter2Opening() }),
-  CH2('Sanctuary falls (Verai with Sonia)', ['veraiSonia'], RML, 20, ['embrace2', 12, 9, 'up'], { run: () => chapter2Opening() }),
-  CH2('Emberport', ['veraiStayed', 'sanctuarySunk', 'ch2start'], RMVL, 21, ['emberport', 15, 16, 'up']),
-  CH2('Kharak Yr / Brakka', ['veraiLeft', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken'], RML, 23, ['kharakyr', 13, 16, 'up']),
-  CH2('Draumond', ['veraiSonia', 'sanctuarySunk', 'ch2start', 'emberGate', 'bribed', 'coalToken', 'gunworks', 'blewPowder'], [...RML, 'brakka'], 25, ['draumond', 13, 16, 'up'], { keys: ['gunpass'] }),
-  CH2('Mount Terminus (Verai with Sonia)', ['veraiSonia', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'coalToken', 'gunworks', 'tookPowder', 'draumond'], [...RML, 'brakka'], 26, ['terminus2', 1, 11, 'right'], { keys: ['gunpass', 'deathpage'] }),
-  CH2('Throne of Cinders', ['veraiStayed', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken', 'gunworks', 'tookPowder', 'draumond', 'ferryman'], [...RMVL], 28, ['cinders', 10, 13, 'up'], { keys: ['gunpass', 'anvilshard'] }),
-);
 function applyCheckpoint(cp) {
   const st = newState();
   st.party = cp.party.map(id => makeMember(id, cp.lvl));
@@ -39,14 +25,11 @@ function applyCheckpoint(cp) {
   if (cp.flags.includes('votary')) st.jobsOpen.push('reaper');
   if (cp.flags.includes('harbor')) st.jobsOpen.push('tidecaller');
   if (cp.flags.includes('chimera')) st.jobsOpen.push('wyrmblood');
-  if (cp.flags.includes('chainJob')) st.jobsOpen.push('chainbearer');
-  if (cp.flags.includes('ch1done')) st.flags.bond = 2;
   st.gold = 500 + cp.lvl * 300; st.items = { tonic: 8, hitonic: cp.lvl > 10 ? 4 : 0, antidote: 3, emberplume: 2, bedroll: 2 };
   if (cp.ship) st.ship = cp.ship;
   Game.state = st;
   const f = new FieldScene(); Game.field = f; Game.replaceAll(f); Game.fade = 0;
   const [id, x, y, d] = cp.map; f.enterMap(id, x, y, d);
-  if (cp.run) f.run(cp.run);
 }
 function unstick() {
   Game.fade = 0; Game.flash = 0; Game.shake = 0;
@@ -84,7 +67,7 @@ class DebugScene {
     if (r.cancel) { if (this.mode === 'root') this.close(); else this.root(); return; }
     const k = r.select.k;
     if (this.mode === 'jump') { this.close(); applyCheckpoint(CHECKPOINTS[r.index]); return; }
-    if (this.mode === 'warp') { this.close(); const id = r.select.id; if (id === 'world') { S().onShip = false; Game.field.enterMap('world', 27, 12, 'down'); } else { const m = prepMap(id); if (m.world) { S().onShip = false; const p = Object.keys(m.places)[0].split(',').map(Number); Game.field.enterMap(id, p[0], p[1] - 1, 'down'); } else Game.field.enterMap(id, m.start[0], m.start[1], m.start[2]); } Game.fade = 0; return; }
+    if (this.mode === 'warp') { this.close(); const id = r.select.id; if (id === 'world') { S().onShip = false; Game.field.enterMap('world', 27, 12, 'down'); } else { const m = prepMap(id); Game.field.enterMap(id, m.start[0], m.start[1], m.start[2]); } Game.fade = 0; return; }
     if (k === 'unstick') { unstick(); this.close(); return; }
     if (k === 'jump') { this.mode = 'jump'; this.menu = new ListMenu(CHECKPOINTS.map(c => ({ text: c.name })), { x: 180, y: 60, w: 600, rows: 11, rowH: 34, title: 'Jump to story point (resets the save in memory)', size: 14 }); return; }
     if (k === 'warp') { this.mode = 'warp'; this.menu = new ListMenu(['world', ...Object.keys(MAPS)].map(id => ({ text: id === 'world' ? 'World map (Solanthia)' : MAPS[id].name, id })), { x: 180, y: 40, w: 600, rows: 13, rowH: 32, title: 'Warp to map', size: 12 }); return; }

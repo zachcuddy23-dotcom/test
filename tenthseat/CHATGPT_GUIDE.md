@@ -402,6 +402,9 @@ tenthseat/
   js/party.js         state, stats(), job change, EXP/JP, save/load (localStorage)
   js/maps.js          WORLD + MAPS (ASCII grids), NPCs, chests, warps
   js/events.js        all story scenes for Chapter One
+  js/data2.js         Chapter Two data (Brakka, 2 jobs, gear, monsters, bosses, shops)
+  js/maps2.js         Chapter Two maps (the Ashkar world map + 9 maps)
+  js/events2.js       Chapter Two scenes (loads after cinema.js)
   js/ui.js            dialog, field menu (Items/Skills/Job/Equip/Status/Order/Config/Save), shops, inn, chapel
   js/field.js         exploration, encounters, cutscene helpers (walk, npcWalk, card, crawl)
   js/battle.js        ATB battle system, effects, backgrounds (+ bg_*, sheet overrides)
@@ -455,11 +458,20 @@ cd tenthseat
 node tools/check/validate.js     # map shapes, reachability, data references  -> "ALL OK"
 node tools/check/sim.js          # real battles, auto-played (win rates, length, HP left)
 NODE_PATH=$(npm root -g) node tools/check/story.js   # plays every story event in headless Chromium (needs playwright)
+NODE_PATH=$(npm root -g) node tools/check/story2.js stay   # Chapter Two from a Chapter One save (also: leave, sonia)
 ```
 
 ---
 
 ## 9. Roadmap: Chapter Two and beyond
+
+**Chapter Two is built.** Its story, choices, merge steps and new art list are all in `CHAPTER2_UPDATE_FOR_CHATGPT.md`. Its code lives in `js/data2.js`, `js/maps2.js` and `js/events2.js`. Chapter Three should follow the same pattern: `data3.js`, `maps3.js`, `events3.js`, a `chapter3Opening()` started from `continueGame()` when `ch2done` is set, and new jump points in `js/debug.js`.
+
+Threads to pick up later:
+- **Chapter Three:** Odeaon's arrest; the truth about Miasma, which is still unsaid; Verai (`veraiDoubt` / `veraiCold` / `veraiWaits` / `veraiRejoined`); Ashkar as ally or rival (`ashkarAlly` / `ashkarRival`).
+- **Chapter Four:** returns to the sunken sanctuary (`sanctuarySunk`).
+
+The original outline follows.
 Outline only. Keep the FF4-like rhythm: a new region, a new ally, a betrayal or sacrifice, and a new vehicle.
 
 - **Chapter Two: The Tenth Flame.** The party sails to **Ashkar**, Dominion of Flame and Ash:

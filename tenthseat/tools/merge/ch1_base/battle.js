@@ -22,20 +22,7 @@ async function battleSwirl() {
   for (let i = 0; i < 3; i++) { await tween(5, k => Game.fade = k * 0.8); await tween(5, k => Game.fade = 0.8 * (1 - k)); }
   await fadeOut(14, '#000');
 }
-// Enemy art: b_<art> (boss) or m_<art>. Chapter bosses without art yet use `ph`, a scaled placeholder.
-const _phCache = {};
-function enemyImg(d) {
-  if (IMG['b_' + d.art]) return recolored('b_' + d.art, IMG['m_' + d.art] ? null : d.tint);
-  if (d.ph) {
-    const k = d.art; if (_phCache[k]) return _phCache[k];
-    let src = d.ph.look ? chibi(d.ph.look, 'right', 0) : recolored('m_' + d.ph.art, d.ph.tint);
-    if (d.ph.silhouette) src = flashed(src, d.ph.silhouette);
-    const c = mkCanvas(Math.round(src.width * d.ph.scale), Math.round(src.height * d.ph.scale)), x = c.getContext('2d');
-    x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0, c.width, c.height);
-    return (_phCache[k] = c);
-  }
-  return recolored('m_' + d.art, d.tint);
-}
+function enemyImg(d) { return recolored((IMG['b_' + d.art] ? 'b_' : 'm_') + d.art, d.tint); }
 
 class BattleScene {
   constructor(opts, res) {
@@ -147,7 +134,7 @@ class BattleScene {
     }
   }
   turnStart(m, b) {
-    b.defend = false; b.guard = false; b.counter = false;
+    b.defend = false; b.guard = false;
     if (b.jumping) { b.queued = true; this.queue.push({ who: m, cmd: { type: 'land', target: b.jumping.target, mult: b.jumping.mult } }); return; }
     this.statusTick(m);
     if (!alive(m)) return;
@@ -288,10 +275,8 @@ class BattleScene {
   kill(t) {
     if (t.enemy) { t.hp = 0; t.dying = t.d.boss ? 70 : 26; Audio2.sfx(t.d.boss ? 'boom' : 'die'); if (t.d.boss) Game.shake = 30; this.queue = this.queue.filter(q => q.who !== t); }
     else {
-      const b0 = this.pb.get(t);
-      if (b0.reraise) { b0.reraise = false; t.hp = Math.max(1, Math.floor(stats(t).mhp / 4)); t.status = {}; this.num(t, 'Rise!', '#ffd060'); this.spawnFx('holy', this.memberCenter(t)); Audio2.sfx('holy'); return; }
       t.hp = 0; t.status = {}; const b = this.pb.get(t);
-      Object.assign(b, { gauge: 0, ready: false, queued: false, defend: false, guard: false, protect: 0, haste: false, regen: false, jumping: null, oy: 0, might: false, counter: false });
+      Object.assign(b, { gauge: 0, ready: false, queued: false, defend: false, guard: false, protect: 0, haste: false, regen: false, jumping: null, oy: 0 });
       this.readyList = this.readyList.filter(x => x !== t); this.queue = this.queue.filter(q => q.who !== t);
       if (this.ui && this.ui.m === t) this.ui = null;
     }
@@ -321,7 +306,7 @@ class BattleScene {
     if (!noMiss && !t.status.sleep && Math.random() > chance) return null;
     let d = st.atk * (1 + Math.random() * 0.5) - t.d.def;
     let crit = false; if (Math.random() < (m.job === 'masquer' ? 0.12 : 0.05)) { d = st.atk * 2 - t.d.def / 2; crit = true; }
-    d = Math.max(1, d) * mult * this.elemMult(t, elem || st.elem) * (m.status.fear ? 0.6 : 1) * (t.buff.def ? 0.7 : 1) * (b.might ? 1.5 : 1);
+    d = Math.max(1, d) * mult * this.elemMult(t, elem || st.elem) * (m.status.fear ? 0.6 : 1) * (t.buff.def ? 0.7 : 1);
     return { d: Math.round(d), crit };
   }
   async lunge(m) { const b = this.pb.get(m); await tween(8, k => b.ox = -40 * k); }
@@ -387,8 +372,7 @@ class BattleScene {
       for (const t of ts) this.spawnFx(sk.fx || 'slash', this.enemyCenter(t));
       Audio2.sfx(sk.fx === 'dark' ? 'dark' : sk.fx === 'fire' ? 'fire' : 'slash'); await wait(18);
       for (let h = 0; h < (sk.hits || 1); h++) {
-        const vmult = sk.vengeance ? 1 + 2 * (1 - m.hp / st.mhp) : 1;
-        for (const t of ts) { if (t.hp <= 0) continue; const r = this.physDamage(m, t, sk.mult * vmult, true, sk.elem); Audio2.sfx(r.crit ? 'crit' : 'hit'); this.damage(t, r.d); }
+        for (const t of ts) { if (t.hp <= 0) continue; const r = this.physDamage(m, t, sk.mult, true, sk.elem); Audio2.sfx(r.crit ? 'crit' : 'hit'); this.damage(t, r.d); }
         await wait(16);
       }
       await wait(20); return;
@@ -439,15 +423,12 @@ class BattleScene {
       if (sk.cures) for (const s of sk.cures) delete t.status[s];
       if (sk.buff === 'regen') this.pb.get(t).regen = true;
     } else if (sk.kind === 'cure') { if (alive(t)) { for (const s of sk.cures) delete t.status[s]; this.num(t, 'Cured', '#70ff90'); } }
-    else if (sk.kind === 'revive') { if (!alive(t)) { t.hp = Math.max(1, Math.floor(stats(t).mhp / (sk.full ? 2 : 4))); t.status = {}; this.pb.get(t).gauge = 0; this.num(t, t.hp, '#70ff90'); } else this.num(t, 'Miss', '#c0c0c0'); }
+    else if (sk.kind === 'revive') { if (!alive(t)) { t.hp = Math.max(1, Math.floor(stats(t).mhp / 4)); t.status = {}; this.pb.get(t).gauge = 0; this.num(t, t.hp, '#70ff90'); } else this.num(t, 'Miss', '#c0c0c0'); }
     else if (sk.kind === 'buff') {
       const pb = this.pb.get(t); if (!alive(t)) return;
       if (sk.buff === 'protect') { pb.protect = 1; this.num(t, 'Protect', '#ffe070'); }
       if (sk.buff === 'haste') { pb.haste = true; this.num(t, 'Haste', '#ffe070'); }
       if (sk.buff === 'regen') { pb.regen = true; this.num(t, 'Regen', '#70ff90'); }
-      if (sk.buff === 'counter') { pb.counter = true; this.num(t, 'Counter', '#ff9070'); }
-      if (sk.buff === 'might') { pb.might = true; this.num(t, 'Might', '#ff9070'); }
-      if (sk.buff === 'reraise') { pb.reraise = true; this.num(t, 'Reraise', '#ffd060'); }
     }
   }
   async land(m, c) {
@@ -515,7 +496,6 @@ class BattleScene {
         let dmg = (d.atk * (1 + Math.random() * 0.5) * (act.mult || 1) - ts.def) * fear * this.enemyDefMult(t);
         Audio2.sfx(act.mult ? 'crit' : 'hit'); if (act.mult) Game.shake = 12;
         this.damage(t, Math.max(1, dmg));
-        if (alive(t) && this.pb.get(t).counter && e.hp > 0) { await wait(14); this.num(t, 'Counter!', '#ff9070'); this.spawnFx('slash', this.enemyCenter(e)); const cr = this.physDamage(t, e, 1, true); Audio2.sfx('hit'); this.damage(e, cr.d); }
         const tc = d.touch;
         if (tc && alive(t) && Math.random() * 100 < tc.chance && !t.status[tc.status] && !ts.immune.includes(tc.status)) { t.status[tc.status] = true; await wait(12); this.num(t, STATUS_LABEL[tc.status], '#ffd060'); Audio2.sfx('status'); }
       }
@@ -539,7 +519,7 @@ class BattleScene {
       Audio2.sfx('status'); await wait(26);
       for (const t of ts) {
         const st = stats(t);
-        if (!st.immune.includes(act.status) && Math.random() * 100 < act.chance - st.spr / 3) { t.status[act.status] = act.status === 'doom' ? 4 : true; this.num(t, STATUS_LABEL[act.status], '#ffd060'); }
+        if (!st.immune.includes(act.status) && Math.random() * 100 < act.chance - st.spr / 3) { t.status[act.status] = true; this.num(t, STATUS_LABEL[act.status], '#ffd060'); }
         else this.num(t, 'Miss', '#c0c0c0');
       }
       await wait(30);
@@ -765,13 +745,6 @@ function battleBg(name) {
     case 'vale': grad(0, 60, '#6a4a9a', '#f0b0d0'); x.fillStyle = '#d0e8ff'; x.fillRect(96, 0, 14, 64); x.fillRect(130, 0, 14, 64); x.fillStyle = 'rgba(255,255,255,0.4)'; x.fillRect(90, 56, 60, 10); hills(46, 6, '#5a3a6a', 1); ground(62, '#6a8a4a', '#3a5a2a', true); x.fillStyle = '#ff90e0'; for (let i = 0; i < 50; i++) x.fillRect(R() * w, 62 + R() * 46, 2, 1); break;
     case 'sanctum': grad(0, 72, '#0a0614', '#3a2050'); disc(120, 26, 18, '#ffe070'); disc(120, 26, 12, '#1a0a24'); for (let i = 0; i < 7; i++) pillar(10 + i * 36, 4, 74, '#6a5a7a'); ground(74, '#4a3a5a', '#1a1024', true); break;
     case 'town': grad(0, 60, '#5aa0f0', '#cfeaff'); for (let i = 0; i < 6; i++) { const bx = i * 42 + 4; x.fillStyle = '#f0e8d8'; x.fillRect(bx, 34, 30, 28); x.fillStyle = '#d0a030'; x.fillRect(bx - 3, 26, 36, 9); x.fillStyle = '#5a3a20'; x.fillRect(bx + 12, 48, 6, 14); } ground(62, '#c8c0a8', '#9a9080', true); break;
-    case 'ashplains': grad(0, 60, '#3a1010', '#c06030'); hills(42, 8, '#2a1a18', 2); hills(52, 5, '#1a1210', 4); ground(60, '#5a4a40', '#2a2420', true); x.fillStyle = '#ff8030'; for (let i = 0; i < 30; i++) x.fillRect(R() * w, R() * 60, 1, 1); break;
-    case 'lava': grad(0, 60, '#1a0808', '#802010'); hills(46, 8, '#1a1010', 1); ground(60, '#2a1c18', '#120a08', true); x.fillStyle = '#ff6010'; for (let i = 0; i < 6; i++) x.fillRect(R() * w, 70 + R() * 36, 30 + R() * 30, 3); x.fillStyle = '#ffc040'; for (let i = 0; i < 6; i++) x.fillRect(R() * w, 72 + R() * 34, 10, 1); break;
-    case 'forge': grad(0, 72, '#140c0a', '#4a2a1a'); for (let i = 0; i < 6; i++) pillar(14 + i * 42, 6, 74, '#3a3a44'); x.fillStyle = 'rgba(255,120,30,0.35)'; x.fillRect(0, 50, w, 24); ground(74, '#3a3030', '#1a1414', true); x.fillStyle = '#ff9030'; for (let i = 0; i < 20; i++) x.fillRect(R() * w, R() * 70, 1, 1); break;
-    case 'grave': grad(0, 70, '#0a0a12', '#3a3a4a'); for (let i = 0; i < 12; i++) { const gx = R() * w; x.fillStyle = '#5a5a66'; x.fillRect(gx, 50 + R() * 14, 8, 16); x.fillRect(gx - 2, 54, 12, 3); } ground(70, '#3a3a40', '#1a1a20', true); x.fillStyle = 'rgba(160,160,200,0.2)'; x.fillRect(0, 56, w, 14); break;
-    case 'volcano': grad(0, 70, '#200808', '#a03010'); x.fillStyle = '#1a0a08'; x.beginPath(); x.moveTo(60, 72); x.lineTo(120, 10); x.lineTo(180, 72); x.fill(); x.fillStyle = '#ff7020'; x.fillRect(114, 10, 12, 4); x.fillRect(118, 14, 4, 30); ground(72, '#2a1a14', '#100806', true); x.fillStyle = '#8a8aa0'; x.fillRect(104, 40, 32, 34); x.fillStyle = '#100806'; x.fillRect(110, 46, 20, 28); break;
-    case 'caldera': grad(0, 72, '#1a0404', '#e06020'); disc(120, 30, 20, 'rgba(255,200,80,0.45)'); disc(120, 30, 12, '#fff0a0'); x.fillStyle = '#140808'; x.fillRect(98, 40, 44, 34); x.fillRect(92, 50, 56, 6); ground(74, '#2a1410', '#0a0404', true); x.fillStyle = '#ffb040'; for (let i = 0; i < 40; i++) x.fillRect(R() * w, R() * 72, 1, 2); break;
-    case 'port2': grad(0, 50, '#301010', '#c08060'); grad(50, 68, '#2a2a3a', '#4a4a5a'); x.fillStyle = '#1a1414'; x.fillRect(20, 20, 10, 50); x.fillRect(210, 20, 10, 50); x.fillStyle = '#ff6030'; x.fillRect(22, 18, 6, 4); x.fillRect(212, 18, 6, 4); ground(68, '#4a4040', '#2a2424', true); break;
     default: grad(0, h, '#222', '#444');
   }
   const big = mkCanvas(W, FIELD_H + 8), bx = big.getContext('2d'); bx.imageSmoothingEnabled = false; bx.drawImage(c, 0, 0, w, h, 0, 0, W, FIELD_H + 8);

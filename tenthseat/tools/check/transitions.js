@@ -10,12 +10,14 @@ const path = require('path');
   await page.goto('file://' + path.join(__dirname, '..', '..', 'index.html'));
   await page.waitForTimeout(1200);
   for (let i = 0; i < 400 && !(await page.evaluate(() => Game.top() instanceof TitleScene)); i++) await page.evaluate(() => { Input.pressed.a = true; }), await page.waitForTimeout(30);
-  await page.evaluate(() => { Game.state = newState(); for (const f of ['intro','audience','mission','stag','votary','pass','bridge','harbor','chimera','wren','noEnc','lunaJoin']) Game.state.flags[f] = true; Game.state.keys.push('harborpass'); const f = new FieldScene(); Game.field = f; Game.replaceAll(f); f.enterMap('world', 20, 14, 'down'); Game.fade = 0;
+  await page.evaluate(() => { Game.state = newState(); for (const f of ['intro','audience','mission','stag','votary','pass','bridge','harbor','chimera','wren','noEnc','lunaJoin','ch1end','ch1done','ch2start','emberGate','trialWon','gunworks','draumond','ferryman','coalToken','chainJob','lunaEmberDone']) Game.state.flags[f] = true; Game.state.keys.push('harborpass', 'gunpass', 'deathpage'); const f = new FieldScene(); Game.field = f; Game.replaceAll(f); f.enterMap('world', 20, 14, 'down'); Game.fade = 0;
     setInterval(() => { const t = Game.top(); if (t instanceof DialogScene || t instanceof NotifyScene) Input.pressed.a = true; }, 50); });
   const cases = await page.evaluate(() => {
     const out = [];
-    for (const [k, p] of Object.entries(WORLD.places)) out.push({ kind: 'place', k });
+    for (const [k, p] of Object.entries(WORLD.places)) out.push({ kind: 'place', k, w: 'world' });
+    for (const [id, m] of Object.entries(MAPS)) if (m.world) for (const k of Object.keys(m.places)) out.push({ kind: 'place', k, w: id });
     for (const [id, m] of Object.entries(MAPS)) {
+      if (m.world) continue;
       prepMap(id);
       for (let y = 0; y < m.h; y++) for (let x = 0; x < m.w; x++) {
         const c = m._grid[y][x], t = IN_TILES[c] || {};
@@ -30,13 +32,13 @@ const path = require('path');
   for (const cs of cases) {
     await page.evaluate(cs => {
       const f = Game.field; Game.fade = 0;
-      if (cs.kind === 'place') { const [x, y] = cs.k.split(',').map(Number); f.enterMap('world', x, y + 1, 'up'); S().x = x; S().y = y; f.arrive(); }
+      if (cs.kind === 'place') { const [x, y] = cs.k.split(',').map(Number); S().onShip = false; f.enterMap(cs.w, x, y + 1, 'up'); S().x = x; S().y = y; f.arrive(); }
       else { f.enterMap(cs.id, cs.x, cs.y, 'down'); f.arrive(); }
     }, cs);
     await page.waitForTimeout(900);
     const st = await page.evaluate(() => ({ fade: Game.fade, top: Game.top() === Game.field, map: Game.field.map.id, busy: Game.field.busy, errs: Game.errors.length }));
-    const from = cs.kind === 'place' ? 'world' : cs.id;
-    const gated = cs.kind === 'place' && cs.k === '27,11'; // Solanthia's gate refuses entry after Hollowmere, on purpose
+    const from = cs.kind === 'place' ? cs.w : cs.id;
+    const gated = cs.kind === 'place' && cs.w === 'world' && cs.k === '27,11'; // Solanthia's gate refuses entry after Hollowmere, on purpose
     const ok = st.fade === 0 && st.top && st.busy === 0 && (gated || st.map !== from) && st.errs === 0;
     if (!ok) { bad++; console.log('BAD', JSON.stringify(cs), JSON.stringify(st)); }
   }

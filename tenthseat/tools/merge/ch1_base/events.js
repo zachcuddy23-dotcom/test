@@ -947,12 +947,11 @@ async function chapterEnd(result) {
   ], { skipAll: false });
   setFlag('ch1done');
   await saveScreen(result, t);
-  if (typeof chapter2Opening === 'function') { await chapter2Opening(); return; }
   await fadeIn(40);
   Audio2.music(musicFor(F().map));
 }
 // Chapter-complete save screen
-function saveScreen(result, mins, title = 'CHAPTER ONE COMPLETE', notesIn = null, footer = 'Save your progress? Chapter Two will continue from this file.') {
+function saveScreen(result, mins) {
   return new Promise(res => Game.push({
     opaque: true, t: 0, saved: null,
     enter() { this._fade = Game.fade; Game.fade = 0; }, leave() { Game.fade = this._fade || 0; },
@@ -967,13 +966,13 @@ function saveScreen(result, mins, title = 'CHAPTER ONE COMPLETE', notesIn = null
     draw() {
       drawStars('#05030c', '#2a1030');
       drawWindow(120, 40, 720, 390);
-      text(title, W / 2, 66, '#ffe070', 20, 'center');
+      text('CHAPTER ONE COMPLETE', W / 2, 66, '#ffe070', 20, 'center');
       text(`Play time ${Math.floor(mins / 60)}h ${mins % 60}m    Battles ${S().battles}    Gold ${S().gold}`, W / 2, 104, '#c8c8e0', 11, 'center');
       S().party.forEach((m, i) => { const y = 136 + i * 56, face = faceImg(HEROES[m.id].face, HEROES[m.id].look); if (face) ctx.drawImage(face, 170, y, 48, 48); text(`${m.name}`, 236, y + 6, '#fff', 14); text(`Lv ${m.lvl}  ${JOBS[m.job].name}`, 236, y + 28, JOBS[m.job].color, 11); });
-      const notes = notesIn || [result === 'stay' ? 'Verai stayed with you.' : result === 'leave' ? 'Verai left to find herself.' : 'Verai went with Sonia.', flag('lunaRevealed') ? 'You know Luna\'s secret.' : 'Luna kept her secret.', 'Miasma\'s secret is still hers.'];
+      const notes = [result === 'stay' ? 'Verai stayed with you.' : result === 'leave' ? 'Verai left to find herself.' : 'Verai went with Sonia.', flag('lunaRevealed') ? 'You know Luna\'s secret.' : 'Luna kept her secret.', 'Miasma\'s secret is still hers.'];
       notes.forEach((n, i) => text(n, 560, 150 + i * 34, '#e8e0ff', 11));
-      if (this.saved === null) { text(footer, W / 2, 410, '#a8a8d0', 11, 'center'); if (this.t >= 30) this.menu.draw(); }
-      else { drawWindow(240, 450, 480, 80); text(this.saved ? 'Saved! Press Z to continue.' : 'Saving is unavailable here. Press Z.', W / 2, 482, this.saved ? '#80ff90' : '#ff9090', 13, 'center'); }
+      if (this.saved === null) { text('Save your progress? Chapter Two will continue from this file.', W / 2, 410, '#a8a8d0', 11, 'center'); if (this.t >= 30) this.menu.draw(); }
+      else { drawWindow(240, 450, 480, 80); text(this.saved ? 'Saved! Press Z to keep exploring.' : 'Saving is unavailable here. Press Z.', W / 2, 482, this.saved ? '#80ff90' : '#ff9090', 13, 'center'); }
     },
   }));
 }

@@ -5,6 +5,7 @@ const assets = new Set(fs.readdirSync(path.join(__dirname, '..', '..', 'assets')
 let errors = 0; const err = m => { errors++; console.log('ERR', m); };
 const T = c.IN_TILES;
 for (const [id, m] of Object.entries(c.MAPS)) {
+  if (m.world) continue; // extra world maps are checked below
   const w = m.rows[0].length;
   m.rows.forEach((r, i) => { if (r.length !== w) err(`${id} row ${i} width ${r.length} != ${w}`); });
   const g = m.rows.map(r => r.split(''));
@@ -55,8 +56,27 @@ const W = c.WORLD;
 for (const [k, p] of Object.entries(W.places)) { const [x, y] = k.split(',').map(Number); const ch = W.rows[y][x]; if (!(c.WORLD_TILES[ch] || {}).place) err(`world place ${k} is on '${ch}'`); }
 W.rows.forEach((r, i) => { if (r.length !== W.rows[0].length) err('world row ' + i); });
 for (const r of W.rows) for (const ch of r) if (!c.WORLD_TILES[ch] && ch !== 'G') err('world tile ' + ch);
+// extra world maps (Chapter Two's Ashkar): shape, tiles, places, and every place reachable once all gates open
+for (const [id, m] of Object.entries(c.MAPS)) {
+  if (!m.world) continue;
+  const g = m.rows, w = g[0].length, gates = m.gates || {};
+  g.forEach((r, i) => { if (r.length !== w) err(`${id} row ${i}`); });
+  const tileAt = (x, y) => { const ch = g[y][x]; return gates[ch] ? c.WORLD_TILES[gates[ch][1]] : c.WORLD_TILES[ch]; };
+  for (const r of g) for (const ch of r) if (!c.WORLD_TILES[ch] && !gates[ch]) err(`${id} tile ${ch}`);
+  for (const [k, p] of Object.entries(m.places)) {
+    const [x, y] = k.split(',').map(Number); if (!(tileAt(x, y) || {}).place) err(`${id} place ${k} is on '${g[y][x]}'`);
+    if (!c.MAPS[p.map || p]) err(`${id} place ${k} -> missing map`);
+  }
+  for (const [ch, [fl]] of Object.entries(gates)) if (typeof fl !== 'string') err(`${id} gate ${ch}`);
+  const walk = t => t && !t.solid && !t.water && !t.mountain && !t.block;
+  const home = Object.entries(m.places).find(([, p]) => (p.map || p) === 'emberport')[0].split(',').map(Number);
+  const seen = new Set([home.join(',')]), q = [home];
+  while (q.length) { const [x, y] = q.shift(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy, k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= w || ny >= g.length || seen.has(k)) continue; const t = tileAt(nx, ny); if (!t || (!t.place && !walk(t))) continue; seen.add(k); if (!t.place) q.push([nx, ny]); } }
+  for (const k of Object.keys(m.places)) if (!seen.has(k)) err(`${id} place ${k} unreachable from Emberport`);
+  console.log(`${id.padEnd(12)} world ${w}x${g.length} reachable ${seen.size}`);
+}
 // data references
-for (const [id, e] of Object.entries(c.ENEMIES)) if (!assets.has('m_' + e.art) && !assets.has('b_' + e.art)) err(`enemy ${id} art ${e.art} missing`);
+for (const [id, e] of Object.entries(c.ENEMIES)) if (!e.ph && !assets.has('m_' + e.art) && !assets.has('b_' + e.art)) err(`enemy ${id} art ${e.art} missing`);
 for (const [z, fs2] of Object.entries(c.FORMATIONS)) for (const f of fs2) for (const [e] of f.e) if (!c.ENEMIES[e]) err(`formation ${z} enemy ${e}`);
 for (const [s, sh] of Object.entries(c.SHOPS)) for (const k of ['weapon', 'armor', 'item']) for (const id of sh[k] || []) if (!c.ITEMS[id] && !c.EQUIP[id]) err(`shop ${s} ${id}`);
 for (const [j, J] of Object.entries(c.JOBS)) for (const [, s] of J.learn) if (!c.SKILLS[s]) err(`job ${j} skill ${s}`);

@@ -70,6 +70,14 @@ if (require.main === module) {
     votary: { party: [['raine', 9, 'oathblade', 4, { weapon: 'broadsword', head: 'ironhelm' }], ['miasma', 9, 'freelancer', 4, { weapon: 'handaxe', head: 'cap' }], ['verai', 9, 'dawnsinger', 3, {}]], items: { tonic: 6, emberplume: 1 } },
     chimera: { party: [['raine', 15, 'oathblade', 6, { weapon: 'dawnblade', head: 'ironhelm', body: 'chainmail' }], ['miasma', 15, 'wyrmblood', 2, { weapon: 'pike', head: 'ironhelm', body: 'chainmail' }], ['verai', 15, 'arcanist', 4, { weapon: 'starrod', head: 'featherhat', body: 'sagerobe' }]], items: { tonic: 6, hitonic: 3, emberplume: 2 } },
     colossus: { party: [['raine', 19, 'reaper', 5, { weapon: 'gravecleaver', head: 'sunhelm', body: 'platemail' }], ['miasma', 19, 'wyrmblood', 5, { weapon: 'tidespear', head: 'sunhelm', body: 'platemail' }], ['verai', 19, 'arcanist', 6, { weapon: 'sagerod', head: 'circlet', body: 'sagerobe' }]], items: { hitonic: 5, emberplume: 2, ether: 2 } },
+    // Chapter Two: Chapter One's end gear, then Emberport / Kharak Yr gear
+    ember: { party: [['raine', 21, 'reaper', 6, { weapon: 'gravecleaver', head: 'sunhelm', body: 'platemail' }], ['miasma', 21, 'wyrmblood', 6, { weapon: 'tidespear', head: 'sunhelm', body: 'platemail' }], ['luna', 21, 'oathblade', 6, { weapon: 'dawnblade', head: 'sunhelm', body: 'platemail' }], ['verai', 21, 'arcanist', 6, { weapon: 'sagerod', head: 'circlet', body: 'sagerobe' }]], items: { hitonic: 5, emberplume: 2, ether: 2 } },
+    ember3: { party: [['raine', 21, 'reaper', 6, { weapon: 'gravecleaver', head: 'sunhelm', body: 'platemail' }], ['miasma', 21, 'wyrmblood', 6, { weapon: 'tidespear', head: 'sunhelm', body: 'platemail' }], ['luna', 21, 'oathblade', 6, { weapon: 'dawnblade', head: 'sunhelm', body: 'platemail' }]], items: { hitonic: 5, emberplume: 2, ether: 2 } },
+    grave3: { party: [['raine', 26, 'reaper', 8, { weapon: 'flamberge', head: 'ashhelm', body: 'obsidianplate' }], ['miasma', 26, 'wyrmblood', 8, { weapon: 'dragonlance', head: 'ashhelm', body: 'obsidianplate' }], ['luna', 26, 'oathblade', 8, { weapon: 'flamberge', head: 'ashhelm', body: 'obsidianplate' }], ['brakka', 26, 'freelancer', 7, { weapon: 'handcannon', head: 'embercowl', body: 'salamanderhide' }]], items: { megatonic: 4, emberplume: 3, hiether: 2, ashsalve: 3 } },
+    throneOld: { party: [['raine', 28, 'reaper', 7, { weapon: 'gravecleaver', head: 'sunhelm', body: 'platemail' }], ['miasma', 28, 'wyrmblood', 7, { weapon: 'tidespear', head: 'sunhelm', body: 'platemail' }], ['brakka', 28, 'freelancer', 7, { weapon: 'handcannon' }], ['verai', 28, 'arcanist', 7, { weapon: 'sagerod', head: 'circlet', body: 'sagerobe' }]], items: { hitonic: 6, megatonic: 4, emberplume: 3, ether: 3 } },
+    forge: { party: [['raine', 24, 'reaper', 7, { weapon: 'flamberge', head: 'ashhelm', body: 'platemail' }], ['miasma', 24, 'wyrmblood', 7, { weapon: 'dragonlance', head: 'ashhelm', body: 'platemail' }], ['luna', 24, 'oathblade', 7, { weapon: 'flamberge', head: 'ashhelm', body: 'platemail' }], ['brakka', 24, 'freelancer', 6, { head: 'embercowl', body: 'salamanderhide' }]], items: { hitonic: 5, megatonic: 2, emberplume: 2, ether: 2 } },
+    grave: { party: [['raine', 26, 'reaper', 8, { weapon: 'flamberge', head: 'ashhelm', body: 'obsidianplate' }], ['miasma', 26, 'wyrmblood', 8, { weapon: 'dragonlance', head: 'ashhelm', body: 'obsidianplate' }], ['luna', 26, 'oathblade', 8, { weapon: 'flamberge', head: 'ashhelm', body: 'obsidianplate' }], ['verai', 26, 'arcanist', 8, { weapon: 'emberrod', head: 'embercowl', body: 'ashrobe' }]], items: { megatonic: 4, emberplume: 3, hiether: 2, ashsalve: 3 } },
+    throne: { party: [['raine', 28, 'reaper', 9, { weapon: 'gravecleaver', head: 'ashhelm', body: 'obsidianplate' }], ['miasma', 28, 'wyrmblood', 9, { weapon: 'dragonlance', head: 'ashhelm', body: 'obsidianplate' }], ['luna', 28, 'oathblade', 9, { weapon: 'dawnblade', head: 'ashhelm', body: 'obsidianplate' }], ['verai', 28, 'arcanist', 9, { weapon: 'emberrod', head: 'embercowl', body: 'ashrobe' }]], items: { megatonic: 5, emberplume: 3, hiether: 3, ashsalve: 3 } },
   };
   const which = process.argv[2];
   const cases = [
@@ -78,6 +86,12 @@ if (require.main === module) {
     ['votary', ['cinderimp', 'cinderimp', 'ashhound']], ['votary', ['votary']],
     ['chimera', ['gilder', 'sunwisp', 'sunwisp']], ['chimera', ['chimera']],
     ['colossus', ['mossogre', 'bloomling', 'bloomling']], ['colossus', ['bloomcolossus']],
+    ['ember', ['cinderhound', 'cinderhound']], ['ember', ['ashimp', 'ashimp', 'ashimp']], ['ember', ['legionnaire', 'kobold', 'kobold']], ['ember', ['vorsk']],
+    ['ember3', ['legionnaire', 'kobold', 'kobold']], ['ember3', ['vorsk']], ['grave3', ['ferryman']], ['grave3', ['veiledverai']],
+    ['throneOld', ['ashkargod']], ['throneOld', ['kargath']],
+    ['forge', ['magmagolem']], ['forge', ['kobold', 'kobold', 'kobold']], ['forge', ['cannongolem']],
+    ['grave', ['ravenwraith', 'ravenwraith', 'ravenwraith']], ['grave', ['nightshade', 'nightshade']], ['grave', ['ferryman']],
+    ['throne', ['cultist', 'cultist', 'cultist']], ['throne', ['crimsonguard', 'crimsonguard']], ['throne', ['ashkargod']], ['throne', ['kargath']],
   ];
   (async () => {
     for (const [p, e] of cases) if (!which || which === p) console.log(p.padEnd(9), e.join('+').padEnd(28), await fight(P[p], e, +process.argv[3] || 12));
