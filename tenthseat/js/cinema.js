@@ -7,7 +7,7 @@
 const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
 class Actor {
   constructor(o) {
-    Object.assign(this, { ox: 0, oy: 0, dir: 'down', frame: 0, pose: '', alpha: 1, emote: null, tremble: 0, spinT: 0 }, o);
+    Object.assign(this, { ox: 0, oy: 0, dir: 'down', frame: 0, pose: '', alpha: 1, emote: null, trem: 0, spinT: 0 }, o);
     if (!this.name && HEROES[this.id]) this.name = HEROES[this.id].name;
   }
   async walk(dirs, speed = 14) {
@@ -32,7 +32,7 @@ class Actor {
   async shake(n = 2) { const d0 = this.dir; for (let i = 0; i < n; i++) { this.dir = 'left'; await wait(7); this.dir = 'right'; await wait(7); } this.dir = d0; }
   async nod(n = 2) { for (let i = 0; i < n; i++) { await tween(6, k => this.oy = k * 4); await tween(6, k => this.oy = 4 - k * 4); } this.oy = 0; }
   async laugh(n = 4) { this.emote = { ch: '♪', t: 60 }; for (let i = 0; i < n; i++) await tween(8, k => this.oy = -Math.sin(k * Math.PI) * 7); this.oy = 0; }
-  async tremble(t = 50) { this.tremble = t; await wait(t); }
+  async tremble(t = 50) { this.trem = t; await wait(t); }
   async spin(n = 1) { const order = ['down', 'left', 'up', 'right']; for (let i = 0; i < n * 4; i++) { this.dir = order[i % 4]; await wait(5); } this.dir = 'down'; }
   async stepBack(dist = 0.6) { const [dx, dy] = DIRS[OPP[this.dir]], x0 = this.x, y0 = this.y; await tween(10, k => { this.x = x0 + dx * dist * k; this.y = y0 + dy * dist * k; this.oy = -Math.sin(k * Math.PI) * 6; }); this.oy = 0; }
   async lunge() { const [dx, dy] = DIRS[this.dir], x0 = this.x, y0 = this.y; await tween(6, k => { this.x = x0 + dx * 0.4 * k; this.y = y0 + dy * 0.4 * k; }); await tween(10, k => { this.x = x0 + dx * 0.4 * (1 - k); this.y = y0 + dy * 0.4 * (1 - k); }); }
@@ -83,7 +83,7 @@ Object.assign(FieldScene.prototype, {
   async panBack(n = 30) { if (!this.cam) return; const st = S(); await this.pan(st.x, st.y, n); this.cam = null; },
   drawActor(a, cx, cy) {
     let x = a.x * TS - cx - 3 + a.ox, y = a.y * TS - cy - 24 + a.oy;
-    if (a.tremble > 0) { a.tremble--; x += (a.tremble % 4 < 2 ? -2 : 2); }
+    if (a.trem > 0) { a.trem--; x += (a.trem % 4 < 2 ? -2 : 2); }
     if (Game.speaking && Game.speaking === a.name) y -= Math.floor(Game.frame / 6) % 2 ? 2 : 0;
     const img = chibi(a.look, a.pose === 'down' ? 'down' : a.dir, a.frame, a.pose === 'down' ? 'sleep' : '');
     ctx.save(); ctx.globalAlpha = a.alpha;
