@@ -307,10 +307,10 @@ const ENEMIES = {
     lines: { start: '"Rejoice, little heretics. The Light has come home."', half: '"Why do you not REJOICE?"' },
   },
   chimera: {
-    name: 'Sunforged Chimera', art: 'chimera', boss: true, hp: 2300, atk: 27, def: 14, mdef: 12, agi: 18, exp: 1600, jp: 12, gold: 1500, weak: ['water', 'ice'], resist: ['fire', 'holy'], actions: 2,
+    name: 'Sunforged Chimera', art: 'chimera', boss: true, hp: 2000, atk: 24, def: 14, mdef: 12, agi: 18, exp: 1600, jp: 12, gold: 1500, weak: ['water', 'ice'], resist: ['fire', 'holy'], actions: 2,
     immune: ['sleep', 'fear', 'doom', 'poison'],
-    acts: [{ w: 4, type: 'attack' }, { w: 2, type: 'strike', name: 'Lion\'s Maul', mult: 1.6, fx: 'slash' }, { w: 2, type: 'spell', name: 'Dragonhead Flame', target: 'all', pow: 22, elem: 'fire', fx: 'fire' }, { w: 2, type: 'status', name: 'Serpent Fang', target: 'one', status: 'poison', chance: 80, fx: 'poison' }],
-    phase2: [{ w: 3, type: 'attack' }, { w: 3, type: 'spell', name: 'Three-Headed Roar', target: 'all', pow: 26, elem: 'fire', fx: 'roar' }, { w: 2, type: 'strike', name: 'Lion\'s Maul', mult: 1.8, fx: 'slash' }],
+    acts: [{ w: 4, type: 'attack' }, { w: 2, type: 'strike', name: 'Lion\'s Maul', mult: 1.6, fx: 'slash' }, { w: 2, type: 'spell', name: 'Dragonhead Flame', target: 'all', pow: 18, elem: 'fire', fx: 'fire' }, { w: 2, type: 'status', name: 'Serpent Fang', target: 'one', status: 'poison', chance: 80, fx: 'poison' }],
+    phase2: [{ w: 3, type: 'attack' }, { w: 3, type: 'spell', name: 'Three-Headed Roar', target: 'all', pow: 21, elem: 'fire', fx: 'roar' }, { w: 2, type: 'strike', name: 'Lion\'s Maul', mult: 1.8, fx: 'slash' }],
     lines: { start: 'The stitched beast wears three halos. All three heads are screaming.', half: 'The stitches along its flank split. Gold light bleeds out.' },
   },
   bloomcolossus: {
