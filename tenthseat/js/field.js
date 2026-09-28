@@ -126,7 +126,7 @@ class FieldScene {
     }
     const trig = this.map.steps && this.map.steps[st.x + ',' + st.y];
     if (trig) { this.run(async () => { await trig(); }); return; }
-    if (c == null) { this.run(() => this.leaveMap('X')); return; }
+    if (c == null) { const [bx, by] = [clamp(st.x, 0, this.map.w - 1), clamp(st.y, 0, this.map.h - 1)]; this.run(async () => { await this.leaveMap('X'); if (this.map.id === (this._leftFrom || this.map.id) && !this.map.world && (st.x < 0 || st.y < 0 || st.x >= this.map.w || st.y >= this.map.h)) { st.x = bx; st.y = by; } }); return; }
     const t = this.tileDef(c);
     if (t.exit) { this.run(() => this.leaveMap(c)); return; }
     if (t.shop) { this.run(async () => { await openShop(t.shop, this.map.shops); st.y += 1; st.dir = 'down'; }); return; }
@@ -156,7 +156,7 @@ class FieldScene {
   }
   async leaveMap(c) {
     const out = c === 'Y' ? this.map.back2 : this.map.back;
-    if (out && out.map) return this.warp(out.map, out.x, out.y, out.dir);
+    if (out && !Array.isArray(out)) return this.warp(out.map, out.x, out.y, out.dir);
     const [bx, by] = out || [S().x, S().y];
     await fadeOut(12); this.enterMap('world', bx, by, 'down'); await fadeIn(12);
   }

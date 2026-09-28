@@ -34,8 +34,10 @@ const path = require('path');
       else { f.enterMap(cs.id, cs.x, cs.y, 'down'); f.arrive(); }
     }, cs);
     await page.waitForTimeout(900);
-    const st = await page.evaluate(() => ({ fade: Game.fade, top: Game.top() === Game.field, map: Game.field.map.id, busy: Game.field.busy }));
-    const ok = st.fade === 0 && st.top && st.busy === 0;
+    const st = await page.evaluate(() => ({ fade: Game.fade, top: Game.top() === Game.field, map: Game.field.map.id, busy: Game.field.busy, errs: Game.errors.length }));
+    const from = cs.kind === 'place' ? 'world' : cs.id;
+    const gated = cs.kind === 'place' && cs.k === '27,11'; // Solanthia's gate refuses entry after Hollowmere, on purpose
+    const ok = st.fade === 0 && st.top && st.busy === 0 && (gated || st.map !== from) && st.errs === 0;
     if (!ok) { bad++; console.log('BAD', JSON.stringify(cs), JSON.stringify(st)); }
   }
   console.log(cases.length, 'transitions,', bad, 'bad; errors:', errors.length ? errors.join('\n') : 'none');
