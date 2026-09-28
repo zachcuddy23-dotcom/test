@@ -32,7 +32,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
     console.log((ok ? 'PASS ' : 'FAIL ') + name);
     if (out) await page.screenshot({ path: path.join(out, 'story_' + name + '.png') });
   };
-  const lv = n => `for (const m of Game.state.party) { m.lvl = ${n}; m.exp = EXP_TABLE[${n}]; const st = stats(m); m.hp = st.mhp; m.mp = st.mmp; }`;
+  const lv = n => `for (const m of Game.state.party) { m.lvl = ${n}; m.exp = EXP_TABLE[${n}]; for (const j of JOB_ORDER) m.jobs[j].lv = Math.max(m.jobs[j].lv, Math.min(MAX_JOB_LV, Math.floor(${n} / 3))); const st = stats(m); m.hp = st.mhp; m.mp = st.mmp; }`;
   await page.evaluate(() => newGame());
   await until(() => Game.field && Game.field.map && Game.field.map.id === 'solanthia' && Game.top() === Game.field, 120000);
   console.log('PASS opening (barge + battle) ->', await page.evaluate(() => Game.field.map.id));
