@@ -148,7 +148,14 @@ Arrows or WASD move · Z / Space / Enter confirm · X cancel / menu · Esc menu 
       - 3 or more: Verai **stays**.
       - 1 to 2: she **leaves alone**.
       - 0 or less: she **goes with Sonia**.
-    - Luna's resolution, then the end crawl. The crawl changes with the outcomes.
+    - Luna's resolution.
+11. **Chapter ending** (`chapterEnd()` / `endingShots()` in `js/events.js`):
+    - One of three ending cinematics (stay / leave / Sonia).
+    - The Ten-seats shot and the phoenix eye.
+    - A short crawl.
+    - An **END OF CHAPTER ONE** card.
+    - A **Chapter Complete save screen** with Save or Continue without saving. It shows the party and the choices made.
+    - Good art targets here: `cine_ending_stay`, `cine_ending_leave`, `cine_ending_sonia` (960×640).
 
 ### 2.5 Tone rules
 - Short lines, one or two sentences per text box. FF4 moves fast.
