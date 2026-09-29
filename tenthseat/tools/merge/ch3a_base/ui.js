@@ -101,8 +101,7 @@ function canSaveHere() { const f = Game.field; return !!f && (f.map.world || f.n
 class MenuScene {
   constructor(res) {
     this.res = res;
-    const benchHere = (S().bench || []).length && Game.field && Game.field.map && (Game.field.map.world || Game.field.map.id === 'wrendeck') && flag('ch3part1');
-    const opts = ['Items', 'Skills', 'Job', 'Equip', 'Status', 'Order', ...(flag('leaderUnlocked') ? ['Leader'] : []), ...(benchHere ? ['Party'] : []), 'Config', 'Save'];
+    const opts = ['Items', 'Skills', 'Job', 'Equip', 'Status', 'Order', ...(flag('leaderUnlocked') ? ['Leader'] : []), 'Config', 'Save'];
     this.root = new ListMenu(opts.map(t => ({ text: t })), { x: 700, y: 12, w: 248, rows: opts.length, rowH: opts.length > 8 ? 33 : 36 });
     this.pick = null; this.sub = null; this.msg = ''; this.opaque = true;
   }
@@ -125,7 +124,6 @@ class MenuScene {
     if (t === 'Equip') this.choose(m => { this.sub = new EquipPanel(this, m); });
     if (t === 'Status') this.choose(m => { this.sub = new StatusPanel(this, m); });
     if (t === 'Order') this.choose((m, i) => { this.msg = 'Swap with whom?'; this.choose((m2, j) => { const p = S().party;[p[i], p[j]] = [p[j], p[i]]; Audio2.sfx('ok'); this.msg = ''; }); });
-    if (t === 'Party') { this.close(); Game.field.run(() => benchSwap()); return; }
     if (t === 'Leader') { this.msg = 'Who leads the way?'; this.choose(m => { S().leader = m.id; Audio2.sfx('ok'); this.msg = `${m.name} is leading now.`; }); }
     if (t === 'Config') this.sub = new ConfigPanel(this);
     if (t === 'Save') {

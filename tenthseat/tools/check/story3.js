@@ -71,7 +71,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
   await check('raine_caught_up', `member('raine').lvl >= 29 && leadMember().id === 'raine'`);
   await check('leader_menu', `new MenuScene().root.items.some(i => i.text === 'Leader')`);
   await check('choose_leader', `(S().leader = 'miasma', leadMember().id === 'miasma')`);
-  await step('south_pass_is_next_update', `Game.field.enterMap('frostreach', 32, 19, 'right'); Game.field.run(() => Game.field.enterPlace(MAPS.frostreach.places['33,19']));`, `Game.field.map.id === 'frostreach'`);
+  await step('south_pass_opens', `Game.field.enterMap('frostreach', 32, 19, 'right'); Game.field.run(() => Game.field.enterPlace(MAPS.frostreach.places['33,19']));`, `Game.field.map.id === 'pass1'`);
   await step('hearthmoor', `Game.field.enterMap('hearthmoor', 14, 14, 'up');`, `Game.field.map.id === 'hearthmoor' && (S().bench.length === 0 || Game.field.visibleNpcs().some(n => n.key === '7'))`);
   console.log('state:', await page.evaluate(() => JSON.stringify({ party: S().party.map(m => [m.id, m.lvl, m.job]), bench: S().bench.map(m => m.id), watcher: S().flags.watcher })));
   console.log('errors:', errors.length ? errors.join('\n---\n') : 'none');

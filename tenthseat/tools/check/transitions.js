@@ -10,7 +10,7 @@ const path = require('path');
   await page.goto('file://' + path.join(__dirname, '..', '..', 'index.html'));
   await page.waitForTimeout(1200);
   for (let i = 0; i < 400 && !(await page.evaluate(() => Game.top() instanceof TitleScene)); i++) await page.evaluate(() => { Input.pressed.a = true; }), await page.waitForTimeout(30);
-  await page.evaluate(() => { Game.state = newState(); for (const f of ['intro','audience','mission','stag','votary','pass','bridge','harbor','chimera','wren','noEnc','lunaJoin','ch1end','ch1done','ch2start','emberGate','trialWon','gunworks','draumond','ferryman','coalToken','chainJob','lunaEmberDone','athenaeum','ch3start','ch3sick','ch3doctor','ch3cured','ch3herb','ch3summit','ch3confessed']) Game.state.flags[f] = true; Game.state.keys.push('harborpass', 'gunpass', 'deathpage'); const f = new FieldScene(); Game.field = f; Game.replaceAll(f); f.enterMap('world', 20, 14, 'down'); Game.fade = 0;
+  await page.evaluate(() => { Game.state = newState(); for (const f of ['intro','audience','mission','stag','votary','pass','bridge','harbor','chimera','wren','noEnc','lunaJoin','ch1end','ch1done','ch2start','emberGate','trialWon','gunworks','draumond','ferryman','coalToken','chainJob','lunaEmberDone','athenaeum','ch3start','ch3sick','ch3doctor','ch3cured','ch3herb','ch3summit','ch3confessed','ch3part1','ch3pass','ch3aval','ch3inq','ch3undercity','ch3underTip','ch3cells','ch3trial']) Game.state.flags[f] = true; Game.state.keys.push('harborpass', 'gunpass', 'deathpage'); const f = new FieldScene(); Game.field = f; Game.replaceAll(f); f.enterMap('world', 20, 14, 'down'); Game.fade = 0;
     setInterval(() => { const t = Game.top(); if (t instanceof DialogScene || t instanceof NotifyScene) Input.pressed.a = true; }, 50); });
   const cases = await page.evaluate(() => {
     const out = [];
@@ -42,6 +42,6 @@ const path = require('path');
     const ok = st.fade === 0 && st.top && st.busy === 0 && (gated || st.map !== from) && st.errs === 0;
     if (!ok) { bad++; console.log('BAD', JSON.stringify(cs), JSON.stringify(st)); }
   }
-  console.log(cases.length, 'transitions,', bad, 'bad; errors:', errors.length ? errors.join('\n') : 'none');
+  console.log(cases.length, 'transitions,', bad, 'bad; errors:', errors.length ? errors.join('\n') : 'none'); console.log('game errors:', await page.evaluate(() => JSON.stringify(Game.errors.slice(0, 4).map(e => e.msg))));
   await browser.close();
 })();

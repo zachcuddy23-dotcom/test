@@ -1,6 +1,6 @@
-# Chapter Three update (part one: the Wyrmspire)
+# Chapter Three update (complete: *The Knight in the Dark*)
 
-This zip is the whole game: Chapters One and Two, the secrets, and the first big arc of **Chapter Three, *The Knight in the Dark***. The story continues in later updates, and saves carry over.
+This zip is the whole game: Chapters One and Two, the secrets, and **all of Chapter Three, *The Knight in the Dark***. Chapter Four comes next, and saves carry over.
 
 If you (ChatGPT) already have an older copy with your art in it, **don't start over.** Merge this update in first (section 1). Then make the new art (section 3).
 
@@ -16,7 +16,7 @@ python3 tools/merge_update.py /path/to/YOUR-older-folder
 node tools/check/validate.js                          # must end with "ALL OK"
 ```
 
-- It works whether your copy was made from the **Chapter One** zip or the **Chapter Two** zip. It finds out which by comparing your files with `tools/merge/ch1_base/` and `tools/merge/ch2_base/`, and tells you in `MERGE_REPORT.md`.
+- It works whether your copy was made from the **Chapter One**, **Chapter Two** or **Chapter Three part one** zip. It finds out which by comparing your files with `tools/merge/ch1_base/`, `ch2_base/` and `ch3a_base/`, and tells you in `MERGE_REPORT.md`.
 - **Your PNGs** are copied into `assets/`. Your art always wins.
 - **Your code edits** (for example a new `NPC_FACES` line, or an enemy's `art:`) are re-applied on top of this update.
   - Edits that can't be re-applied automatically are listed in `MERGE_REPORT.md` for you to copy over by hand.
@@ -78,7 +78,62 @@ Raine collapses. **Ashkar's token, her crescent pendant, has woken up** after st
 - **Reward:** Raine makes a new rule, and **the party leader can now be chosen** (Menu → Leader).
 - **Hook:** a notice arrives. Odeaon's trial is in seven days, for treason *and for harboring a DRAGON*. Raine slowly looks at Miasma.
 
-**Then:** the save screen appears ("THE WYRMSPIRE: Chapter Three continues..."). The pass south to Solanthia is where the next update starts.
+**Then:** the save screen appears ("THE WYRMSPIRE: Chapter Three continues..."), and the story heads for the pass south.
+
+## 2b. Story bible: Chapter Three, part two (the trial)
+
+**The Frostfang Pass** (the Frostreach's south pass, 2 maps).
+- **The avalanche:** Miasma finally starts: *"About your mother—"* An avalanche cuts her off. *"...Later."* Raine: *"You keep SAYING later."*
+- **Inquisitor Hallorn** and his chain hounds ambush the party, sent by the High Luminar to take "the dragon, alive." Raine: *"What dragon?"* Hallorn: *"You don't know. Oh, that's wonderful."*
+- **That night:** Miasma rehearses the truth by the fire twice. When she turns around, Raine is asleep.
+- The pass comes out on the **Aurelion** world map, north of Solanthia (a new cave, `M`).
+
+**The Solanthia Undercity** (2 maps). The gates are sealed and covered in wanted posters, so the party sneaks in through the old aqueduct.
+- **Stealth:** Dawnguard **sentries patrol**. The **yellow tiles show what each can see.**
+- **If spotted**, you fight two sentries. Win, and that sentry is out cold. Run, and you're sent back to the map's start.
+- There's a Dawn Lantern to save at.
+
+**The Temple Cells.** Raine finds Odeaon behind bars.
+- He sees Miasma: *"...You came." "Idiot." "Always."* Raine: *"...You two KNOW each other?"*
+- He refuses to escape: *"Some things only work in the light."*
+- Luna gets Dawnguard tabards so the party can watch the trial from the crowd.
+
+**The Grand Tribunal.** "High Luminar Vesper" tries Odeaon for treason and for *harboring a dragon*.
+- Raine unmasks herself to defend him.
+- **Miasma transforms in front of a thousand people:** *"HERE I AM... That girl is my daughter."*
+- Raine: *"A dragon killed my mother. That's what you told me. Every year, on my birthday."* Miasma: *"...In a way, kid. She did."*
+- If the friends knew (`ch3told`), Raine realizes they all knew.
+- **The fight:** the Luminar plus two Temple Paladins (party of four).
+- **The Luminar's face cracks in front of the whole Temple.** "Vesper" has been **Sonia** all along. (In Chapter One only the party saw her unmask.)
+- **Sonia steals the Dawnheart, Sylara's reliquary**, from her own altar.
+- **Verai's scene depends on her state:**
+
+| Verai's state | What happens |
+|---|---|
+| With the party | She stands up to Sonia: *"Still not yours."* |
+| Went with Sonia, doubting (`veraiDoubt`) | She secretly frees Odeaon's chains (`veraiHelped`) |
+| Went with Sonia, cold (`veraiCold`) | She warns Raine off |
+| Left and waiting (`veraiWaits`) | She arrives in a smoke screen and **rejoins** (`veraiReturned`) |
+
+- **The escape:** Miasma flies everyone out through the golden window to the Wren.
+
+**The Wren, that night.** Raine's big choice:
+- **"You let me think you were DEAD."** (`raineAnger`)
+- **Walk away in silence.** (`raineSilent`)
+- **"...Why?"** (`raineWhy`, `motherTrust` +1). Miasma explains:
+  - The Temple came up the mountain when Raine was eight months old, so she gave her to "the only person who ever brought me a sandwich."
+  - The pendant was Ashkar's token, which she'd put on Raine to keep her warm.
+
+After the choice:
+- **Odeaon talks to Raine.** Why a dragon, of all things? *"...She thought it was funny."* Raine laughs, then cries.
+- **The toy dragon:** if you found it on the Wyrmspire, Miasma leaves it on the rail (*"The tail's been glued." "Twice."*). Raine: *"Goodnight, M— ...Goodnight, Miasma."*
+- **Odeaon joins as a playable hero.** His innate command is **Vow**: Shield Wall, Lionheart, Father's Watch, Last Light.
+- **The Party menu:** on the world map, *Menu, then Party* swaps members with whoever is waiting aboard the Wren.
+
+**End of Chapter Three:**
+- Sonia now holds the Heartseed and the Dawnheart. *"Beneath the Twin Falls, in the sunken sanctuary, something opens its eyes."*
+- An end card and a save screen.
+- The player is left aboard the Wren on the Aurelion world map. **Chapter Four starts from `ch3done`**: `continueGame()` already calls `chapter4Opening()` when it exists.
 
 ### Flags this arc sets (for the next writer)
 
@@ -92,7 +147,13 @@ Raine collapses. **Ashkar's token, her crescent pendant, has woken up** after st
 | `ch3helm` / `ch3toy` | Found Odeaon's dented helm / the toy dragon (key items `dentedhelm`, `toydragon`) |
 | `ch3yeti`, `ch3rime`, `ch3herb` | Mini-boss, boss, and the Lily |
 | `leaderUnlocked` | The Leader menu exists; `S().leader` is the chosen id |
-| `ch3part1` | This arc is done. The next update starts from here (the south pass in the Frostreach). |
+| `ch3part1` | The Wyrmspire arc is done |
+| `ch3pass`, `ch3aval`, `ch3inq` | Took the pass, the avalanche, beat the Inquisitor |
+| `ch3undercity`, `ch3cells`, `ch3trial` | Entered the Undercity, met Odeaon in his cell, the trial happened |
+| `raineAnger` / `raineSilent` / `raineWhy`, `motherTrust` (number) | How Raine took the truth. Use these in Chapter Four. |
+| `veraiHelped`, `veraiReturned` | Verai freed Odeaon in secret / Verai rejoined at the trial |
+| `ch3toyGiven` | Miasma gave Raine the toy dragon |
+| `ch3done` | Chapter Three is complete. Chapter Four starts here. |
 
 **Tone:** keep the rhythm going: joke, gut-punch, joke. Raine still does **not** know the truth, her friends do, and Odeaon's charge ("harboring a dragon") forces it out soon.
 
@@ -160,10 +221,25 @@ Palette for the Frostreach:
 
 ---
 
+### 3.9 Chapter Three, part two art
+| File | Notes |
+|---|---|
+| `odeaon.png`, `odeaon_sheet.png`, `odeaon_face.png` | **Odeaon is now playable.** A tall, silver-bearded High Knight in white-and-silver plate and a blue cape, with a kind, tired face, holding Dawnbreaker (a holy longsword). Battle sprite ~128px facing LEFT. Face 128×128. Also `face_odeaon` for when he speaks as an NPC. |
+| `odeaon_<job>.png` | Optional job outfits for Odeaon, same list as the other heroes |
+| `b_inquisitor.png` | Inquisitor Hallorn: a lean, smug Temple inquisitor in white and gold, carrying a huge dragon-chain. Delete his `ph` in `js/data3.js` afterwards. |
+| `b_luminar.png` | "High Luminar Vesper" in battle: golden robes, a halo, a serene and cruel face with a hairline crack of shadow. Delete her `ph` afterwards. |
+| `face_hallorn`, `face_dawnguard` | Portraits (128×128) |
+| `bg_undercity` | Old aqueduct tunnels under Solanthia: stone arches, dark water, shafts of gold light from grates above |
+| `bg_temple` | Already listed in the main guide. The Grand Tribunal uses it for the Luminar fight. |
+| `cine_tribunal_dragon` | (960×640) A red dragon filling a golden courtroom, the crowd fleeing, Raine small in the aisle looking up |
+| `cine_wren_rail` | (960×640) Raine at the Wren's rail at night; a little red toy dragon sits beside her hand |
+| Monsters `m_snowharpy`, `m_chainhound`, `m_sewerrat`, `m_drowned`, `m_lampooze`, `m_sentry`, `m_paladin` | Optional. Set `art:` and delete `tint`. |
+
 ## 4. Test it
 ```bash
 node tools/check/validate.js                                        # maps, data, ice-floor solvability
 NODE_PATH=$(npm root -g) node tools/check/story3.js 0               # Chapter Three from a Chapter Two save (0/1/2 = who stays with Raine)
+NODE_PATH=$(npm root -g) node tools/check/story3b.js stay 2         # the rest of Chapter Three (Verai: stay/doubt/cold/waits; Raine's choice 0/1/2)
 ```
 
 **In the game:** press **F2 → Jump to story point**, then pick an entry starting with "Ch3:". There's one for each step of the climb.

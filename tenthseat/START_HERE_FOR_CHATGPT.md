@@ -1,6 +1,6 @@
 # Start here
 
-This zip contains the full game **The Tenth Seat, Chapters One and Two, plus the first arc of Chapter Three**, and everything needed to finish its art.
+This zip contains the full game **The Tenth Seat, Chapters One to Three**, and everything needed to finish its art.
 
 ## To play
 Unzip it and open `index.html` in any web browser. No install or internet is needed, except for the pixel font, which falls back to a plain font offline.
@@ -19,12 +19,12 @@ Unzip it and open `index.html` in any web browser. No install or internet is nee
 >
 > After each batch, give me the updated zip so I can test it. Show me each image before moving on.
 
-## If ChatGPT already worked on an older version (Chapter One or Two)
+## If ChatGPT already worked on an older version (Chapter One, Two, or Three part one)
 Upload this zip **and** ChatGPT's latest zip, then paste:
 
-> Here is the newest update of "The Tenth Seat" (Chapter Three, part one). Unzip it and read `CHAPTER3_UPDATE_FOR_CHATGPT.md` first. Merge it with your work exactly as section 1 says: run `python3 tools/merge_update.py <your older folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
+> Here is the newest update of "The Tenth Seat" (all of Chapter Three). Unzip it and read `CHAPTER3_UPDATE_FOR_CHATGPT.md` first. Merge it with your work exactly as section 1 says: run `python3 tools/merge_update.py <your older folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
 >
-> Then make the new art from section 3 of that file, starting with 3.1 (Miasma's Dragon job, her true dragon form, Rimeclaw, Old Mother Yeti). If you haven't done Chapter Two's art yet, `CHAPTER2_UPDATE_FOR_CHATGPT.md` section 3 lists it. Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
+> Then make the new art from section 3 of that file, starting with 3.1 (Miasma's Dragon job, her true dragon form, Rimeclaw, Old Mother Yeti), then 3.9 (Odeaon as a playable hero, the Inquisitor, the Luminar). If you haven't done Chapter Two's art yet, `CHAPTER2_UPDATE_FOR_CHATGPT.md` section 3 lists it. Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
 
 ## (Older) If ChatGPT only worked on Chapter One
 Upload this zip **and** ChatGPT's latest Chapter One zip, then paste:

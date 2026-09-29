@@ -43,9 +43,6 @@ CHECKPOINTS.push(
   CH3('Wyrmspire: Frozen Falls (ice)', [...CH3_CLIMB, 'ch3m1'], 29, ['wyrm2', 1, 14, 'right'], { run: () => { raineLeaves(); } }),
   CH3('Wyrmspire: the Old Nest', [...CH3_CLIMB, 'ch3m1', 'ch3m2'], 30, ['wyrm3', 1, 12, 'right'], { run: () => { raineLeaves(); } }),
   CH3('Wyrmspire: Summit (Rimeclaw)', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3helm', 'ch3toy', 'ch3yeti', 'ch3m4'], 31, ['summit', 1, 10, 'right'], { run: () => { raineLeaves(); } }),
-  CH3('Frostfang Pass (after the Wyrmspire)', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1', 'ch3pass'], 32, ['pass1', 11, 1, 'down']),
-  CH3('Solanthia Undercity (sneaking)', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1', 'ch3pass', 'ch3aval', 'ch3inq', 'ch3undercity', 'ch3underTip'], 33, ['undercity1', 4, 16, 'right']),
-  CH3('The Temple cells and the trial', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1', 'ch3pass', 'ch3aval', 'ch3inq', 'ch3undercity', 'ch3underTip', 'ch3told'], 34, ['cells', 9, 8, 'up'], { keys: ['gunpass', 'toydragon'] }),
   CH3('After the Wyrmspire', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1'], 32, ['hearthmoor', 14, 14, 'up']),
 );
 function applyCheckpoint(cp) {
@@ -60,7 +57,7 @@ function applyCheckpoint(cp) {
   if (cp.flags.includes('chainJob')) st.jobsOpen.push('chainbearer');
   if (cp.flags.includes('ch1done')) st.flags.bond = 2;
   if (cp.flags.includes('ch2end')) st.jobsOpen.push('phoenix');
-  if (cp.flags.includes('ch3rime')) { st.jobsOpen.push('dragon'); const mi = st.party.find(m => m.id === 'miasma'); if (mi) { mi.jobs.dragon.lv = 5; mi.job = 'dragon'; mi.equip.weapon = 'skyclaws'; } }
+  if (cp.flags.includes('ch3rime')) st.jobsOpen.push('dragon');
   if (cp.bench) st.bench = cp.bench.map(id => makeMember(id, cp.lvl));
   st.gold = 500 + cp.lvl * 300; st.items = { tonic: 8, hitonic: cp.lvl > 10 ? 4 : 0, antidote: 3, emberplume: 2, bedroll: 2 };
   if (cp.ship) st.ship = cp.ship;

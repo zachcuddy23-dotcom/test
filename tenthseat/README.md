@@ -1,4 +1,4 @@
-# The Tenth Seat: Chapters One and Two, and Chapter Three (in progress)
+# The Tenth Seat: Chapters One, Two and Three
 
 A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
@@ -11,7 +11,17 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
 
-## What's new in Chapter Three (part one: the Wyrmspire)
+## What's new in Chapter Three, part two: the trial
+- **Frostfang Pass:** an avalanche, and an Inquisitor who knows exactly what Miasma is.
+- **Sneaking through the Solanthia Undercity:** sentries patrol, and the yellow tiles show what they can see.
+- **The Grand Tribunal:**
+  - Miasma reveals herself as a dragon, and as Raine's mother, in front of the whole Temple.
+  - The High Luminar is unmasked as Sonia, who steals Sylara's Dawnheart.
+  - Verai's Chapter One choice changes the scene.
+- **The Wren, that night:** Raine's reaction is your choice. The little toy dragon comes home.
+- **Odeaon joins** as a playable High Knight. Use **Menu, then Party** on the world map to swap with whoever waits aboard the Wren.
+
+## What's new in Chapter Three, part one (the Wyrmspire)
 - **Chapter Two saves carry over.** Finish Chapter Two, or Continue a Chapter Two save, and Chapter Three begins.
 - On the voyage home, just as Miasma finally starts to tell Raine the truth, **Raine collapses.** Her pendant, Ashkar's token, is burning her from the inside.
 - **Raine leaves the party and Miasma leads.** Three friends climb the **Wyrmspire**, Miasma's old mountain, for the Frostheart Lily. You choose who stays at Raine's bedside.

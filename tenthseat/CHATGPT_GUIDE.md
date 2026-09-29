@@ -465,13 +465,14 @@ NODE_PATH=$(npm root -g) node tools/check/story.js   # plays every story event i
 NODE_PATH=$(npm root -g) node tools/check/story2.js stay   # Chapter Two from a Chapter One save (also: leave, sonia)
 NODE_PATH=$(npm root -g) node tools/check/secrets.js       # secrets and mini-games
 NODE_PATH=$(npm root -g) node tools/check/story3.js 0     # Chapter Three from a Chapter Two save
+NODE_PATH=$(npm root -g) node tools/check/story3b.js stay 2   # the rest of Chapter Three
 ```
 
 ---
 
 ## 9. Roadmap: Chapter Two and beyond
 
-**Chapter Three, part one is built** (see `CHAPTER3_UPDATE_FOR_CHATGPT.md`: Raine's illness, the Wyrmspire, the Dragon job, the Leader menu). The next part starts at the south pass in the Frostreach and leads to Odeaon's trial in Solanthia. Three more chapters are planned in total, then post-game content.
+**Chapter Three is built** (see `CHAPTER3_UPDATE_FOR_CHATGPT.md`: Raine's illness, the Wyrmspire, the Dragon job, the Leader menu, the Undercity, the trial, and Odeaon joining). Chapter Four, *The Drowned Sanctuary*, starts from the `ch3done` flag. Write a `chapter4Opening()` and `continueGame()` will call it. Three more chapters are planned in total, then post-game content.
 
 **Chapter Two is built.** Its story, choices, merge steps and new art list are all in `CHAPTER2_UPDATE_FOR_CHATGPT.md`. Its code lives in `js/data2.js`, `js/maps2.js` and `js/events2.js`. Chapter Three should follow the same pattern: `data3.js`, `maps3.js`, `events3.js`, a `chapter3Opening()` started from `continueGame()` when `ch2done` is set, and new jump points in `js/debug.js`.
 

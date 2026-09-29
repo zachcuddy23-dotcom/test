@@ -37,7 +37,7 @@ for (const [id, m] of Object.entries(c.MAPS)) {
     if ((t.exit || t.shop || t.stairs || ch === '+') && !reach(x, y)) err(`${id} ${ch} at ${x},${y} unreachable`);
     if (ch === 'L' && !adj(x, y)) err(`${id} lantern at ${x},${y} unreachable`);
     if (chestKeys.has(ch) && !adj(x, y)) err(`${id} chest ${ch} at ${x},${y} unreachable`);
-    if (npcKeys.has(ch) && !adj(x, y) && !m.npcs[ch].img) err(`${id} npc ${ch} at ${x},${y} unreachable`);
+    if (npcKeys.has(ch) && !adj(x, y) && !m.npcs[ch].img && !m.npcs[ch].behind) err(`${id} npc ${ch} at ${x},${y} unreachable`);
     if (npcKeys.has(ch) && m.npcs[ch].img && !adj(x, y)) err(`${id} boss npc ${ch} at ${x},${y} unreachable`);
   }
   for (const k of Object.keys(m.steps || {})) { const [x, y] = k.split(',').map(Number); if (!reach(x, y)) err(`${id} step trigger ${k} unreachable`); }
@@ -62,7 +62,7 @@ for (const [id, m] of Object.entries(c.MAPS)) {
   const g = m.rows, chestKeys = new Set(Object.keys(m.chests || {}));
   const solid = (x, y) => { const ch = g[y] && g[y][x]; if (ch == null) return true; if (chestKeys.has(ch)) return true; if (/[0-9]/.test(ch)) return false; const t = T[ch]; return !t || !!t.solid; };
   const moves = ([x, y]) => [[1, 0], [-1, 0], [0, 1], [0, -1]].flatMap(([dx, dy]) => { let nx = x + dx, ny = y + dy; if (solid(nx, ny)) return []; while (g[ny][nx] === 'i' && !solid(nx + dx, ny + dy)) { nx += dx; ny += dy; } return [[nx, ny]]; });
-  const goal = ([x, y]) => g[y][x] === '>';
+  const goal = ([x, y]) => g[y][x] === '>' || !!(T[g[y][x]] || {}).exit;
   const reachGoal = s => { const seen = new Set([s + '']), q = [s]; while (q.length) { const a = q.shift(); if (goal(a)) return true; for (const b of moves(a)) if (!seen.has(b + '')) { seen.add(b + ''); q.push(b); } } return false; };
   const start = m.start.slice(0, 2), all = new Map([[start + '', start]]), q = [start];
   while (q.length) { const a = q.shift(); if (goal(a)) continue; for (const b of moves(a)) if (!all.has(b + '')) { all.set(b + '', b); q.push(b); } }

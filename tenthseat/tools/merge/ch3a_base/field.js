@@ -45,13 +45,7 @@ class FieldScene {
     if (this.map.tileOverride) { const o = this.map.tileOverride(c); if (o) return o; }
     return this.tiles[c] || { solid: true };
   }
-  visibleNpcs() { return this.npcs.filter(n => !n.out && (!n.def.show || n.def.show())); }
-  // Patrolling guards (def.patrol + def.sight): the tiles they can see, straight ahead until a wall.
-  sightTiles(n) {
-    const out = [], [dx, dy] = DIRS[n.dir] || [0, 1]; let x = n.x, y = n.y;
-    for (let i = 0; i < n.def.sight; i++) { x += dx; y += dy; const c = this.tileAt(x, y); if (c == null || this.tileDef(c).solid || this.chestAt(x, y)) break; out.push([x, y]); }
-    return out;
-  }
+  visibleNpcs() { return this.npcs.filter(n => !n.def.show || n.def.show()); }
   npcAt(x, y) { return this.visibleNpcs().find(n => n.x === x && n.y === y || (n.mv && n.mv.tx === x && n.mv.ty === y)); }
   chestAt(x, y) { return (this.map._chests || []).find(c => c.x === x && c.y === y); }
   nearLantern() { const st = S(); for (const [dx, dy] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) if (this.tileAt(st.x + dx, st.y + dy) === 'L') return true; return false; }
@@ -72,14 +66,6 @@ class FieldScene {
     this.animF = Math.floor(Game.frame / 16);
     if (this.banner > 0) this.banner--;
     this.updateNpcs();
-    if (!this.busy && !this.scripted && !this.moving) {
-      const st = S();
-      for (const n of this.visibleNpcs()) {
-        if (!n.def.sight || n.mv || !n.def.onSpot) continue;
-        const near = Math.abs(n.x - st.x) + Math.abs(n.y - st.y) === 1;
-        if (near || this.sightTiles(n).some(([x, y]) => x === st.x && y === st.y)) { Audio2.sfx('error'); this.run(() => n.def.onSpot(n)); return; }
-      }
-    }
     if (this.moving) { this.stepMove(); return; }
     if (this.busy) return;
     if (Input.hit('menu') || Input.hit('b')) { this.run(async () => { await openMenu(); }); return; }
@@ -217,18 +203,6 @@ class FieldScene {
   updateNpcs() {
     for (const n of this.npcs) {
       if (n.mv) { n.mv.t++; if (n.mv.t >= (n.mv.n || 16)) { n.x = n.mv.tx; n.y = n.mv.ty; n.mv = null; } continue; }
-      if (n.def.patrol) {
-        if (this.busy) continue;
-        if (--n.t > 0) continue;
-        n.t = n.def.pace || 26;
-        const p = n.def.patrol; n.pi = n.pi || 0;
-        const d = p[n.pi % p.length], [dx, dy] = DIRS[d], nx = n.x + dx, ny = n.y + dy, st = S();
-        n.dir = d;
-        if (nx === st.x && ny === st.y) continue;          // you're in the way: the guard just stares at you
-        if (!this.blocked(nx, ny, true)) n.mv = { tx: nx, ty: ny, t: 0, n: 20 };
-        n.pi++;
-        continue;
-      }
       if (n.def.move !== 'wander' || this.busy) continue;
       if (--n.t > 0) continue;
       n.t = rnd(80, 220);
@@ -301,7 +275,6 @@ class FieldScene {
     } });
     for (const a of this.actors || []) objs.push({ y: a.y + 0.02, draw: () => this.drawActor(a, cx, cy) });
     objs.sort((a, b) => a.y - b.y).forEach(o => o.draw());
-    for (const n of this.visibleNpcs()) if (n.def.sight) { ctx.fillStyle = 'rgba(255,220,90,0.22)'; for (const [x, y] of this.sightTiles(n)) ctx.fillRect(x * TS - cx, y * TS - cy, TS, TS); }
     const tint = this.nightTint || (typeof this.map.tint === 'function' ? this.map.tint() : this.map.tint);
     if (tint) { ctx.fillStyle = tint; ctx.fillRect(0, 0, W, H); }
     if (this.map.embers && this.map.embers()) this.drawEmbers();
