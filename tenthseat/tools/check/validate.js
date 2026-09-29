@@ -56,6 +56,20 @@ const W = c.WORLD;
 for (const [k, p] of Object.entries(W.places)) { const [x, y] = k.split(',').map(Number); const ch = W.rows[y][x]; if (!(c.WORLD_TILES[ch] || {}).place) err(`world place ${k} is on '${ch}'`); }
 W.rows.forEach((r, i) => { if (r.length !== W.rows[0].length) err('world row ' + i); });
 for (const r of W.rows) for (const ch of r) if (!c.WORLD_TILES[ch] && ch !== 'G') err('world tile ' + ch);
+// ice floors: from every spot you can stop on, the exit ('>') must still be reachable (no softlocks)
+for (const [id, m] of Object.entries(c.MAPS)) {
+  if (m.world || !m.rows.some(r => r.includes('i'))) continue;
+  const g = m.rows, chestKeys = new Set(Object.keys(m.chests || {}));
+  const solid = (x, y) => { const ch = g[y] && g[y][x]; if (ch == null) return true; if (chestKeys.has(ch)) return true; if (/[0-9]/.test(ch)) return false; const t = T[ch]; return !t || !!t.solid; };
+  const moves = ([x, y]) => [[1, 0], [-1, 0], [0, 1], [0, -1]].flatMap(([dx, dy]) => { let nx = x + dx, ny = y + dy; if (solid(nx, ny)) return []; while (g[ny][nx] === 'i' && !solid(nx + dx, ny + dy)) { nx += dx; ny += dy; } return [[nx, ny]]; });
+  const goal = ([x, y]) => g[y][x] === '>';
+  const reachGoal = s => { const seen = new Set([s + '']), q = [s]; while (q.length) { const a = q.shift(); if (goal(a)) return true; for (const b of moves(a)) if (!seen.has(b + '')) { seen.add(b + ''); q.push(b); } } return false; };
+  const start = m.start.slice(0, 2), all = new Map([[start + '', start]]), q = [start];
+  while (q.length) { const a = q.shift(); if (goal(a)) continue; for (const b of moves(a)) if (!all.has(b + '')) { all.set(b + '', b); q.push(b); } }
+  if (![...all.values()].some(goal)) err(`${id} ice: exit unreachable`);
+  for (const s of all.values()) if (!goal(s) && !reachGoal(s)) err(`${id} ice: stuck at ${s}`);
+  console.log(`${id.padEnd(12)} ice ok, ${all.size} resting spots`);
+}
 // extra world maps (Chapter Two's Ashkar): shape, tiles, places, and every place reachable once all gates open
 for (const [id, m] of Object.entries(c.MAPS)) {
   if (!m.world) continue;
@@ -69,10 +83,10 @@ for (const [id, m] of Object.entries(c.MAPS)) {
   }
   for (const [ch, [fl]] of Object.entries(gates)) if (typeof fl !== 'string') err(`${id} gate ${ch}`);
   const walk = t => t && !t.solid && !t.water && !t.mountain && !t.block;
-  const home = Object.entries(m.places).find(([, p]) => (p.map || p) === 'emberport')[0].split(',').map(Number);
+  const home = (Object.entries(m.places).find(([, p]) => (p.map || p) === (m.home || 'emberport')) || Object.entries(m.places)[0])[0].split(',').map(Number);
   const seen = new Set([home.join(',')]), q = [home];
   while (q.length) { const [x, y] = q.shift(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy, k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= w || ny >= g.length || seen.has(k)) continue; const t = tileAt(nx, ny); if (!t || (!t.place && !walk(t))) continue; seen.add(k); if (!t.place) q.push([nx, ny]); } }
-  for (const k of Object.keys(m.places)) if (!seen.has(k)) err(`${id} place ${k} unreachable from Emberport`);
+  for (const k of Object.keys(m.places)) if (!seen.has(k)) err(`${id} place ${k} unreachable from its home town`);
   console.log(`${id.padEnd(12)} world ${w}x${g.length} reachable ${seen.size}`);
 }
 // data references

@@ -62,8 +62,7 @@ Object.assign(FieldScene.prototype, {
     const side = [behind[1], behind[0]];
     const spots = [[0, 0], [behind[0] + side[0], behind[1] + side[1]], [behind[0] - side[0], behind[1] - side[1]], [behind[0] * 2, behind[1] * 2]];
     const out = {};
-    const lead = leadMember();
-    [lead, ...st.party.filter(m => m !== lead)].filter(m => m && !(skip || []).includes(m.id)).forEach((m, i) => {
+    st.party.filter(m => !(skip || []).includes(m.id)).forEach((m, i) => {
       if (this.actor(m.id)) { out[m.id] = this.actor(m.id); return; }
       // a party member already standing on the map as an NPC plays herself (no clone)
       const npc = this.visibleNpcs().find(n => n.def.look === HEROES[m.id].look && !(this.hideNpc && this.hideNpc.has(n.key)));
@@ -79,7 +78,7 @@ Object.assign(FieldScene.prototype, {
   },
   // Party gathers back into the leader and the player sprite returns.
   async uncast() {
-    const st = S(), lead = this.actor(leadMember().id);
+    const st = S(), lead = this.actor(st.party[0].id);
     const others = (this.actors || []).filter(a => HEROES[a.id] && a !== lead);
     await Promise.all(others.map(a => tween(14, k => { a.alpha = 1 - k; })));
     if (lead) { st.x = Math.round(lead.x); st.y = Math.round(lead.y); st.dir = lead.dir; }

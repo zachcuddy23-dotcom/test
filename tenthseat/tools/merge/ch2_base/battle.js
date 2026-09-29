@@ -593,7 +593,7 @@ class BattleScene {
   }
   async leave(n = 16) {
     await fadeOut(n); Game.pop(this);
-    if (Game.field) Audio2.music(S().onShip ? 'sea' : musicFor(Game.field.map));
+    if (Game.field) Audio2.music(S().onShip ? 'sea' : Game.field.map.music);
     await fadeIn(n);
   }
   message(m) { this.msg = m; return new Promise(r => { this.waitKey = r; }); }
@@ -778,9 +778,6 @@ function battleBg(name) {
     case 'volcano': grad(0, 70, '#200808', '#a03010'); x.fillStyle = '#1a0a08'; x.beginPath(); x.moveTo(60, 72); x.lineTo(120, 10); x.lineTo(180, 72); x.fill(); x.fillStyle = '#ff7020'; x.fillRect(114, 10, 12, 4); x.fillRect(118, 14, 4, 30); ground(72, '#2a1a14', '#100806', true); x.fillStyle = '#8a8aa0'; x.fillRect(104, 40, 32, 34); x.fillStyle = '#100806'; x.fillRect(110, 46, 20, 28); break;
     case 'caldera': grad(0, 72, '#1a0404', '#e06020'); disc(120, 30, 20, 'rgba(255,200,80,0.45)'); disc(120, 30, 12, '#fff0a0'); x.fillStyle = '#140808'; x.fillRect(98, 40, 44, 34); x.fillRect(92, 50, 56, 6); ground(74, '#2a1410', '#0a0404', true); x.fillStyle = '#ffb040'; for (let i = 0; i < 40; i++) x.fillRect(R() * w, R() * 72, 1, 2); break;
     case 'port2': grad(0, 50, '#301010', '#c08060'); grad(50, 68, '#2a2a3a', '#4a4a5a'); x.fillStyle = '#1a1414'; x.fillRect(20, 20, 10, 50); x.fillRect(210, 20, 10, 50); x.fillStyle = '#ff6030'; x.fillRect(22, 18, 6, 4); x.fillRect(212, 18, 6, 4); ground(68, '#4a4040', '#2a2424', true); break;
-    case 'snowfield': grad(0, 60, '#6a8ab8', '#dce8f4'); hills(40, 10, '#b8c8dc', 1); hills(50, 6, '#ffffff', 3); ground(62, '#eef2f8', '#c8d4e4', true); x.fillStyle = '#ffffff'; for (let i = 0; i < 40; i++) x.fillRect(R() * w, R() * 60, 1, 1); break;
-    case 'icecave': grad(0, 72, '#1a2a44', '#6a9ac0'); for (let i = 0; i < 12; i++) { const ix = R() * w; x.fillStyle = '#b8dcf4'; x.fillRect(ix, 0, 3, 8 + R() * 16); x.fillStyle = '#e8f6ff'; x.fillRect(ix, 0, 1, 6); } ground(72, '#b4d0e8', '#6a8aa8', true); break;
-    case 'summit': grad(0, 70, '#1a2040', '#8aa0c8'); x.fillStyle = '#ffffff'; for (let i = 0; i < 50; i++) x.fillRect(R() * w, R() * 50, 1, 1); hills(52, 4, '#dce8f4', 2); ground(66, '#eef2f8', '#b8c8dc', true); x.fillStyle = 'rgba(200,230,255,0.3)'; x.fillRect(0, 30, w, 10); break;
     case 'library': grad(0, 72, '#140c18', '#3a2a3a'); for (let i = 0; i < 8; i++) { const sx = i * 30 + 2; x.fillStyle = '#3a2418'; x.fillRect(sx, 8, 26, 64); for (let r = 0; r < 5; r++) for (let k = 0; k < 6; k++) { x.fillStyle = pick(['#8a2a20', '#2a6a4a', '#3a4a8a', '#8a6a2a', '#5a2a5a']); x.fillRect(sx + 2 + k * 4, 11 + r * 12, 3, 9); } } x.fillStyle = 'rgba(64,224,208,0.25)'; x.fillRect(0, 60, w, 14); ground(74, '#4a3428', '#1a1010', true); x.fillStyle = '#f0e8d0'; for (let i = 0; i < 16; i++) x.fillRect(R() * w, R() * 70, 3, 2); break;
     case 'fey': grad(0, 72, '#2a1030', '#6a3a4a'); x.fillStyle = '#8a5a30'; x.fillRect(0, 60, w, 14); disc(40, 40, 18, '#c0a060'); disc(40, 40, 12, '#e0c080'); x.fillStyle = '#e8e0f0'; x.fillRect(170, 16, 18, 50); x.fillRect(166, 12, 26, 6); x.fillStyle = '#7a3a8a'; for (let i = 0; i < 4; i++) disc(90 + i * 22, 30 + (i % 2) * 8, 6, i % 2 ? '#c04080' : '#4080c0'); ground(74, '#8a5a30', '#3a2010', true); x.fillStyle = '#ffe080'; for (let i = 0; i < 30; i++) x.fillRect(R() * w, R() * 72, 1, 1); break;
     default: grad(0, h, '#222', '#444');

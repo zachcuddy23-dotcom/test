@@ -18,7 +18,7 @@ function newState() {
     party: [makeMember('raine', 1), makeMember('miasma', 1)],
     gold: 300, items: { tonic: 5, antidote: 2, bellflower: 1 }, bag: {}, keys: [], flags: {}, chests: {},
     jobsOpen: [...START_JOBS], map: 'barge', x: 7, y: 6, dir: 'up',
-    bench: [], resting: null, leader: null, ship: null, onShip: false, steps: 0, playTime: 0, battles: 0, cfg: { atb: 'wait', speed: 3 },
+    bench: [], ship: null, onShip: false, steps: 0, playTime: 0, battles: 0, cfg: { atb: 'wait', speed: 3 },
   };
 }
 const S = () => Game.state;
@@ -27,14 +27,6 @@ function setFlag(k, v = true) { S().flags[k] = v; }
 function hasKey(k) { return S().keys.includes(k); }
 function giveKey(k) { if (!hasKey(k)) S().keys.push(k); }
 function takeKey(k) { S().keys = S().keys.filter(x => x !== k); }
-// Who walks at the front on the map. Raine leads until the party earns the right to choose
-// (Chapter Three); while she is away, the first standing member leads.
-function leadMember() {
-  const st = S(), alive1 = m => m && m.hp > 0;
-  if (flag('leaderUnlocked') && st.leader) { const m = st.party.find(p => p.id === st.leader); if (alive1(m)) return m; }
-  if (!flag('leaderUnlocked')) { const r = st.party.find(p => p.id === 'raine'); if (alive1(r)) return r; }
-  return st.party.find(alive1) || st.party[0];
-}
 function member(id) { return S().party.find(m => m.id === id); }
 function addMember(id) {
   if (member(id)) return member(id);
@@ -158,7 +150,7 @@ function migrateSave(s) {
   const d = newState();
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
   s.cfg = Object.assign({}, d.cfg, s.cfg || {});
-  for (const m of [...(s.party || []), ...(s.bench || []), ...(s.resting ? [s.resting] : [])]) {
+  for (const m of s.party || []) {
     m.jobs = m.jobs || {}; m.status = m.status || {}; m.equip = m.equip || {};
     for (const j of JOB_ORDER) if (!m.jobs[j]) m.jobs[j] = { lv: 1, jp: 0 };
     if (!JOBS[m.job]) m.job = HEROES[m.id].job;

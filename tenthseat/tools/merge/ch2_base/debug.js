@@ -33,18 +33,6 @@ CHECKPOINTS.push(
   CH2('Mini-game: Bell-Ringer (Draumond)', ['veraiSonia', 'sanctuarySunk', 'ch2start', 'emberGate', 'bribed', 'coalToken', 'gunworks', 'blewPowder'], [...RML, 'brakka'], 25, ['draumond', 13, 16, 'up'], { keys: ['gunpass'] }),
   CH2('Throne of Cinders', ['veraiStayed', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken', 'gunworks', 'tookPowder', 'draumond', 'ferryman'], [...RMVL], 28, ['cinders', 10, 13, 'up'], { keys: ['gunpass', 'anvilshard'] }),
 );
-// Chapter Three checkpoints (Chapter Two finished: Verai stayed, Brakka waiting on the bench)
-const CH2_DONE = ['veraiStayed', 'sanctuarySunk', 'ch2start', 'emberGate', 'trialWon', 'chainJob', 'coalToken', 'gunworks', 'tookPowder', 'draumond', 'ferryman', 'throneMet', 'ashkarAlly', 'ch2end', 'ch2done'];
-const CH3 = (name, extra, lvl, map, more = {}) => ({ ...CH2(name, [...CH2_DONE, ...extra], RMVL, lvl, map, { bench: ['brakka'], keys: ['gunpass'], ...more }), name: 'Ch3: ' + name });
-const CH3_CLIMB = ['ch3start', 'ch3sick', 'ch3doctor', 'ch3confessed'];
-CHECKPOINTS.push(
-  CH3('Chapter Two just finished', [], 28, ['cinders', 10, 13, 'up'], { run: () => chapter3Opening() }),
-  CH3('Hearthmoor, Raine is ill', CH3_CLIMB, 28, ['hearthmoor', 14, 14, 'up'], { run: () => { raineLeaves(); } }),
-  CH3('Wyrmspire: Frozen Falls (ice)', [...CH3_CLIMB, 'ch3m1'], 29, ['wyrm2', 1, 14, 'right'], { run: () => { raineLeaves(); } }),
-  CH3('Wyrmspire: the Old Nest', [...CH3_CLIMB, 'ch3m1', 'ch3m2'], 30, ['wyrm3', 1, 12, 'right'], { run: () => { raineLeaves(); } }),
-  CH3('Wyrmspire: Summit (Rimeclaw)', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3helm', 'ch3toy', 'ch3yeti', 'ch3m4'], 31, ['summit', 1, 10, 'right'], { run: () => { raineLeaves(); } }),
-  CH3('After the Wyrmspire', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1'], 32, ['hearthmoor', 14, 14, 'up']),
-);
 function applyCheckpoint(cp) {
   const st = newState();
   st.party = cp.party.map(id => makeMember(id, cp.lvl));
@@ -56,9 +44,6 @@ function applyCheckpoint(cp) {
   if (cp.flags.includes('chimera')) st.jobsOpen.push('wyrmblood');
   if (cp.flags.includes('chainJob')) st.jobsOpen.push('chainbearer');
   if (cp.flags.includes('ch1done')) st.flags.bond = 2;
-  if (cp.flags.includes('ch2end')) st.jobsOpen.push('phoenix');
-  if (cp.flags.includes('ch3rime')) st.jobsOpen.push('dragon');
-  if (cp.bench) st.bench = cp.bench.map(id => makeMember(id, cp.lvl));
   st.gold = 500 + cp.lvl * 300; st.items = { tonic: 8, hitonic: cp.lvl > 10 ? 4 : 0, antidote: 3, emberplume: 2, bedroll: 2 };
   if (cp.ship) st.ship = cp.ship;
   Game.state = st;

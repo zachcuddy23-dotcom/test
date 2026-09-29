@@ -200,7 +200,7 @@ const Audio2 = {
     this.want = name;
     if (!this.ac) return;
     if (this.track && this.track.name === name && !force) return;
-    this.track = name && MUSIC[name] ? Object.assign({ name }, MUSIC[name]) : null;
+    this.track = name ? Object.assign({ name }, MUSIC[name]) : null;
     this.step = 0; this.nextT = this.ac.currentTime + 0.05;
     if (!this.timer) this.timer = setInterval(() => this.pump(), 50);
   },

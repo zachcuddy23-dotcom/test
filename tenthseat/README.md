@@ -1,4 +1,4 @@
-# The Tenth Seat: Chapter One, *The Unseated*, and Chapter Two, *The Tenth Flame*
+# The Tenth Seat: Chapters One and Two, and Chapter Three (in progress)
 
 A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
@@ -10,6 +10,18 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **Keyboard:** arrows or WASD move · Z / Space / Enter confirm · X cancel or menu · Esc menu · hold Shift to run
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
+
+## What's new in Chapter Three (part one: the Wyrmspire)
+- **Chapter Two saves carry over.** Finish Chapter Two, or Continue a Chapter Two save, and Chapter Three begins.
+- On the voyage home, just as Miasma finally starts to tell Raine the truth, **Raine collapses.** Her pendant, Ashkar's token, is burning her from the inside.
+- **Raine leaves the party and Miasma leads.** Three friends climb the **Wyrmspire**, Miasma's old mountain, for the Frostheart Lily. You choose who stays at Raine's bedside.
+- **The climb:**
+  - Two **ice-slide puzzles**, the Old Nest, and a Yeti mini-boss.
+  - Backstory moments for Miasma, Luna, Verai and Brakka.
+  - The boss, **Rimeclaw the Frost Wyrm**, is balanced for three.
+- **The Dragon job:** at the summit, Miasma remembers what she really is.
+- **Choose your party leader** (Menu, then Leader) after Raine recovers.
+- The story continues: Odeaon's trial is in seven days, and the pass south is where the next update picks up.
 
 ## What's new in Chapter Two
 - **Chapter One saves carry over.** Continue a save made on the "Chapter One Complete" screen and Chapter Two begins, with all your choices intact.

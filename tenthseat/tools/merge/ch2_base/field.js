@@ -87,7 +87,7 @@ class FieldScene {
       const t = this.tileDef(c);
       if (st.onShip) {
         if (t.sea || c === 'B' || c === 'r') return this.startMove(nx, ny, speed);
-        if (!t.solid) { st.ship = { x: st.x, y: st.y }; st.onShip = false; Audio2.music(musicFor(this.map)); return this.startMove(nx, ny, 10); }
+        if (!t.solid) { st.ship = { x: st.x, y: st.y }; st.onShip = false; Audio2.music(this.map.music); return this.startMove(nx, ny, 10); }
         return;
       }
       if (this.map.id === 'world' && st.ship && st.ship.x === nx && st.ship.y === ny) { st.onShip = true; Audio2.music('sea'); return this.startMove(nx, ny, 10); }
@@ -136,13 +136,7 @@ class FieldScene {
       const w = this.map.warps[c], tm = prepMap(w.map), [tx, ty] = tm._marks[w.at];
       this.run(async () => { Audio2.sfx('stairs'); await this.warp(w.map, tx, ty, st.dir); }); return;
     }
-    // ice: keep sliding the same way until something stops you (no random battles mid-slide)
-    if (t.ice && !this.scripted) {
-      const [dx, dy] = DIRS[st.dir], nx = st.x + dx, ny = st.y + dy;
-      if (this.tileAt(nx, ny) != null && !this.blocked(nx, ny)) { if (!this.sliding) Audio2.sfx('cursor'); this.sliding = true; this.startMove(nx, ny, 5); return; }
-    }
-    const slid = this.sliding; this.sliding = false;
-    if (this.map.enc && !slid) this.maybeEncounter(this.map.enc, t.enc == null ? 1 : t.enc, this.map.bg);
+    if (this.map.enc) this.maybeEncounter(this.map.enc, t.enc == null ? 1 : t.enc, this.map.bg);
   }
   maybeEncounter(zone, mult, bg) {
     if (!mult || !FORMATIONS[zone] || flag('noEnc')) return;
@@ -266,7 +260,7 @@ class FieldScene {
         else ctx.drawImage(img, nx * TS - cx - 3, ny * TS - cy - 24, 54, 72);
       } });
     }
-    const lead = leadMember();
+    const lead = st.party.find(alive) || st.party[0];
     if (!this.hidePlayer) objs.push({ y: py + 0.01, draw: () => {
       if (st.onShip) { ctx.drawImage(OBJ.ship, px * TS - cx, py * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS); return; }
       let fr = 0; if (this.moving) { const k = this.moving.t / this.moving.n; fr = k < 0.5 ? ((this.stepCount % 2) ? 1 : 2) : 0; }

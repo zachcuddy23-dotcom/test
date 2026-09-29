@@ -10,7 +10,7 @@ const path = require('path');
   await page.goto('file://' + path.join(__dirname, '..', '..', 'index.html'));
   await page.waitForTimeout(1200);
   for (let i = 0; i < 400 && !(await page.evaluate(() => Game.top() instanceof TitleScene)); i++) await page.evaluate(() => { Input.pressed.a = true; }), await page.waitForTimeout(30);
-  await page.evaluate(() => { Game.state = newState(); for (const f of ['intro','audience','mission','stag','votary','pass','bridge','harbor','chimera','wren','noEnc','lunaJoin','ch1end','ch1done','ch2start','emberGate','trialWon','gunworks','draumond','ferryman','coalToken','chainJob','lunaEmberDone','athenaeum']) Game.state.flags[f] = true; Game.state.keys.push('harborpass', 'gunpass', 'deathpage'); const f = new FieldScene(); Game.field = f; Game.replaceAll(f); f.enterMap('world', 20, 14, 'down'); Game.fade = 0;
+  await page.evaluate(() => { Game.state = newState(); for (const f of ['intro','audience','mission','stag','votary','pass','bridge','harbor','chimera','wren','noEnc','lunaJoin','ch1end','ch1done','ch2start','emberGate','trialWon','gunworks','draumond','ferryman','coalToken','chainJob','lunaEmberDone','athenaeum','ch3start','ch3sick','ch3doctor','ch3cured','ch3herb','ch3summit','ch3confessed']) Game.state.flags[f] = true; Game.state.keys.push('harborpass', 'gunpass', 'deathpage'); const f = new FieldScene(); Game.field = f; Game.replaceAll(f); f.enterMap('world', 20, 14, 'down'); Game.fade = 0;
     setInterval(() => { const t = Game.top(); if (t instanceof DialogScene || t instanceof NotifyScene) Input.pressed.a = true; }, 50); });
   const cases = await page.evaluate(() => {
     const out = [];
@@ -38,7 +38,7 @@ const path = require('path');
     await page.waitForTimeout(900);
     const st = await page.evaluate(() => ({ fade: Game.fade, top: Game.top() === Game.field, map: Game.field.map.id, busy: Game.field.busy, errs: Game.errors.length }));
     const from = cs.kind === 'place' ? cs.w : cs.id;
-    const gated = cs.kind === 'place' && cs.w === 'world' && cs.k === '27,11'; // Solanthia's gate refuses entry after Hollowmere, on purpose
+    const gated = cs.kind === 'place' && ((cs.w === 'world' && cs.k === '27,11') || (cs.w === 'frostreach' && ['18,4', '11,22', '33,19'].includes(cs.k))); // story-gated on purpose // Solanthia's gate refuses entry after Hollowmere, on purpose
     const ok = st.fade === 0 && st.top && st.busy === 0 && (gated || st.map !== from) && st.errs === 0;
     if (!ok) { bad++; console.log('BAD', JSON.stringify(cs), JSON.stringify(st)); }
   }

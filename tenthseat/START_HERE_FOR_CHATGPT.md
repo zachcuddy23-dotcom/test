@@ -1,6 +1,6 @@
 # Start here
 
-This zip contains the full game **The Tenth Seat, Chapters One and Two** plus everything needed to finish its art.
+This zip contains the full game **The Tenth Seat, Chapters One and Two, plus the first arc of Chapter Three**, and everything needed to finish its art.
 
 ## To play
 Unzip it and open `index.html` in any web browser. No install or internet is needed, except for the pixel font, which falls back to a plain font offline.
@@ -19,7 +19,14 @@ Unzip it and open `index.html` in any web browser. No install or internet is nee
 >
 > After each batch, give me the updated zip so I can test it. Show me each image before moving on.
 
-## If ChatGPT already worked on Chapter One
+## If ChatGPT already worked on an older version (Chapter One or Two)
+Upload this zip **and** ChatGPT's latest zip, then paste:
+
+> Here is the newest update of "The Tenth Seat" (Chapter Three, part one). Unzip it and read `CHAPTER3_UPDATE_FOR_CHATGPT.md` first. Merge it with your work exactly as section 1 says: run `python3 tools/merge_update.py <your older folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
+>
+> Then make the new art from section 3 of that file, starting with 3.1 (Miasma's Dragon job, her true dragon form, Rimeclaw, Old Mother Yeti). If you haven't done Chapter Two's art yet, `CHAPTER2_UPDATE_FOR_CHATGPT.md` section 3 lists it. Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
+
+## (Older) If ChatGPT only worked on Chapter One
 Upload this zip **and** ChatGPT's latest Chapter One zip, then paste:
 
 > Here is Chapter Two of "The Tenth Seat". Unzip it and read `CHAPTER2_UPDATE_FOR_CHATGPT.md` first. Merge it with your Chapter One work exactly as section 1 says: run `python3 tools/merge_chapter2.py <your chapter one folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
@@ -31,10 +38,11 @@ Upload this zip **and** ChatGPT's latest Chapter One zip, then paste:
 |---|---|
 | `index.html`, `js/` | The game |
 | `assets/` | Current art as PNGs (bosses, monsters, heroes, portraits) |
+| `CHAPTER3_UPDATE_FOR_CHATGPT.md` | Chapter Three part one: how to merge it, the story and flags so far, and every new art slot |
 | `CHAPTER2_UPDATE_FOR_CHATGPT.md` | How to merge Chapter Two into earlier work, the Chapter Two story and choices, and **every new art slot** |
 | `CHATGPT_GUIDE.md` | The full brief: story, characters and secrets, every art slot with sizes and prompts, the animation frame layout, and how to add content |
 | `README.md` | Game features and controls |
 | `tools/source/` | Original character sheets and boss paintings (the style references) |
 | `tools/pixelate.py`, `tools/bosses.py`, `tools/build_assets.py` | Art pipeline: turn paintings into game sprites, then embed them |
-| `tools/merge_chapter2.py`, `tools/merge/` | Merges this update into a Chapter One folder that already has new art |
+| `tools/merge_update.py`, `tools/merge/` | Merges this update into an older folder (Chapter One or Two) that already has new art |
 | `tools/check/` | Automated checks: map and data validation, battle balance, full story playthrough |

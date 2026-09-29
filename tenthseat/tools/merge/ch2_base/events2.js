@@ -615,7 +615,6 @@ async function chapter2End(give) {
     flag('miasmaHalfTruth') ? 'Miasma told you half the truth.' : 'Miasma kept her secret.',
     hasV() ? 'Verai is with you.' : flag('veraiWaits') ? 'Verai will find you.' : 'Verai is with Sonia.',
   ], 'Chapter Three will continue from this file.');
-  if (typeof chapter3Opening === 'function') { await chapter3Opening(); return; }
   await fadeIn(40);
   Audio2.music(musicFor(F().map));
 }

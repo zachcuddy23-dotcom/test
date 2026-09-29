@@ -59,7 +59,6 @@ function continueGame() {
   Game.fade = 1;
   // A finished Chapter One save rolls straight into Chapter Two
   if (flag('ch1done') && !flag('ch2start') && typeof chapter2Opening === 'function') f.run(() => chapter2Opening());
-  else if (flag('ch2done') && !flag('ch3start') && typeof chapter3Opening === 'function') f.run(() => chapter3Opening());
   else fadeIn(30);
 }
 
