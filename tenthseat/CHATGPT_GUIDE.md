@@ -408,7 +408,10 @@ tenthseat/
   js/secrets.js       optional secrets and mini-games (Athenaeum, Book Dragon, Hollowgrin's chest, bells)
   js/data3.js         Chapter Three data (Dragon job, tier-4 gear, Wyrmspire monsters and bosses)
   js/maps3.js         Chapter Three maps (the Frostreach, Hearthmoor, the Wyrmspire, snow tiles, music)
-  js/events3.js       Chapter Three scenes (loads last)
+  js/events3.js       Chapter Three scenes
+  js/data4.js         Chapter Four data (Ashkar guest, Moonhollow gear, Cleansing, sanctuary monsters)
+  js/maps4.js         Chapter Four maps (Moonhollow, the drowned sanctuary, current tiles)
+  js/events4.js       Chapter Four scenes (loads last)
   js/ui.js            dialog, field menu (Items/Skills/Job/Equip/Status/Order/Config/Save), shops, inn, chapel
   js/field.js         exploration, encounters, cutscene helpers (walk, npcWalk, card, crawl)
   js/battle.js        ATB battle system, effects, backgrounds (+ bg_*, sheet overrides)
@@ -466,11 +469,14 @@ NODE_PATH=$(npm root -g) node tools/check/story2.js stay   # Chapter Two from a 
 NODE_PATH=$(npm root -g) node tools/check/secrets.js       # secrets and mini-games
 NODE_PATH=$(npm root -g) node tools/check/story3.js 0     # Chapter Three from a Chapter Two save
 NODE_PATH=$(npm root -g) node tools/check/story3b.js stay 2   # the rest of Chapter Three
+NODE_PATH=$(npm root -g) node tools/check/story4.js ally stays # Chapter Four (ally|rival, stays|bench|push)
 ```
 
 ---
 
 ## 9. Roadmap: Chapter Two and beyond
+
+**Chapter Four is built** (see `CHAPTER4_UPDATE_FOR_CHATGPT.md`: Verai's goodwill, Luna and Moonhollow, the two Anvil routes, the drowned sanctuary). Chapter Five, *The City of Masks*, starts from `ch4done`.
 
 **Chapter Three is built** (see `CHAPTER3_UPDATE_FOR_CHATGPT.md`: Raine's illness, the Wyrmspire, the Dragon job, the Leader menu, the Undercity, the trial, and Odeaon joining). Chapter Four, *The Drowned Sanctuary*, starts from the `ch3done` flag. Write a `chapter4Opening()` and `continueGame()` will call it. Three more chapters are planned in total, then post-game content.
 

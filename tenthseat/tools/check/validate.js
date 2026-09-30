@@ -58,14 +58,28 @@ W.rows.forEach((r, i) => { if (r.length !== W.rows[0].length) err('world row ' +
 for (const r of W.rows) for (const ch of r) if (!c.WORLD_TILES[ch] && ch !== 'G') err('world tile ' + ch);
 // ice floors: from every spot you can stop on, the exit ('>') must still be reachable (no softlocks)
 for (const [id, m] of Object.entries(c.MAPS)) {
-  if (m.world || !m.rows.some(r => r.includes('i'))) continue;
+  if (m.world || !m.rows.some(r => [...r].some(ch => (T[ch] || {}).ice || (T[ch] || {}).push))) continue;
   const g = m.rows, chestKeys = new Set(Object.keys(m.chests || {}));
   const solid = (x, y) => { const ch = g[y] && g[y][x]; if (ch == null) return true; if (chestKeys.has(ch)) return true; if (/[0-9]/.test(ch)) return false; const t = T[ch]; return !t || !!t.solid; };
-  const moves = ([x, y]) => [[1, 0], [-1, 0], [0, 1], [0, -1]].flatMap(([dx, dy]) => { let nx = x + dx, ny = y + dy; if (solid(nx, ny)) return []; while (g[ny][nx] === 'i' && !solid(nx + dx, ny + dy)) { nx += dx; ny += dy; } return [[nx, ny]]; });
+  const PD = { left: [-1, 0], right: [1, 0], up: [0, -1], down: [0, 1] };
+  let loops = false;
+  const moves = ([x, y]) => [[1, 0], [-1, 0], [0, 1], [0, -1]].flatMap(([dx, dy]) => {
+    let nx = x + dx, ny = y + dy; if (solid(nx, ny)) return [];
+    const seen = new Set();
+    for (;;) {
+      const t = T[g[ny][nx]] || {};
+      if (t.push) [dx, dy] = PD[t.push]; else if (!t.ice) break;
+      if (solid(nx + dx, ny + dy)) break;
+      const k = nx + ',' + ny + ',' + dx + ',' + dy; if (seen.has(k)) { loops = true; break; } seen.add(k);
+      nx += dx; ny += dy;
+    }
+    return [[nx, ny]];
+  });
   const goal = ([x, y]) => g[y][x] === '>' || !!(T[g[y][x]] || {}).exit;
   const reachGoal = s => { const seen = new Set([s + '']), q = [s]; while (q.length) { const a = q.shift(); if (goal(a)) return true; for (const b of moves(a)) if (!seen.has(b + '')) { seen.add(b + ''); q.push(b); } } return false; };
   const start = m.start.slice(0, 2), all = new Map([[start + '', start]]), q = [start];
   while (q.length) { const a = q.shift(); if (goal(a)) continue; for (const b of moves(a)) if (!all.has(b + '')) { all.set(b + '', b); q.push(b); } }
+  if (loops) err(`${id} ice/current: an endless current loop`);
   if (![...all.values()].some(goal)) err(`${id} ice: exit unreachable`);
   for (const s of all.values()) if (!goal(s) && !reachGoal(s)) err(`${id} ice: stuck at ${s}`);
   console.log(`${id.padEnd(12)} ice ok, ${all.size} resting spots`);

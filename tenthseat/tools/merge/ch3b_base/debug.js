@@ -48,17 +48,6 @@ CHECKPOINTS.push(
   CH3('The Temple cells and the trial', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1', 'ch3pass', 'ch3aval', 'ch3inq', 'ch3undercity', 'ch3underTip', 'ch3told'], 34, ['cells', 9, 8, 'up'], { keys: ['gunpass', 'toydragon'] }),
   CH3('After the Wyrmspire', [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3nest', 'ch3yeti', 'ch3m4', 'ch3summit', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1'], 32, ['hearthmoor', 14, 14, 'up']),
 );
-// Chapter Four checkpoints (Chapter Three finished; Raine asked "why"; Verai stayed in Chapter One)
-const CH3_DONE = [...CH3_CLIMB, 'ch3m1', 'ch3m2', 'ch3m3', 'ch3m4', 'ch3nest', 'ch3helm', 'ch3toy', 'ch3yeti', 'ch3summit', 'ch3told', 'ch3rime', 'ch3herb', 'ch3cured', 'leaderUnlocked', 'ch3part1', 'ch3pass', 'ch3aval', 'ch3inq', 'ch3undercity', 'ch3underTip', 'ch3cells', 'ch3trial', 'raineWhy', 'ch3toyGiven', 'veraiNight', 'lunaRevealed', 'ch3done'];
-const CH4 = (name, route, extra, party, bench, lvl, map, more = {}) => ({ ...CH2(name, [...CH2_DONE.filter(f => f !== 'ashkarAlly'), route, ...CH3_DONE, ...extra], party, lvl, map, { bench, keys: ['gunpass', ...(route === 'ashkarRival' ? ['anvilshard'] : []), ...(more.keys || [])], ...more }), name: 'Ch4: ' + name });
-const P4 = ['raine', 'miasma', 'odeaon', 'verai'], B4 = ['luna', 'brakka'], P4b = ['raine', 'miasma', 'odeaon', 'luna'], B4b = ['verai', 'brakka'];
-CHECKPOINTS.push(
-  CH4('Chapter Three just finished (Ashkar ally, Verai in the party)', 'ashkarAlly', [], P4, B4, 34, ['wrendeck', 8, 5, 'up'], { run: () => chapter4Opening() }),
-  CH4('Chapter Three just finished (Ashkar rival, Verai benched: she leaves)', 'ashkarRival', [], P4b, B4b, 34, ['wrendeck', 8, 5, 'up'], { run: () => chapter4Opening() }),
-  CH4('Moonhollow (ally route)', 'ashkarAlly', ['ch4start', 'veraiResisted'], P4, B4, 35, ['world', 17, 17, 'up'], { keys: ['anvilshard', 'phoenixember'], run: () => { S().flags.veraiWill = 4; } }),
-  CH4('Drowned sanctuary (ally route)', 'ashkarAlly', ['ch4start', 'veraiResisted', 'ch4moon', 'ch4lunaTalk', 'ch4purge', 'lunaUnmasked', 'hallornSpared', 'ch4dive'], P4b, B4b, 37, ['drowned1', 2, 16, 'up'], { keys: ['anvilshard', 'phoenixember', 'accord'], run: () => { S().flags.veraiWill = 4; } }),
-  CH4('Drowned sanctuary (rival route, Verai gone)', 'ashkarRival', ['ch4start', 'veraiGone4', 'ch4moon', 'ch4lunaTalk', 'ch4purge', 'lunaUnmasked', 'hallornKept', 'ch4dive'], P4b, ['brakka'], 37, ['drowned1', 2, 16, 'up'], { keys: ['anvilbell', 'accord'] }),
-);
 function applyCheckpoint(cp) {
   const st = newState();
   st.party = cp.party.map(id => makeMember(id, cp.lvl));

@@ -15,6 +15,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
   await page.addScriptTag({ content: AI + '\nwindow.aiPick = aiPick;' });
   await page.evaluate(c => {
     window.__pick = { 'Miasma is standing there': c }; window.__saveScreen = 0;
+    chapter4Opening = undefined;   // test Chapter Three on its own; story4.js covers the hand-off
     setInterval(() => {
       const b = Game.scenes.find(s => s instanceof BattleScene);
       if (b && b.ui && b.ui.kind === 'cmd') { b.setCmd(b.ui.m, aiPick(b, b.ui.m)); return; }

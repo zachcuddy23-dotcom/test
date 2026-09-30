@@ -151,9 +151,7 @@ class FieldScene {
       this.run(async () => { Audio2.sfx('stairs'); await this.warp(w.map, tx, ty, st.dir); }); return;
     }
     // ice: keep sliding the same way until something stops you (no random battles mid-slide)
-    // currents: push you their way, the same as ice but in a fixed direction
-    if ((t.ice || t.push) && !this.scripted) {
-      if (t.push) st.dir = t.push;
+    if (t.ice && !this.scripted) {
       const [dx, dy] = DIRS[st.dir], nx = st.x + dx, ny = st.y + dy;
       if (this.tileAt(nx, ny) != null && !this.blocked(nx, ny)) { if (!this.sliding) Audio2.sfx('cursor'); this.sliding = true; this.startMove(nx, ny, 5); return; }
     }

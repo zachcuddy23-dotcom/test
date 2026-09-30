@@ -893,7 +893,6 @@ async function chapter3End() {
     flag('raineWhy') ? 'Raine asked why.' : flag('raineAnger') ? 'Raine is furious.' : 'Raine said nothing.',
     hasV() ? 'Verai is with you.' : flag('veraiHelped') ? 'Verai helped, in secret.' : 'Verai is with Sonia.',
   ], 'Chapter Four will continue from this file.');
-  if (typeof chapter4Opening === 'function') { await chapter4Opening(); return; }
   // back out on the Aurelion world map, aboard the Wren
   const st = S(); st.ship = { x: 55, y: 19 }; st.onShip = true;
   F().enterMap('world', 55, 19, 'left');

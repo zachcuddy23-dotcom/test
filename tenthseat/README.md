@@ -1,4 +1,4 @@
-# The Tenth Seat: Chapters One, Two and Three
+# The Tenth Seat: Chapters One to Four
 
 A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
@@ -10,6 +10,18 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **Keyboard:** arrows or WASD move · Z / Space / Enter confirm · X cancel or menu · Esc menu · hold Shift to run
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
+
+## What's new in Chapter Four: the breaking point
+- **Verai can leave.** Her goodwill depends on how you've treated her: kept her in the party, or left her on the bench? Asked her, or ordered her? She can leave with her mother at the start, or break partway through, and she'll be gone for the chapter.
+- **Luna's chapter:**
+  - Moonhollow, her hidden people.
+  - Why she hid, and her eight years of letters.
+  - Odeaon knew all along (and Miasma has a joke about it).
+  - The Cleansing, and Luna finally breaking.
+- **Your Chapter Two Ashkar choice rewrites the chapter:**
+  - **Ally:** a wounded god, the Phoenix Ember, and Ashkar fighting beside you.
+  - **Rival:** his Cinder Knights, Brakka's Anvil Bell, and Sonia taking the Anvil.
+- **The drowned sanctuary:** a current-push puzzle, the Hall of Reflections, and Elaris's last seed.
 
 ## What's new in Chapter Three, part two: the trial
 - **Frostfang Pass:** an avalanche, and an Inquisitor who knows exactly what Miasma is.
