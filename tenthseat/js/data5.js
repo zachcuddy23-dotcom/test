@@ -4,7 +4,7 @@
 // Every god now has a job:  Sylara Dawnsinger, Thalara Tidecaller, Valerion Oathblade, Myndra Arcanist,
 //   Grimnar Ash Reaper, Malakar Masquer, Zariel Chainbearer, Ashkar Phoenix Warlock, and new here:
 //   Elaris -> Bloomwarden (Heartbloom Hollow), Kryos -> Timewarden (the Stilled Hourglass),
-//   and Nyxia, the erased one -> Nightveil (Ebonport's chapel).
+//   and Nyxia, the erased one -> Nightveil (Ebonport's chapel): a healer whose medicine is shadow.
 // Gear tier 6 (Sephara, Ebonport) and tier 7 (Rimward), plus one ultimate weapon per hero, hidden in
 // the places only a dragon can reach.
 // ---------------------------------------------------------------------------
@@ -25,10 +25,10 @@ Object.assign(JOBS, {
   },
   nightveil: {
     name: 'Nightveil', god: 'Nyxia (unseated)', cmd: 'Veil', color: '#a070ff',
-    desc: 'The erased goddess of the night still has a few faithful. They fight from the dark, and the dark is kind to them.',
-    mult: { hp: 1.0, mp: 1.1, str: 1.15, agi: 1.3, mag: 1.15, vit: 0.95, spr: 1.0 },
-    weapons: ['dagger', 'rod', 'claw'], armor: ['light', 'robe', 'hat'],
-    learn: [[1, 'veilstrike'], [2, 'nightcloak'], [3, 'eclipsedust'], [5, 'starlessbite'], [6, 'longnight'], [8, 'veilednight']],
+    desc: 'The erased goddess of the night still has a few faithful, and they are healers. Shadows close wounds the way night closes a day: gently, and all at once.',
+    mult: { hp: 1.0, mp: 1.45, str: 0.75, agi: 1.1, mag: 1.2, vit: 0.95, spr: 1.4 },
+    weapons: ['rod', 'staff', 'dagger'], armor: ['robe', 'hat', 'light'],
+    learn: [[1, 'shadowmend'], [2, 'duskveil'], [3, 'umbralsalve'], [4, 'nightcradle'], [5, 'starlessbite'], [6, 'shroud'], [7, 'moonlessrebirth'], [8, 'veilednight']],
   },
 });
 JOB_ORDER.push('bloomwarden', 'timewarden', 'nightveil');
@@ -48,13 +48,15 @@ Object.assign(SKILLS, {
   graveclock: { name: 'Grave Clock', mp: 18, target: 'enemy', kind: 'status', status: 'doom', chance: 60, fx: 'dark', desc: 'The Pale Watcher counts down from three. Bosses refuse.' },
   palewinter: { name: 'Pale Winter', mp: 26, target: 'enemies', kind: 'dmg', elem: 'ice', pow: 76, status: 'stop', chance: 20, fx: 'ice', desc: 'A winter that lasts one second and forever. Ice on all foes.' },
   endofhours: { name: 'End of Hours', mp: 44, target: 'enemies', kind: 'dmg', elem: 'ice', pow: 118, fx: 'ice', desc: 'Kryos shows every foe the last minute of the world.' },
-  // Nightveil (Nyxia)
-  veilstrike: { name: 'Veil Strike', mp: 4, target: 'enemy', kind: 'phys', mult: 1.7, elem: 'dark', fx: 'dark', desc: 'Strike from a shadow that was not there a moment ago.' },
-  nightcloak: { name: 'Night Cloak', mp: 8, target: 'self', kind: 'buff', buff: 'counter', fx: 'smoke', desc: 'Wrap yourself in night. Strike back at anyone who hits you.' },
-  eclipsedust: { name: 'Eclipse Dust', mp: 10, target: 'enemies', kind: 'status', status: 'blind', chance: 70, fx: 'smoke', desc: 'Put out every light. Blinds all foes.' },
-  starlessbite: { name: 'Starless Bite', mp: 16, target: 'enemy', kind: 'drain', elem: 'dark', pow: 74, fx: 'dark', desc: 'Drink a foe\'s light.' },
-  longnight: { name: 'The Long Night', mp: 26, target: 'enemies', kind: 'dmg', elem: 'dark', pow: 78, status: 'sleep', chance: 25, fx: 'dark', desc: 'A night with no morning in it. Dark on all foes.' },
-  veilednight: { name: 'The Veiled Night', mp: 42, target: 'enemies', kind: 'dmg', elem: 'dark', pow: 122, fx: 'dark', desc: 'For one moment, Nyxia is a goddess again.' },
+  // Nightveil (Nyxia): a healer whose medicine is the dark
+  shadowmend: { name: 'Shadow Mend', mp: 4, target: 'ally', kind: 'heal', pow: 36, fx: 'smoke', field: true, desc: 'A shadow lays itself over a wound like a cool cloth. Restores HP to one ally.' },
+  duskveil: { name: 'Dusk Veil', mp: 12, target: 'allies', kind: 'buff', buff: 'regen', fx: 'smoke', desc: 'The party stands in a kind dusk. Everyone regenerates.' },
+  umbralsalve: { name: 'Umbral Salve', mp: 8, target: 'ally', kind: 'heal', pow: 24, cures: ['poison', 'blind', 'sleep', 'fear', 'silence', 'stop', 'doom'], fx: 'smoke', field: true, desc: 'Night takes the sickness away with it. Cures every ailment, even Stop and Doom, and heals a little.' },
+  nightcradle: { name: 'Night Cradle', mp: 18, target: 'allies', kind: 'heal', pow: 46, fx: 'smoke', field: true, desc: 'Nyxia\'s lullaby, sung in shadow. Heals the whole party.' },
+  starlessbite: { name: 'Starless Bite', mp: 14, target: 'enemy', kind: 'drain', elem: 'dark', pow: 70, fx: 'dark', desc: 'Drink a foe\'s light, and keep half of it for yourself.' },
+  shroud: { name: 'Shroud', mp: 16, target: 'allies', kind: 'buff', buff: 'protect', fx: 'smoke', desc: 'Wrap the party in shadow. Defense up for everyone.' },
+  moonlessrebirth: { name: 'Moonless Rebirth', mp: 30, target: 'dead', kind: 'revive', full: true, fx: 'smoke', field: true, desc: 'Even the dead sleep. Nyxia knows how to wake them. Revives one ally with half their HP.' },
+  veilednight: { name: 'The Veiled Night', mp: 40, target: 'allies', kind: 'heal', pow: 92, buff: 'regen', cures: ['poison', 'blind', 'sleep', 'fear', 'silence'], fx: 'smoke', field: true, desc: 'For one moment, Nyxia is a goddess again, and every wound in the party closes in the dark.' },
   // innate gifts earned in Chapter Five (kept in member.bonus)
   crescentflare: { name: 'Crescent Flare', mp: 24, target: 'enemies', kind: 'phys', mult: 2.0, elem: 'fire', fx: 'fire', desc: 'The coal around Raine\'s neck remembers whose hearth it came from.' },
   emberheart: { name: 'Ember Heart', mp: 30, target: 'allies', kind: 'heal', pow: 70, buff: 'regen', fx: 'fire', field: true, desc: 'A feather Ashkar gave back. Warmth for everyone, and it lingers.' },
@@ -237,9 +239,9 @@ Object.assign(ENEMIES, {
     acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Cannonade', target: 'all', pow: 66, elem: 'fire', fx: 'boom' }, { w: 1, type: 'strike', name: 'Ram', mult: 1.9, fx: 'boom' }],
     lines: { start: '"PASSWORD." (It does not wait for one.)', half: 'A plate falls off the Colossus. Behind it, painted inside: "BRAKKA - DON\'T TOUCH."' },
   }),
-  stormherald: B5('The Storm Herald', 'stormherald', { art: 'pirate', tint: { h: 260, s: 1.4, l: 0.7 }, scale: 2.6 }, 19500, 130, {
+  stormherald: B5('The Storm Herald', 'stormherald', { art: 'pirate', tint: { h: 260, s: 1.4, l: 0.7 }, scale: 2.6 }, 18000, 128, {
     weak: ['holy', 'earth'], resist: ['bolt', 'dark'],
-    acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Veilstorm', target: 'all', pow: 62, elem: 'bolt', fx: 'bolt' }, { w: 1, type: 'status', name: 'Lightning Doubt', target: 'all', status: 'silence', chance: 40, fx: 'bolt' }, { w: 1, type: 'strike', name: 'Eye of the Storm', mult: 2.0, fx: 'boom' }],
+    acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Veilstorm', target: 'all', pow: 62, elem: 'bolt', fx: 'bolt' }, { w: 1, type: 'status', name: 'Lightning Doubt', target: 'all', status: 'silence', chance: 25, fx: 'bolt' }, { w: 1, type: 'strike', name: 'Eye of the Storm', mult: 2.0, fx: 'boom' }],
     phase2: [{ w: 2, type: 'attack' }, { w: 2, type: 'spell', name: 'Thousand Prayers', target: 'all', pow: 68, elem: 'dark', fx: 'dark' }, { w: 1, type: 'heal', name: 'Stolen Faith', pow: 1600, uses: 1, when: 'hurt' }],
     lines: { start: '"She is almost a god of everything. You are almost too late. Almost."', half: 'Thousands of stolen prayers scream out of the Herald\'s armor.' },
   }),

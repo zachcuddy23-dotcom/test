@@ -15,8 +15,8 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **Miasma remembers she's a dragon.** Everyone turns to look at her at once. She is your airship now: **press Z on any world map to take off, and Z again to land** or fly straight into a town.
 - **The Sky Chart** shows the whole world: Aurelion, Ashkar, the Frostreach, and two new lands, **Thalemyr** (Myndra's Great Library, Ebonport the City of Masks) and **Zalakir** (the Unclaimed Wilds). Fly off the edge of any map to cross between them.
 - **Places you could see all along but never reach** (behind mountains, reefs, lava, a frozen lake) open up: Heartbloom Hollow, Miasma's old hoard, the Stilled Hourglass, Gruntle's powder vault, the Moonfang Barrows, and more.
-- **Every god has a job now:** new **Bloomwarden** (Elaris), **Timewarden** (Kryos) and **Nightveil** (Nyxia, the erased goddess).
-- **An ultimate weapon and a new skill for every hero**, tier 6 and tier 7 shops, and a **level cap of 50**.
+- **Every god has a job now:** new **Bloomwarden** (Elaris), **Timewarden** (Kryos) and **Nightveil** (Nyxia, the erased goddess), a **healer whose medicine is shadow**.
+- **An ultimate weapon and a new skill for every hero**, tier 6 and tier 7 shops, and a **level cap of 60**.
 - **Your choices land:**
   - **Verai:** if she stayed, does she carry Nyxia's night or become it? If she left, can you bring her home?
   - **Ashkar:** ally route, rekindle him in his cradle (give back Raine's pendant?). Rival route, take the Anvil back from Sonia's forge (and keep it, or give it to him?).

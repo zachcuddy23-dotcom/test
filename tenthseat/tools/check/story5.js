@@ -45,8 +45,9 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
   await until(() => { Input.pressed.a = true; return Game.top() instanceof TitleScene; }, 60000);
 
   // a Chapter Four save, the way Chapter Four left it
-  await page.evaluate(([route, gone]) => {
+  await page.evaluate(([route, gone, mode]) => {
     const st = newState(), L = 44;
+    st.bag = { pilgrimstaff: 2, wildrobe: 2, wildhat: 2 };
     const party = gone ? ['raine', 'miasma', 'odeaon', 'luna'] : ['raine', 'miasma', 'odeaon', 'verai'], bench = gone ? ['brakka'] : ['luna', 'brakka'];
     st.party = party.map(id => makeMember(id, L)); st.bench = bench.map(id => makeMember(id, L - 1));
     const job = { raine: 'reaper', miasma: 'dragon', odeaon: 'oathblade', verai: 'arcanist', luna: 'oathblade', brakka: 'freelancer' };
@@ -62,7 +63,8 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
     st.flags[route === 'ally' ? 'anvilSealed' : 'anvilLost'] = true;
     if (route === 'ally') st.flags.ashkarGuttered = true;
     st.flags[route === 'ally' ? 'hallornSpared' : 'hallornKept'] = true;
-    if (gone) { st.flags.veraiGone4 = true; st.flags.veraiGoneWhen = 'reflection'; st.flags.veraiReach = true; st.flags.veraiReachChoice = 1; st.flags.veraiWill = 2; }
+    // rivalBack: she was reached in Chapter Four ('I'm sorry') and goodwill 2; rivalLost: 'Come home' and goodwill 1
+    if (gone) { st.flags.veraiGone4 = true; st.flags.veraiGoneWhen = 'reflection'; st.flags.veraiReach = true; st.flags.veraiReachChoice = mode === 'rivalBack' ? 1 : 0; st.flags.veraiWill = mode === 'rivalBack' ? 2 : 1; }
     else { st.flags.veraiResisted = true; st.flags.veraiStood = true; st.flags.veraiWill = 5; }
     st.flags.bond = 3; st.flags.lunaTrust = 2;
     st.keys = ['harborpass', 'wrenkey', 'gunpass', 'dentedhelm', 'elarisseed', 'accord', ...(route === 'ally' ? ['phoenixember'] : [])];
@@ -70,7 +72,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
     st.map = 'world'; st.x = 55; st.y = 19; st.dir = 'left'; st.onShip = true; st.ship = { x: 55, y: 19 }; st.gold = 80000;
     Object.assign(st.items, { megatonic: 9, heartdew: 9, inkdraught: 9, phoenixtear: 9, echomint: 6, hitonic: 20, tonic: 20, emberplume: 8 });
     localStorage.setItem(SAVE_KEY, JSON.stringify(st));
-  }, [route, gone]);
+  }, [route, gone, mode]);
   await page.evaluate(() => continueGame());
   await until(() => flag('ch5start') && Game.field.map.id === 'world' && Game.field.busy === 0 && Game.top() === Game.field, 400000);
   await check('opening_flying', `flag('skyWings') && S().flying && hasKey('skywings') && Game.field.map.id === 'world'`);
@@ -96,6 +98,8 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
     mode === 'allyCarry' ? `S().flags.veraiNyxia === 'carry' && member('verai') && member('verai').bonus.includes('nyxheart')` :
     mode === 'allyVessel' ? `S().flags.veraiNyxia === 'vessel'` :
     mode === 'rivalBack' ? `flag('veraiBack') && !!member('verai') && !(S().away || {}).verai` : `flag('veraiLost5') && !flag('veraiBack') && !!(S().away || {}).verai`}`);
+  // a party with no healer takes up Nightveil, Nyxia's shadow-healing job, as soon as it opens
+  await check('nightveil_healer', `(() => { const p = S().party; if (!p.some(m => ['dawnsinger', 'nightveil', 'bloomwarden'].includes(m.job))) changeJob(p.find(m => !['raine', 'miasma'].includes(m.id)) || p[p.length - 1], 'nightveil'); return p.some(m => m.job === 'nightveil' || m.job === 'dawnsinger') && SKILLS.nightcradle.kind === 'heal'; })()`);
   // the route dungeon on the Ashen Crown
   if (route === 'ally') {
     await step('cradle_braziers', `S().flying = true; Game.field.enterMap('ashkar', 6, 3, 'down'); Game.field.run(async () => { await landHere(); for (let i = 0; i < 4; i++) await lightBrazier(i); });`, `Game.field.map.id === 'cradle1' && flag('ch5braziers') && !Game.field.tileDef('G').solid`);

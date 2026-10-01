@@ -22,19 +22,19 @@ node tools/check/validate.js          # must end with "ALL OK"
 **Saves:**
 - Finishing Chapter Four now flows straight into Chapter Five.
 - Pressing **Continue** on a "Chapter Four Complete" save also starts Chapter Five.
-- **The level cap is now 50** (it was 30). Experience earned past 30 was never lost: it pays out on the next battle.
+- **The level cap is now 60** (it was 30). Experience earned past 30 was never lost: it pays out on the next battle.
 - Never rename a flag, job, item or map id.
 
 ### New and changed files
 
 | File | Status | What's in it |
 |---|---|---|
-| `js/data5.js` | NEW | Three new jobs (**Bloomwarden**, **Timewarden**, **Nightveil**), 30 skills, tier 6 and tier 7 gear, **an ultimate weapon for every hero**, 25 monsters and 13 bosses |
+| `js/data5.js` | NEW | Three new jobs (**Bloomwarden**, **Timewarden**, and **Nightveil**, a shadow healer), 30 skills, tier 6 and tier 7 gear, **an ultimate weapon for every hero**, 25 monsters and 13 bosses |
 | `js/maps5.js` | NEW | Two new continents (**Thalemyr**, **Zalakir**), 25 new maps, the new places added to Aurelion, Ashkar and the Frostreach, the flying-dragon sprite, 7 music tracks |
 | `js/events5.js` | NEW | Every Chapter Five scene, **flying**, and **the Sky Chart** |
 | `index.html` | changed | Loads the three new files |
 | `js/field.js` | changed | Flying (over anything except the Veilstorm), map overlays for lit braziers and star plates, flying back out of places only a dragon can reach |
-| `js/data.js` | changed | Level cap 30 → 50 |
+| `js/data.js` | changed | Level cap 30 → 60 |
 | `js/events4.js` | changed | The Chapter Four ending continues into Chapter Five ("Next: Chapter Five - The Open Sky") |
 | `js/main.js` | changed | Continue on a finished Chapter Four save starts Chapter Five |
 | `js/debug.js` | changed | Chapter Five jump points |
@@ -77,7 +77,7 @@ The sea roads close. A storm the colour of a bruise, the **Veilstorm**, stands o
 | Ashkar | Phoenix Warlock | Chapter Two |
 | **Elaris** | **Bloomwarden** (thorns, regen, sleep, Heartsong, Embrace) | Heartbloom Hollow: plant Elaris's Last Seed |
 | **Kryos** | **Timewarden** (ice, Haste, Stop, Doom, End of Hours) | The Stilled Hourglass, in the Frostreach's frozen lake |
-| **Nyxia** (the erased goddess) | **Nightveil** (dark strikes, counter, blind, drain, The Veiled Night) | Ebonport's chapel |
+| **Nyxia** (the erased goddess) | **Nightveil**, a **healer whose medicine is shadow** (Shadow Mend, Dusk Veil regen, Umbral Salve cures everything including Stop and Doom, Night Cradle, Shroud, Moonless Rebirth, The Veiled Night) | Ebonport's chapel, on every route. Nyxia's last faithful were her healers: *"Night is when wounds close."* A party without Verai, or without a Dawnsinger, should take it up |
 
 ### The main road: three keys to the Veilstorm
 1. **Astrilion, Myndra's Great Library (Thalemyr).** Pages are going blank.
@@ -175,7 +175,7 @@ Hooks for the Final Chapter:
 ## 4. Balance
 - Enemies are tuned for a party of about level 40 to 45 in Sephara or Rimward gear (`tools/check/sim.js`-style runs). Regular fights leave the party at about 85% HP. The main bosses take about 2 minutes and leave the party at 30 to 60%.
 - `HP5` in `js/data5.js` scales every Chapter Five monster's HP at once. Raise it to make the chapter harder.
-- The Storm Herald is meant to be the hardest fight in the game so far.
+- The Storm Herald is meant to be the hardest fight in the game so far. With a healer (Dawnsinger, Bloomwarden or **Nightveil**) a level 43 to 45 party wins it nearly every time; without one it can wipe you.
 
 ---
 

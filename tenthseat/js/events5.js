@@ -497,7 +497,7 @@ async function chapelVeraiHere() {
     giveKey('nightlantern'); await notify("Received Nyxia's Lantern!", 'levelup');
   });
   if (giveBonus('verai', 'nyxheart')) await notify("Verai learned Nyx's Heart!", 'levelup');
-  openJob('nightveil'); await notify('New job: Nightveil (Nyxia, the Veiled Night)!', 'levelup');
+  await unlockNightveil();
   setFlag('ch5veil');
 }
 async function chapelVeraiGone() {
@@ -582,8 +582,13 @@ async function chapelVeraiGone() {
       giveKey('nightlantern'); await notify("Received Nyxia's Lantern!", 'levelup');
     });
   }
-  openJob('nightveil'); await notify('New job: Nightveil (Nyxia, the Veiled Night)!', 'levelup');
+  await unlockNightveil();
   setFlag('ch5veil');
+}
+async function unlockNightveil() {
+  await say('Unlit Lantern-Keeper', "One more thing. We were Nyxia's healers, once. Night is when wounds close. Take what we know.");
+  openJob('nightveil'); await notify('New job: Nightveil (Nyxia, the Veiled Night)!', 'levelup');
+  await tip("Nightveil is a healer whose medicine is shadow: Shadow Mend, Dusk Veil (regen), Night Cradle, a cure for every ailment, and a full revive. Anyone can take it up, so a party without Verai still has a healer.");
 }
 async function nyxiaAltar() {
   if (!flag('ch5veil')) return say(null, "An altar to Nyxia. Her symbol is a veil drawn over the moon. Someone has scratched it out, and someone else has carefully drawn it back in.");
