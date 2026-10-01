@@ -126,7 +126,7 @@ At the throne, a Verai who ran gets **one last chance** after Sonia falls. She e
 - **Sonia, the Unseated**, then **Sonia, the One**: she opens her arms and every prayer in the crater pours into her.
 - If Ashkar got his fire back, or came with the Tenth Flame's banner, **he fights beside you**.
 - Your banners shape her final form:
-  - HP: ×(1.25 − 0.05 per banner).
+  - HP: ×(1.2 − 0.05 per banner).
   - Ebonport: no **Unmake**.
   - Kryos's minute: slower.
   - Starsight: lower defenses.
@@ -185,7 +185,7 @@ A reef-ringed sky islet **east of Zalakir**: ten pedestals, one per god. Each go
 - **Godsfall's guardians** leave that party at roughly 30 to 70% HP.
 - **Sonia, the One**, by number of banners:
   - **0:** almost unbeatable (the game warns you).
-  - **About 6:** a hard fight.
+  - **About 7:** a hard fight.
   - **10 or more:** fair.
   - **13:** comfortable.
 - **The Ring of the Ten's** gods are the hardest fights in the game if you bring the wrong element.

@@ -786,7 +786,7 @@ MAPS.seatring.onEnter = async () => { if (!flag('ringSeen')) { setFlag('ringSeen
 function buildSonia() {
   const n = bannerCount();
   const one = variantEnemy('sonia_one', 'final', d => {
-    d.hp = Math.round(d.hp * (1.25 - 0.05 * n) / 100) * 100;
+    d.hp = Math.round(d.hp * (1.2 - 0.05 * n) / 100) * 100;
     if (bannerOn('mask')) d.acts = d.acts.filter(a => a.name !== 'Unmake');
     if (flag('ringComplete')) d.acts = d.acts.filter(a => a.name !== 'Faith');
     if (bannerOn('hour') || hasKey('stoppedminute')) d.agi -= 14;

@@ -124,9 +124,9 @@ Object.assign(ENEMIES, {
     acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Stolen Prayers', target: 'all', pow: 80, elem: 'dark', fx: 'dark' }, { w: 1, type: 'status', name: 'Unmake', target: 'all', status: 'stop', chance: 35, frames: 200, fx: 'dark' }, { w: 1, type: 'spell', name: 'A Mother\'s Reach', target: 'one', pow: 130, elem: 'dark', fx: 'dark' }],
     lines: { start: '"You took back my reliquaries. How sweet. I don\'t NEED them anymore. I have everyone\'s prayers."', half: '"Do you know how long I waited? A YEAR. A year with no seat, no faithful, nothing but a daughter who looked at me like I was a stranger."' },
   }),
-  sonia_one: B6('Sonia, the One', 'sonia', null, 46000, 146, {
+  sonia_one: B6('Sonia, the One', 'sonia', null, 46000, 140, {
     exp: 0, gold: 0, def: 56, mdef: 56, agi: 36,
-    acts: [{ w: 3, type: 'spell', name: 'Every Prayer at Once', target: 'all', pow: 64, elem: 'star', fx: 'light' }, { w: 2, type: 'attack' }, { w: 1, type: 'spell', name: 'The Only God', target: 'one', pow: 130, elem: 'holy', fx: 'holy' }, { w: 1, type: 'status', name: 'Unmake', target: 'all', status: 'stop', chance: 35, frames: 200, fx: 'dark' }, { w: 1, type: 'heal', name: 'Faith', pow: 3000, uses: 1, when: 'hurt' }],
+    acts: [{ w: 3, type: 'spell', name: 'Every Prayer at Once', target: 'all', pow: 58, elem: 'star', fx: 'light' }, { w: 2, type: 'attack' }, { w: 1, type: 'spell', name: 'The Only God', target: 'one', pow: 130, elem: 'holy', fx: 'holy' }, { w: 1, type: 'status', name: 'Unmake', target: 'all', status: 'stop', chance: 35, frames: 200, fx: 'dark' }, { w: 1, type: 'heal', name: 'Faith', pow: 3000, uses: 1, when: 'hurt' }],
     lines: { start: '"I am every god you ever prayed to. Bow, Captain. Everyone else already has."', half: 'Somewhere far above, the banners are still flying. The throne shudders.' },
   }),
 });
