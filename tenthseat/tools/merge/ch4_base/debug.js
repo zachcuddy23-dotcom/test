@@ -59,30 +59,6 @@ CHECKPOINTS.push(
   CH4('Drowned sanctuary (ally route)', 'ashkarAlly', ['ch4start', 'veraiResisted', 'ch4moon', 'ch4lunaTalk', 'ch4purge', 'lunaUnmasked', 'hallornSpared', 'ch4dive'], P4b, B4b, 37, ['drowned1', 2, 16, 'up'], { keys: ['anvilshard', 'phoenixember', 'accord'], run: () => { S().flags.veraiWill = 4; } }),
   CH4('Drowned sanctuary (rival route, Verai gone)', 'ashkarRival', ['ch4start', 'veraiGone4', 'ch4moon', 'ch4lunaTalk', 'ch4purge', 'lunaUnmasked', 'hallornKept', 'ch4dive'], P4b, ['brakka'], 37, ['drowned1', 2, 16, 'up'], { keys: ['anvilbell', 'accord'] }),
 );
-// Chapter Five checkpoints (Chapter Four finished)
-const CH4_DONE_A = ['ch4start', 'veraiResisted', 'veraiStood', 'ch4moon', 'ch4lunaTalk', 'ch4purge', 'lunaUnmasked', 'hallornSpared', 'ch4dive', 'ch4mirrors', 'ch4bloom', 'ch4elaris', 'anvilSealed', 'ashkarGuttered', 'ch4done'];
-const CH4_DONE_R = ['ch4start', 'veraiGone4', 'ch4moon', 'ch4lunaTalk', 'ch4purge', 'lunaUnmasked', 'hallornKept', 'ch4dive', 'ch4mirrors', 'ch4bloom', 'ch4elaris', 'anvilLost', 'veraiReach', 'ch4done'];
-const CH5 = (name, route, extra, party, bench, lvl, map, more = {}) => {
-  const ally = route === 'ashkarAlly', cp = CH4(name, route, [...(ally ? CH4_DONE_A : CH4_DONE_R), ...extra], party, bench, lvl, map, { ...more, keys: ['elarisseed', 'accord', ...(ally ? ['phoenixember'] : []), ...(more.keys || [])] });
-  const run = more.run;
-  return { ...cp, name: 'Ch5: ' + name, run: () => {
-    takeKey('anvilshard'); S().flags.veraiWill = ally ? 5 : 2; S().flags.lunaTrust = 2;
-    for (const j of ['bloomwarden', 'timewarden', 'nightveil']) if (!JOB_ORDER.includes(j)) JOB_ORDER.push(j);
-    if (!ally) { S().away = { verai: makeMember('verai', lvl - 1) }; S().flags.veraiReachChoice = 1; }
-    if (extra.includes('skyWings')) { giveKey('skywings'); S().flying = true; Audio2.music('sky'); }
-    if (run) return run();
-  } };
-};
-const PT5 = ['raine', 'miasma', 'odeaon', 'verai'], BN5 = ['luna', 'brakka'], PT5b = ['raine', 'miasma', 'odeaon', 'luna'], BN5b = ['brakka'];
-CHECKPOINTS.push(
-  CH5('Chapter Four just finished (Ashkar ally, Verai stayed)', 'ashkarAlly', [], PT5, BN5, 38, ['wrendeck', 8, 5, 'up'], { run: () => chapter5Opening() }),
-  CH5('Chapter Four just finished (Ashkar rival, Verai gone)', 'ashkarRival', [], PT5b, BN5b, 38, ['wrendeck', 8, 5, 'up'], { run: () => chapter5Opening() }),
-  CH5('Flying over Aurelion (ally route)', 'ashkarAlly', ['ch5start', 'skyWings'], PT5, BN5, 40, ['world', 52, 19, 'left']),
-  CH5('Flying over Thalemyr (rival route, Verai gone)', 'ashkarRival', ['ch5start', 'skyWings'], PT5b, BN5b, 40, ['thalemyr', 14, 20, 'up']),
-  CH5('Ebonport chapel (rival route, Verai gone)', 'ashkarRival', ['ch5start', 'skyWings', 'ch5star'], PT5b, BN5b, 42, ['ebonport3', 10, 12, 'up'], { keys: ['starchart', 'masks'] }),
-  CH5('The Ashen Crown (ally route)', 'ashkarAlly', ['ch5start', 'skyWings', 'ch5star', 'ch5veil'], PT5, BN5, 42, ['cradle1', 10, 14, 'up'], { keys: ['starchart', 'nightlantern'] }),
-  CH5('The Rim of Godsfall (ally route, all three keys)', 'ashkarAlly', ['ch5start', 'skyWings', 'ch5star', 'ch5veil', 'ch5flame', 'ashkarRisen', 'ch5rimOpen'], PT5, BN5, 45, ['rim1', 2, 13, 'right'], { keys: ['starchart', 'nightlantern', 'livingflame'] }),
-);
 function applyCheckpoint(cp) {
   const st = newState();
   st.party = cp.party.map(id => makeMember(id, cp.lvl));

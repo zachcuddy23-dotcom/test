@@ -61,7 +61,6 @@ function continueGame() {
   if (flag('ch1done') && !flag('ch2start') && typeof chapter2Opening === 'function') f.run(() => chapter2Opening());
   else if (flag('ch2done') && !flag('ch3start') && typeof chapter3Opening === 'function') f.run(() => chapter3Opening());
   else if (flag('ch3done') && !flag('ch4start') && typeof chapter4Opening === 'function') f.run(() => chapter4Opening());
-  else if (flag('ch4done') && !flag('ch5start') && typeof chapter5Opening === 'function') f.run(() => chapter5Opening());
   else fadeIn(30);
 }
 

@@ -29,11 +29,10 @@ class FieldScene {
     const st = S();
     this.map = prepMap(id); st.map = id; st.x = x; st.y = y; if (dir) st.dir = dir;
     this.tiles = this.map.world ? WORLD_TILES : IN_TILES;
-    if (!this.map.world) st.flying = false;
     this.npcs = (this.map._npcs || []).map(n => ({ ...n, def: this.map.npcs[n.key], hx: n.x, hy: n.y, dir: this.map.npcs[n.key].dir || 'down', t: rnd(60, 200), mv: null }));
     this.banner = this.map.world ? 0 : 150;
     this.encSafe = 3;
-    Audio2.music(st.flying ? 'sky' : st.onShip ? 'sea' : musicFor(this.map));
+    Audio2.music(st.onShip ? 'sea' : musicFor(this.map));
     if (this.map.onEnter) this.run(() => this.map.onEnter());
   }
   tileAt(x, y) { if (x < 0 || y < 0 || x >= this.map.w || y >= this.map.h) return null; return this.map._grid[y][x]; }
@@ -84,7 +83,7 @@ class FieldScene {
     if (this.moving) { this.stepMove(); return; }
     if (this.busy) return;
     if (Input.hit('menu') || Input.hit('b')) { this.run(async () => { await openMenu(); }); return; }
-    if (Input.ok()) { if (this.map.world && typeof flightOk === 'function' && flightOk()) return; this.interact(); return; }
+    if (Input.ok()) { this.interact(); return; }
     const d = Input.dir();
     if (d) this.tryMove(d);
   }
@@ -97,14 +96,6 @@ class FieldScene {
     const st = S(); st.dir = d;
     const [dx, dy] = DIRS[d], nx = st.x + dx, ny = st.y + dy;
     const speed = st.onShip ? 6 : (Input.held.run ? 6 : 10);
-    if (this.map.world && st.flying) {
-      // on Miasma's back: over anything but the Veilstorm; off the edge of the map opens the Sky Chart
-      const c = this.tileAt(nx, ny);
-      if (c == null) { if (typeof openSkyChart === 'function') this.run(() => openSkyChart()); return; }
-      if (this.tileDef(c).noFly) { if (this.bumpT !== Game.frame - 1) Audio2.sfx('bump'); this.bumpT = Game.frame; if (typeof stormBump === 'function' && !this.stormSaid) { this.stormSaid = true; this.run(() => stormBump()); } return; }
-      this.stormSaid = false;
-      return this.startMove(nx, ny, Input.held.run ? 3 : 5);
-    }
     if (this.map.world) {
       const c = this.tileAt(nx, ny); if (c == null) return;
       const t = this.tileDef(c);
@@ -142,7 +133,6 @@ class FieldScene {
     const st = S(); st.steps++;
     for (const m of st.party) if (alive(m) && m.status.poison && m.hp > 1) m.hp--;
     const c = this.tileAt(st.x, st.y);
-    if (this.map.world && st.flying) return;   // flying: no towns underfoot, no monsters up here
     if (this.map.world) {
       const place = this.map.places[st.x + ',' + st.y];
       if (place && !st.onShip) { this.run(() => this.enterPlace(place)); return; }
@@ -183,19 +173,15 @@ class FieldScene {
   }
   async enterPlace(place) {
     const id = typeof place.map === 'function' ? place.map() : place.map;
-    if (place.check) { const ok = await place.check(); if (!ok) return false; }
+    if (place.check) { const ok = await place.check(); if (!ok) return; }
     const m = prepMap(id), at = place.at || m.start; Audio2.sfx('stairs');
-    const st = S(); st.flying = false; st.seen = st.seen || {}; st.seen[id] = 1;
     await fadeOut(12); this.enterMap(id, at[0], at[1], at[2]); await fadeIn(12);
-    return true;
   }
   async leaveMap(c) {
     const out = c === 'Y' ? this.map.back2 : this.map.back;
     if (out && !Array.isArray(out)) return this.warp(out.map, out.x, out.y, out.dir);
-    const [bx, by] = out || [S().x, S().y], wid = this.map.worldId || 'world';
-    // places you can only fly to: you leave the way you came, on Miasma's back
-    if (flag('skyWings') && (this.map.skyBack || (prepMap(wid)._grid[by] && (WORLD_TILES[prepMap(wid)._grid[by][bx]] || {}).solid))) S().flying = true;
-    await fadeOut(12); this.enterMap(wid, bx, by, 'down'); await fadeIn(12);
+    const [bx, by] = out || [S().x, S().y];
+    await fadeOut(12); this.enterMap(this.map.worldId || 'world', bx, by, 'down'); await fadeIn(12);
   }
   async warp(id, x, y, dir) { await fadeOut(12); this.enterMap(id, x, y, dir); await fadeIn(12); }
   // -------------------------------------------------------------- interaction
@@ -287,7 +273,6 @@ class FieldScene {
       ctx.drawImage(this.tileArt(c, x, y), sx, sy, TS, TS);
       if (this.map.world && c === '~') this.foam(x, y, sx, sy);
     }
-    if (this.map.overlay) this.map.overlay(cx, cy);
     const objs = [];
     for (const ch of this.map._chests || []) objs.push({ y: ch.y, draw: () => ctx.drawImage(S().chests[ch.id] ? OBJ.chestOpen : OBJ.chest, ch.x * TS - cx, ch.y * TS - cy, TS, TS) });
     if (this.map.id === 'world' && st.ship && !st.onShip) objs.push({ y: st.ship.y, draw: () => ctx.drawImage(OBJ.ship, st.ship.x * TS - cx, st.ship.y * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS) });
@@ -310,8 +295,7 @@ class FieldScene {
       } });
     }
     const lead = leadMember();
-    if (!this.hidePlayer && st.flying && this.map.world) objs.push({ y: 9999, draw: () => drawSkyDragon(px * TS - cx + TS / 2, py * TS - cy + TS / 2, st.dir) });
-    else if (!this.hidePlayer) objs.push({ y: py + 0.01, draw: () => {
+    if (!this.hidePlayer) objs.push({ y: py + 0.01, draw: () => {
       if (st.onShip) { ctx.drawImage(OBJ.ship, px * TS - cx, py * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS); return; }
       let fr = 0; if (this.moving) { const k = this.moving.t / this.moving.n; fr = k < 0.5 ? ((this.stepCount % 2) ? 1 : 2) : 0; }
       const talk = Game.speaking === HEROES[lead.id].name && Math.floor(Game.frame / 6) % 2 ? 2 : 0;

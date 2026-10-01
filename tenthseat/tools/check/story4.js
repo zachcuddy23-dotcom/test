@@ -18,6 +18,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
   const picks = mode === 'push' ? { 'Everyone is looking at Verai': 1, 'Hallorn is sneering': 2, 'staring into the mirror': 2 } : { 'Everyone is looking at Verai': 0, 'Hallorn is sneering': 0, 'staring into the mirror': 0 };
   Object.assign(picks, { 'What happens to Hallorn': route === 'ally' ? 0 : 1, "Luna won't look": 2, 'Luna is crying': 0 });
   await page.evaluate(p => {
+    chapter5Opening = undefined;   // test Chapter Four on its own; story5.js covers Chapter Five
     window.__pick = p; window.__saveScreen = 0;
     setInterval(() => {
       const b = Game.scenes.find(s => s instanceof BattleScene);

@@ -411,7 +411,10 @@ tenthseat/
   js/events3.js       Chapter Three scenes
   js/data4.js         Chapter Four data (Ashkar guest, Moonhollow gear, Cleansing, sanctuary monsters)
   js/maps4.js         Chapter Four maps (Moonhollow, the drowned sanctuary, current tiles)
-  js/events4.js       Chapter Four scenes (loads last)
+  js/events4.js       Chapter Four scenes
+  js/data5.js         Chapter Five data (Bloomwarden / Timewarden / Nightveil, tier 6-7 gear, ultimates, monsters, bosses)
+  js/maps5.js         Chapter Five maps (Thalemyr, Zalakir, 25 maps, flight-only places, the flying dragon)
+  js/events5.js       Chapter Five scenes, flying and the Sky Chart (loads last)
   js/ui.js            dialog, field menu (Items/Skills/Job/Equip/Status/Order/Config/Save), shops, inn, chapel
   js/field.js         exploration, encounters, cutscene helpers (walk, npcWalk, card, crawl)
   js/battle.js        ATB battle system, effects, backgrounds (+ bg_*, sheet overrides)
@@ -470,13 +473,16 @@ NODE_PATH=$(npm root -g) node tools/check/secrets.js       # secrets and mini-ga
 NODE_PATH=$(npm root -g) node tools/check/story3.js 0     # Chapter Three from a Chapter Two save
 NODE_PATH=$(npm root -g) node tools/check/story3b.js stay 2   # the rest of Chapter Three
 NODE_PATH=$(npm root -g) node tools/check/story4.js ally stays # Chapter Four (ally|rival, stays|bench|push)
+NODE_PATH=$(npm root -g) node tools/check/story5.js allyCarry  # Chapter Five (allyCarry|allyVessel|rivalBack|rivalLost)
 ```
 
 ---
 
 ## 9. Roadmap: Chapter Two and beyond
 
-**Chapter Four is built** (see `CHAPTER4_UPDATE_FOR_CHATGPT.md`: Verai's goodwill, Luna and Moonhollow, the two Anvil routes, the drowned sanctuary). Chapter Five, *The City of Masks*, starts from `ch4done`.
+**Chapter Five is built** (see `CHAPTER5_UPDATE_FOR_CHATGPT.md`: Miasma flies, the Sky Chart, Thalemyr and Zalakir, every god's job, the three keys, Verai's return or loss, the Rim of Godsfall). The Final Chapter, *The Tenth Seat*, starts from `ch5done`: the fight inside Godsfall Crater, and who takes the empty seat.
+
+**Chapter Four is built** (see `CHAPTER4_UPDATE_FOR_CHATGPT.md`: Verai's goodwill, Luna and Moonhollow, the two Anvil routes, the drowned sanctuary). Chapter Five, *The Open Sky*, starts from `ch4done`.
 
 **Chapter Three is built** (see `CHAPTER3_UPDATE_FOR_CHATGPT.md`: Raine's illness, the Wyrmspire, the Dragon job, the Leader menu, the Undercity, the trial, and Odeaon joining). Chapter Four, *The Drowned Sanctuary*, starts from the `ch3done` flag. Write a `chapter4Opening()` and `continueGame()` will call it. Three more chapters are planned in total, then post-game content.
 

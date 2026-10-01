@@ -56,6 +56,7 @@ const W = c.WORLD;
 for (const [k, p] of Object.entries(W.places)) { const [x, y] = k.split(',').map(Number); const ch = W.rows[y][x]; if (!(c.WORLD_TILES[ch] || {}).place) err(`world place ${k} is on '${ch}'`); }
 W.rows.forEach((r, i) => { if (r.length !== W.rows[0].length) err('world row ' + i); });
 for (const r of W.rows) for (const ch of r) if (!c.WORLD_TILES[ch] && ch !== 'G') err('world tile ' + ch);
+for (const [k, p] of Object.entries(W.places)) if (p.map && typeof p.map === 'string' && !c.MAPS[p.map]) err(`world place ${k} -> missing map ${p.map}`);
 // ice floors: from every spot you can stop on, the exit ('>') must still be reachable (no softlocks)
 for (const [id, m] of Object.entries(c.MAPS)) {
   if (m.world || !m.rows.some(r => [...r].some(ch => (T[ch] || {}).ice || (T[ch] || {}).push))) continue;
@@ -93,14 +94,19 @@ for (const [id, m] of Object.entries(c.MAPS)) {
   for (const r of g) for (const ch of r) if (!c.WORLD_TILES[ch] && !gates[ch]) err(`${id} tile ${ch}`);
   for (const [k, p] of Object.entries(m.places)) {
     const [x, y] = k.split(',').map(Number); if (!(tileAt(x, y) || {}).place) err(`${id} place ${k} is on '${g[y][x]}'`);
-    if (!c.MAPS[p.map || p]) err(`${id} place ${k} -> missing map`);
+    if (typeof p.map !== 'function' && !c.MAPS[p.map || p]) err(`${id} place ${k} -> missing map`);
   }
   for (const [ch, [fl]] of Object.entries(gates)) if (typeof fl !== 'string') err(`${id} gate ${ch}`);
   const walk = t => t && !t.solid && !t.water && !t.mountain && !t.block;
   const home = (Object.entries(m.places).find(([, p]) => (p.map || p) === (m.home || 'emberport')) || Object.entries(m.places)[0])[0].split(',').map(Number);
   const seen = new Set([home.join(',')]), q = [home];
   while (q.length) { const [x, y] = q.shift(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy, k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= w || ny >= g.length || seen.has(k)) continue; const t = tileAt(nx, ny); if (!t || (!t.place && !walk(t))) continue; seen.add(k); if (!t.place) q.push([nx, ny]); } }
-  for (const k of Object.keys(m.places)) if (!seen.has(k)) err(`${id} place ${k} unreachable from its home town`);
+  for (const [k, p] of Object.entries(m.places)) if (!seen.has(k) && !p.sky) err(`${id} place ${k} unreachable from its home town`);
+  // Chapter Five: places marked sky are reached on Miasma's back; sealed ones must stay inside the Veilstorm
+  const fly = new Set(), fq = [];
+  for (let y = 0; y < g.length; y++) for (let x = 0; x < w; x++) if ((x === 0 || y === 0 || x === w - 1 || y === g.length - 1) && !(tileAt(x, y) || {}).noFly) { fly.add(x + ',' + y); fq.push([x, y]); }
+  while (fq.length) { const [x, y] = fq.shift(); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy, k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= w || ny >= g.length || fly.has(k) || (tileAt(nx, ny) || {}).noFly) continue; fly.add(k); fq.push([nx, ny]); } }
+  for (const [k, p] of Object.entries(m.places)) { if (p.sealed && fly.has(k)) err(`${id} sealed place ${k} can be flown to`); if (!p.sealed && !fly.has(k)) err(`${id} place ${k} cannot even be flown to`); }
   console.log(`${id.padEnd(12)} world ${w}x${g.length} reachable ${seen.size}`);
 }
 // data references

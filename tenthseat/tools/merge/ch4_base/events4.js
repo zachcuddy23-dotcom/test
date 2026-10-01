@@ -686,7 +686,7 @@ async function chapter4End() {
     { dur: 330, bg: 'seats', sfx: 'holy', flash: 14, layers: [
       { text: 'END OF CHAPTER FOUR', x: W / 2, y: 210, size: 36, color: '#ffe070', glow: 'rgba(255,200,80,0.8)', fadeIn: 40 },
       { text: 'THE DROWNED SANCTUARY', x: W / 2, y: 270, size: 18, color: '#9ad8e8', fadeIn: 80 },
-      { text: 'Next: Chapter Five - The Open Sky', x: W / 2, y: 360, size: 12, color: '#a8a8d0', fadeIn: 140 },
+      { text: 'Next: Chapter Five - The City of Masks', x: W / 2, y: 360, size: 12, color: '#a8a8d0', fadeIn: 140 },
     ] },
   ], { skipAll: false });
   setFlag('ch4done');
@@ -696,7 +696,6 @@ async function chapter4End() {
     flag('veraiGone4') ? 'Verai left with her mother.' : 'Verai stayed. Her choice.',
     flag('hallornSpared') ? 'You let Hallorn go.' : 'Moonhollow kept Hallorn.',
   ], 'Chapter Five will continue from this file.');
-  if (typeof chapter5Opening === 'function') { await chapter5Opening(); return; }
   const st = S(); st.ship = { x: 55, y: 19 }; st.onShip = true;
   f.enterMap('world', 55, 19, 'left');
   await fadeIn(40);

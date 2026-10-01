@@ -36,10 +36,8 @@ const HEROES = {
     bio: 'A Dawnguard knight who never takes off her helmet. Polite, brave, eats a LOT of meat, and gets strangely quiet on full-moon nights.',
   },
 };
-const EXP_TABLE = [0, 0, 24, 70, 140, 240, 380, 560, 800, 1100, 1480, 1950, 2520, 3200, 4000, 4950, 6050, 7300, 8750, 10400, 12300, 14400, 16800, 19500, 22500, 26000, 30000, 34500, 39500, 45000,
-  51000, 57500, 64500, 72000, 80000, 88500, 97500, 107000, 117000, 127500, 138500, 150000, 162000, 174500, 187500, 201000, 215000, 229500, 244500, 260000, 9999999];
-// The cap was 30 until Chapter Five; experience earned past it was banked, and pays out on the next battle.
-const MAX_LEVEL = 50;
+const EXP_TABLE = [0, 0, 24, 70, 140, 240, 380, 560, 800, 1100, 1480, 1950, 2520, 3200, 4000, 4950, 6050, 7300, 8750, 10400, 12300, 14400, 16800, 19500, 22500, 26000, 30000, 34500, 39500, 45000, 9999999];
+const MAX_LEVEL = 30;
 const JP_TABLE = [0, 0, 10, 28, 56, 96, 150, 220, 310];
 const MAX_JOB_LV = 8;
 

@@ -1,4 +1,4 @@
-# The Tenth Seat: Chapters One to Four
+# The Tenth Seat: Chapters One to Five
 
 A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
@@ -10,6 +10,17 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **Keyboard:** arrows or WASD move · Z / Space / Enter confirm · X cancel or menu · Esc menu · hold Shift to run
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
+
+## What's new in Chapter Five: the open sky (the semi-finale)
+- **Miasma remembers she's a dragon.** Everyone turns to look at her at once. She is your airship now: **press Z on any world map to take off, and Z again to land** or fly straight into a town.
+- **The Sky Chart** shows the whole world: Aurelion, Ashkar, the Frostreach, and two new lands, **Thalemyr** (Myndra's Great Library, Ebonport the City of Masks) and **Zalakir** (the Unclaimed Wilds). Fly off the edge of any map to cross between them.
+- **Places you could see all along but never reach** (behind mountains, reefs, lava, a frozen lake) open up: Heartbloom Hollow, Miasma's old hoard, the Stilled Hourglass, Gruntle's powder vault, the Moonfang Barrows, and more.
+- **Every god has a job now:** new **Bloomwarden** (Elaris), **Timewarden** (Kryos) and **Nightveil** (Nyxia, the erased goddess).
+- **An ultimate weapon and a new skill for every hero**, tier 6 and tier 7 shops, and a **level cap of 50**.
+- **Your choices land:**
+  - **Verai:** if she stayed, does she carry Nyxia's night or become it? If she left, can you bring her home?
+  - **Ashkar:** ally route, rekindle him in his cradle (give back Raine's pendant?). Rival route, take the Anvil back from Sonia's forge (and keep it, or give it to him?).
+  - **At the Rim of Godsfall, someone takes Sonia's blow for Raine**, and who it is depends on everything above.
 
 ## What's new in Chapter Four: the breaking point
 - **Verai can leave.** Her goodwill depends on how you've treated her: kept her in the party, or left her on the bench? Asked her, or ordered her? She can leave with her mother at the start, or break partway through, and she'll be gone for the chapter.
@@ -88,6 +99,7 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
   | Ash Reaper | Grimnar | **Ash**: Ashblade, Funeral Pyre, Final Gate, Soulforge |
   | Wyrmblood | old dragon blood | **Wyrm**: Jump, Lancet, Wyrm Cry, Skyfall |
 
+- **Later chapters add** Chainbearer (Zariel), Phoenix Warlock (Ashkar), Dragon (Miasma's true form), and in Chapter Five **Bloomwarden** (Elaris), **Timewarden** (Kryos) and **Nightveil** (Nyxia). Every one of the Ten now has a job.
 - **Innate commands** stay with each hero in every job: Raine's **Brew** (alchemy), Miasma's **Breath** (dragon breath), Verai's **Smoke** (the dream-smoke of the lost goddess Nyxia).
 - **Other features:**
   - Shops, inns, chapels and treasure chests.
