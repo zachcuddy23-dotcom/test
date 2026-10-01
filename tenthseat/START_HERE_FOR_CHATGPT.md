@@ -22,9 +22,9 @@ Unzip it and open `index.html` in any web browser. No install or internet is nee
 ## If ChatGPT already worked on an older version (any earlier chapter)
 Upload this zip **and** ChatGPT's latest zip, then paste:
 
-> Here is the newest update of "The Tenth Seat" (Chapter Five). Unzip it and read `CHAPTER5_UPDATE_FOR_CHATGPT.md` first, then `CHAPTER4_UPDATE_FOR_CHATGPT.md` and `CHAPTER3_UPDATE_FOR_CHATGPT.md` if you haven't done their art yet. Merge it with your work exactly as section 1 says: run `python3 tools/merge_update.py <your older folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
+> Here is the complete game of "The Tenth Seat" (the Final Chapter). Unzip it and read `FINAL_CHAPTER_UPDATE_FOR_CHATGPT.md` first, then `CHAPTER5_UPDATE_FOR_CHATGPT.md`, `CHAPTER4_UPDATE_FOR_CHATGPT.md` and `CHAPTER3_UPDATE_FOR_CHATGPT.md` if you haven't done their art yet. Merge it with your work exactly as section 1 says: run `python3 tools/merge_update.py <your older folder>` from inside the new folder, fix anything listed in `MERGE_REPORT.md`, then run `node tools/check/validate.js`. Give me the merged zip before making any new art.
 >
-> Then make the new art from section 5 of the Chapter Five file, starting with Miasma's true dragon form (and her flying sprite) and the illustrated Sky Chart. After that, do anything still missing from the Chapter Four file (Luna unmasked, Luna berserk) and the Chapter Three file (Miasma's Dragon form, Rimeclaw, Odeaon). If you haven't done Chapter Two's art yet, `CHAPTER2_UPDATE_FOR_CHATGPT.md` section 3 lists it. Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
+> Then make the new art from section 6 of the Final Chapter file (Sonia, the One and the Unseated Throne first), then section 5 of the Chapter Five file, starting with Miasma's true dragon form (and her flying sprite) and the illustrated Sky Chart. After that, do anything still missing from the Chapter Four file (Luna unmasked, Luna berserk) and the Chapter Three file (Miasma's Dragon form, Rimeclaw, Odeaon). If you haven't done Chapter Two's art yet, `CHAPTER2_UPDATE_FOR_CHATGPT.md` section 3 lists it. Keep every filename exactly as written. Show me each image before moving on, and give me an updated zip after each batch.
 
 ## (Older) If ChatGPT only worked on Chapter One
 Upload this zip **and** ChatGPT's latest Chapter One zip, then paste:
@@ -38,6 +38,7 @@ Upload this zip **and** ChatGPT's latest Chapter One zip, then paste:
 |---|---|
 | `index.html`, `js/` | The game |
 | `assets/` | Current art as PNGs (bosses, monsters, heroes, portraits) |
+| `FINAL_CHAPTER_UPDATE_FOR_CHATGPT.md` | The Final Chapter: merging, the Rally and every banner, Godsfall, the six endings, the epilogue, and every new art slot |
 | `CHAPTER5_UPDATE_FOR_CHATGPT.md` | Chapter Five: merging, flying and the Sky Chart, the story and choices, and every new art slot |
 | `CHAPTER4_UPDATE_FOR_CHATGPT.md` | Chapter Four: merging, the story and choices, and every new art slot |
 | `CHAPTER3_UPDATE_FOR_CHATGPT.md` | Chapter Three part one: how to merge it, the story and flags so far, and every new art slot |

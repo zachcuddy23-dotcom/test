@@ -83,25 +83,6 @@ CHECKPOINTS.push(
   CH5('The Ashen Crown (ally route)', 'ashkarAlly', ['ch5start', 'skyWings', 'ch5star', 'ch5veil'], PT5, BN5, 42, ['cradle1', 10, 14, 'up'], { keys: ['starchart', 'nightlantern'] }),
   CH5('The Rim of Godsfall (ally route, all three keys)', 'ashkarAlly', ['ch5start', 'skyWings', 'ch5star', 'ch5veil', 'ch5flame', 'ashkarRisen', 'ch5rimOpen'], PT5, BN5, 45, ['rim1', 2, 13, 'right'], { keys: ['starchart', 'nightlantern', 'livingflame'] }),
 );
-// Final Chapter checkpoints (Chapter Five finished)
-const CH5_DONE = ['ch5start', 'skyWings', 'ch5star', 'ch5orrery', 'ch5unwritten', 'ch5veil', 'ch5regent', 'ch5flame', 'ch5rimOpen', 'ch5rim', 'ch5herald', 'ch5done'];
-const CH6 = (name, route, extra, party, bench, lvl, map, more = {}) => {
-  const ally = route === 'ashkarAlly', cp = CH5(name, route, [...CH5_DONE, ...(ally ? ['ashkarRisen', 'pendantGiven', 'ashkarFell'] : ['anvilKept', 'odeaonFell', 'veraiLost5']), ...extra], party, bench, lvl, map, { ...more, keys: ['starchart', 'nightlantern', ally ? 'livingflame' : 'crownember', 'masks', ...(ally ? [] : ['anvilshard2']), ...(more.keys || [])] });
-  const run = cp.run;
-  return { ...cp, name: name.replace(/^/, 'Final: '), run: () => {
-    run(); takeKey('elarisseed'); S().flags.veraiNyxia = ally ? 'carry' : null;
-    if (!ally) { S().away.odeaon = makeMember('odeaon', lvl); S().party = S().party.filter(m => m.id !== 'odeaon'); }
-    giveKey('skywings'); if (more.after) return more.after();
-  } };
-};
-const PT6 = ['raine', 'miasma', 'odeaon', 'verai'], BN6 = ['luna', 'brakka'], PT6b = ['raine', 'miasma', 'luna', 'brakka'];
-CHECKPOINTS.push(
-  CH6('Chapter Five just finished (ally route)', 'ashkarAlly', [], PT6, BN6, 48, ['rimward', 12, 9, 'up'], { after: () => chapter6Opening() }),
-  CH6('Chapter Five just finished (rival route, Verai lost, Odeaon fell)', 'ashkarRival', [], PT6b, [], 48, ['rimward', 12, 9, 'up'], { after: () => chapter6Opening() }),
-  CH6('Godsfall: the Hall of Unanswered Prayers (ally, 8 banners)', 'ashkarAlly', ['ch6start', 'ch6siege', 'bn_dawn', 'bn_tide', 'bn_moon', 'bn_star', 'bn_mask', 'bn_hearth', 'bn_powder', 'bn_flame'], PT6, BN6, 52, ['gf2', 10, 14, 'up']),
-  CH6('Godsfall: the Unseated Throne (ally, 8 banners)', 'ashkarAlly', ['ch6start', 'ch6siege', 'bn_dawn', 'bn_tide', 'bn_moon', 'bn_star', 'bn_mask', 'bn_hearth', 'bn_powder', 'bn_flame', 'prayer4', 'soniaHeard', 'ch6heartseed', 'ch6dawnheart', 'ch6night', 'ch6warden', 'ch6rescue', 'ashkarRevived', 'ch6camp'], PT6, BN6, 54, ['gf7', 11, 11, 'up'], { keys: ['heartseed', 'dawnheart'] }),
-  CH6('The Ring of the Ten', 'ashkarAlly', ['ch6start'], PT6, BN6, 54, ['seatring', 11, 15, 'up']),
-);
 function applyCheckpoint(cp) {
   const st = newState();
   st.party = cp.party.map(id => makeMember(id, cp.lvl));

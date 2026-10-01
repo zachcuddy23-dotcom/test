@@ -414,7 +414,10 @@ tenthseat/
   js/events4.js       Chapter Four scenes
   js/data5.js         Chapter Five data (Bloomwarden / Timewarden / Nightveil, tier 6-7 gear, ultimates, monsters, bosses)
   js/maps5.js         Chapter Five maps (Thalemyr, Zalakir, 25 maps, flight-only places, the flying dragon)
-  js/events5.js       Chapter Five scenes, flying and the Sky Chart (loads last)
+  js/events5.js       Chapter Five scenes, flying and the Sky Chart
+  js/data6.js         Final Chapter data (tier 8, god relics, Godsfall, Sonia)
+  js/maps6.js         Final Chapter maps (Godsfall Crater, the Ring of the Ten)
+  js/events6.js       Final Chapter: the Rally, Godsfall, endings, epilogue (loads last)
   js/ui.js            dialog, field menu (Items/Skills/Job/Equip/Status/Order/Config/Save), shops, inn, chapel
   js/field.js         exploration, encounters, cutscene helpers (walk, npcWalk, card, crawl)
   js/battle.js        ATB battle system, effects, backgrounds (+ bg_*, sheet overrides)
@@ -474,11 +477,14 @@ NODE_PATH=$(npm root -g) node tools/check/story3.js 0     # Chapter Three from a
 NODE_PATH=$(npm root -g) node tools/check/story3b.js stay 2   # the rest of Chapter Three
 NODE_PATH=$(npm root -g) node tools/check/story4.js ally stays # Chapter Four (ally|rival, stays|bench|push)
 NODE_PATH=$(npm root -g) node tools/check/story5.js allyCarry  # Chapter Five (allyCarry|allyVessel|rivalBack|rivalLost)
+NODE_PATH=$(npm root -g) node tools/check/story6.js allyBloom  # Final Chapter (allyBloom|rivalEmpty|vesselRaine|rivalSonia)
 ```
 
 ---
 
 ## 9. Roadmap: Chapter Two and beyond
+
+**The game is complete.** The Final Chapter, *The Tenth Seat* (see `FINAL_CHAPTER_UPDATE_FOR_CHATGPT.md`), starts from `ch5done` and ends at `ch6done` with a post-game. New content should hang off `ch6done`.
 
 **Chapter Five is built** (see `CHAPTER5_UPDATE_FOR_CHATGPT.md`: Miasma flies, the Sky Chart, Thalemyr and Zalakir, every god's job, the three keys, Verai's return or loss, the Rim of Godsfall). The Final Chapter, *The Tenth Seat*, starts from `ch5done`: the fight inside Godsfall Crater, and who takes the empty seat.
 

@@ -25,6 +25,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
     'Ashkar is holding out his hand': mode === 'rivalBack' ? 1 : 0,
   };
   await page.evaluate(p => {
+    chapter6Opening = undefined;   // test Chapter Five on its own; story6.js covers the Final Chapter
     window.__pick = p; window.__saveScreen = 0;
     setInterval(() => {
       const b = Game.scenes.find(s => s instanceof BattleScene);

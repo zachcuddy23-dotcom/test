@@ -44,13 +44,13 @@ function castHero(cast, id) {
 }
 function anyMember(id) { return member(id) || (S().bench || []).find(m => m.id === id); }
 function giveBonus(id, skill) { const m = anyMember(id); if (!m) return false; m.bonus = m.bonus || []; if (!m.bonus.includes(skill)) m.bonus.push(skill); return true; }
-function groupLevel() { const all = [...S().party, ...(S().bench || [])]; return Math.round(all.reduce((s, m) => s + m.lvl, 0) / Math.max(1, all.length)); }
+function partyLevel() { const all = [...S().party, ...(S().bench || [])]; return Math.round(all.reduce((s, m) => s + m.lvl, 0) / Math.max(1, all.length)); }
 // banked experience from the old level cap of 30 pays out now
 function catchUpLevels() { for (const m of [...S().party, ...(S().bench || []), ...Object.values(S().away || {})]) gainExp(m, 0); }
 function returnFromAway(id) {
   const st = S(), m = st.away && st.away[id]; if (!m) return null;
   delete st.away[id];
-  const lv = Math.max(m.lvl, groupLevel()); if (lv > m.lvl) gainExp(m, Math.max(0, EXP_TABLE[lv] - m.exp));
+  const lv = Math.max(m.lvl, partyLevel()); if (lv > m.lvl) gainExp(m, Math.max(0, EXP_TABLE[lv] - m.exp));
   m.hp = stats(m).mhp; m.mp = stats(m).mmp; m.status = {};
   st.bench = st.bench || []; st.bench.push(m); ensureInParty(id);
   return m;
@@ -179,7 +179,6 @@ class SkyChartScene {
         if (p.sky && !(S().seen || {})[pm] && Math.floor(this.t / 20) % 2) { ctx.fillStyle = '#80e0ff'; ctx.fillRect(sx - 3, sy - 3, 6, 6); text('?', sx + 4, sy - 12, '#80e0ff', 10); }
         else { ctx.fillStyle = '#ffe070'; ctx.fillRect(sx - 2, sy - 2, 4, 4); }
       }
-      if (typeof skyChartExtra === 'function') skyChartExtra(L, this.t);
       // Godsfall: the Veilstorm turns over the crater
       if (L.id === 'zalakir') {
         const cx = L.x + 39.5 * SKY_SCALE, cy = L.y + 14.5 * SKY_SCALE;
@@ -455,7 +454,7 @@ async function wardenSpotted(n) {
   if (r === 'win') { n.out = true; await notify('The wardens are down.', null); }
   else if (r === 'run') { await F().warp(F().map.id, F().map.start[0], F().map.start[1], F().map.start[2]); }
 }
-async function ebonChapelEvent() {
+async function chapelEvent() {
   if (flag('ch5veil')) return;
   const f = F();
   if (f._chapelBusy) return; f._chapelBusy = true;
@@ -898,7 +897,7 @@ async function vaultLetter() {
 }
 
 // ------------------------------------------------------------------ small places
-async function skynestSign() {
+async function nestSign() {
   if (heroHere('miasma')) await say(MI(), "Not mine. My cousin Vesk's. She always did have terrible taste in coins. Take whatever you like, she owes me.");
   else await say(null, "A pile of old coins in a dragon's nest. The owner hasn't been back in years.");
 }
@@ -1091,7 +1090,6 @@ async function chapter5End() {
     flag('ashkarFell') ? 'Ashkar fell. The Tenth Seat is empty.' : flag('odeaonFell') ? 'Odeaon fell into the storm.' : 'Everyone made it out.',
     `Jobs found: ${['bloomwarden', 'timewarden', 'nightveil'].filter(j => st.jobsOpen.includes(j)).length} of 3 new.`,
   ], 'The Final Chapter will continue from this file. Godsfall waits.');
-  if (typeof chapter6Opening === 'function') { await chapter6Opening(); return; }
   st.flying = true;
   f.enterMap('zalakir', 7, 12, 'down');
   await fadeIn(40);

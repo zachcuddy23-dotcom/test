@@ -5,7 +5,7 @@
 class TitleScene {
   constructor() {
     this.opaque = true; this.t = 0;
-    const save = hasSave(); this.saveFound = save;
+    const save = hasSave();
     this.menu = new ListMenu([{ text: 'New Game' }, { text: 'Continue', disabled: !save }, { text: 'Watch Trailer' }], { x: 360, y: 430, w: 240, rowH: 36 });
     this.menu.index = save ? 1 : 0;
   }
@@ -32,7 +32,7 @@ class TitleScene {
     ctx.save(); ctx.shadowColor = `rgba(255,200,80,${glow})`; ctx.shadowBlur = 24;
     text('THE TENTH SEAT', W / 2, 140, '#ffe070', 38, 'center'); ctx.restore();
     text('A Tale of Cael\'Brithar', W / 2, 196, '#c8c8ff', 14, 'center');
-    text(this.saveFound ? 'The complete tale, in six chapters' : 'Chapter One: The Unseated', W / 2, 222, '#a0a0d0', 12, 'center');
+    text('Chapter One: The Unseated', W / 2, 222, '#a0a0d0', 12, 'center');
     ['miasma', 'raine', 'verai'].forEach((id, i) => { const img = IMG[HEROES[id].img]; if (!img) return; const x = 250 + i * 230, bob = Math.sin(this.t / 30 + i) * 3; ctx.drawImage(img, Math.round(x - img.width / 2), Math.round(420 - img.height + bob)); });
     this.menu.draw();
     text('Arrows: move   Z: confirm   X: cancel/menu   Shift: run', W / 2, 590, '#8888aa', 12, 'center');
@@ -62,7 +62,6 @@ function continueGame() {
   else if (flag('ch2done') && !flag('ch3start') && typeof chapter3Opening === 'function') f.run(() => chapter3Opening());
   else if (flag('ch3done') && !flag('ch4start') && typeof chapter4Opening === 'function') f.run(() => chapter4Opening());
   else if (flag('ch4done') && !flag('ch5start') && typeof chapter5Opening === 'function') f.run(() => chapter5Opening());
-  else if (flag('ch5done') && !flag('ch6start') && typeof chapter6Opening === 'function') f.run(() => chapter6Opening());
   else fadeIn(30);
 }
 

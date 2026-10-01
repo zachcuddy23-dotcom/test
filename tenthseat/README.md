@@ -1,4 +1,4 @@
-# The Tenth Seat: Chapters One to Five
+# The Tenth Seat: the complete game
 
 A browser JRPG in the spirit of the FF4 era: timed ATB battles, a fast and funny story, and a **job system you can change at any time**. It's set in the user's world of **Cael'Brithar** under the Ascendant Ten, and stars **Raine Cudlar**, **Miasma**, **Verai** and **Luna**, each hiding something.
 
@@ -10,6 +10,29 @@ Open `tenthseat/index.html` in a browser. There's no build step or server.
 - **Keyboard:** arrows or WASD move · Z / Space / Enter confirm · X cancel or menu · Esc menu · hold Shift to run
 - **In battle:** when a hero's TIME gauge fills, pick a command. Press X on the command menu to switch between heroes who are ready. Battle mode (Wait or Active) and speed are in **Menu → Config**.
 - **Saving:** save on the world map or beside a glowing **Dawn Lantern**. Inns also save.
+
+## The Final Chapter: the Tenth Seat
+- **The Rally.** Sonia is about to sit on a throne made of every unanswered prayer in the world. Fly everywhere and raise **13 banners**, and every one is shaped by something you did:
+  - Hallorn, spared or kept.
+  - The Emberport gate, bribed or fought.
+  - The blackpowder, taken or blown up.
+  - Where Grimnar's Anvil went.
+  - Whether you planted Elaris's seed.
+  - Whether you met Kryos.
+  - Whether Ashkar fell.
+- **The siege of the Rim** (fewer waves with more banners), then **Godsfall Crater, eight floors down**:
+  - the Hall of Unanswered Prayers (echoes from the whole story)
+  - the Heartseed Garden
+  - the Drowned Sun
+  - Nyxia's Night
+  - Where the Gods Fell
+  - the Stair of Every Prayer
+  - the Unseated Throne
+- **Verai's whole history adds up**, from the first bond in Chapter One: she carries Nyxia, is pulled back from the night by her name, comes home, or stays with her mother.
+- **Odeaon or Ashkar is rescued.** The family's last night on the stairs plays out by how Raine took the truth, and she may finally call Miasma "Mom".
+- **Sonia, twice.** Your banners strip her powers.
+- **Who sits in the Tenth Seat?** Up to six endings: nobody, Verai, Ashkar, Elaris reborn (or a new god from her seed), Raine, or Sonia's second chance.
+- **An epilogue that remembers every chapter,** credits, and a post-game. The **Ring of the Ten**, an optional sky islet, has ten god trials and ten relics.
 
 ## What's new in Chapter Five: the open sky (the semi-finale)
 - **Miasma remembers she's a dragon.** Everyone turns to look at her at once. She is your airship now: **press Z on any world map to take off, and Z again to land** or fly straight into a town.
