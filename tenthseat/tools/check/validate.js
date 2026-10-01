@@ -117,5 +117,14 @@ for (const [j, J] of Object.entries(c.JOBS)) for (const [, s] of J.learn) if (!c
 for (const [i, I] of Object.entries(c.INNATE)) for (const [, s] of I.learn) if (!c.SKILLS[s]) err(`innate ${i} skill ${s}`);
 for (const [h, H] of Object.entries(c.HEROES)) { for (const id of Object.values(H.equip)) if (id && !c.EQUIP[id]) err(`hero ${h} equip ${id}`); if (!c.JOBS[H.job]) err(`hero ${h} job`); }
 for (const [id, e] of Object.entries(c.ENEMIES)) if (e.steal && !c.ITEMS[e.steal] && !c.EQUIP[e.steal]) err(`enemy ${id} steal ${e.steal}`);
+// two scripts declaring the same function name: the later one silently replaces the earlier one
+{
+  const html = fs.readFileSync(path.join(__dirname, '..', '..', 'index.html'), 'utf8'), seen = {};
+  for (const f of [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1])) {
+    for (const m of fs.readFileSync(path.join(__dirname, '..', '..', f), 'utf8').matchAll(/^(?:async )?function ([A-Za-z0-9_]+)/gm)) {
+      if (seen[m[1]] && seen[m[1]] !== f) err(`function ${m[1]} is declared in both ${seen[m[1]]} and ${f}`); seen[m[1]] = f;
+    }
+  }
+}
 console.log(errors ? `${errors} errors` : 'ALL OK');
 process.exit(errors ? 1 : 0);

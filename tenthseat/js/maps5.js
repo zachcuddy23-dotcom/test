@@ -525,12 +525,12 @@ Object.assign(MAPS, {
     ],
     warps: { '<': { map: 'ebonport2', at: '>' } },
     npcs: {
-      1: { enemy: 'maskedregent', scale: 0.32, name: 'The Masked Regent', show: () => !flag('ch5regent'), talk: [async () => chapelEvent()] },
-      2: { look: 'verai', name: 'Verai', show: () => flag('veraiGone4') && !flag('veraiBack') && !flag('ch5veil') && !flag('ch5vvActor'), talk: [async () => chapelEvent()] },
+      1: { enemy: 'maskedregent', scale: 0.32, name: 'The Masked Regent', show: () => !flag('ch5regent'), talk: [async () => ebonChapelEvent()] },
+      2: { look: 'verai', name: 'Verai', show: () => flag('veraiGone4') && !flag('veraiBack') && !flag('ch5veil') && !flag('ch5vvActor'), talk: [async () => ebonChapelEvent()] },
     },
     chests: { Q: { id: 'c5_eb3a', item: 'nyxianrod' }, V: { id: 'c5_eb3b', item: 'veilmantle' } },
     signs: { '10,1': () => nyxiaAltar(), '11,1': () => nyxiaAltar() },
-    steps: { '9,8': () => chapelEvent(), '10,8': () => chapelEvent(), '11,8': () => chapelEvent() },
+    steps: { '9,8': () => ebonChapelEvent(), '10,8': () => ebonChapelEvent(), '11,8': () => ebonChapelEvent() },
   },
   starfall: {
     name: 'Starfall Isle', theme: 'orrery', music: 'library', under: '.', exitArt: 'floor', worldId: 'thalemyr', back: [42, 6], start: [7, 8, 'up'], bg: 'library', skyBack: true,
@@ -646,7 +646,7 @@ Object.assign(MAPS, {
       "^^^^^^^^XX^^^^^^",
     ],
     chests: { Q: { id: 'c5_sn1', item: 'skyscaleclaws' }, V: { id: 'c5_sn2', item: 'phoenixtear', n: 3 }, R: { id: 'c5_sn3', gold: 12000 } },
-    signs: { '10,2': () => nestSign(), '3,3': () => nestSign(), '8,4': () => nestSign() },
+    signs: { '10,2': () => skynestSign(), '3,3': () => skynestSign(), '8,4': () => skynestSign() },
   },
   echoes: {
     name: 'The Rift of Echoes', theme: 'storm', music: 'veil', under: ':', exitArt: 'floor', worldId: 'zalakir', back: [28, 22], start: [9, 9, 'up'], bg: 'stormplain', skyBack: true,

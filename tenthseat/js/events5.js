@@ -44,13 +44,13 @@ function castHero(cast, id) {
 }
 function anyMember(id) { return member(id) || (S().bench || []).find(m => m.id === id); }
 function giveBonus(id, skill) { const m = anyMember(id); if (!m) return false; m.bonus = m.bonus || []; if (!m.bonus.includes(skill)) m.bonus.push(skill); return true; }
-function partyLevel() { const all = [...S().party, ...(S().bench || [])]; return Math.round(all.reduce((s, m) => s + m.lvl, 0) / Math.max(1, all.length)); }
+function groupLevel() { const all = [...S().party, ...(S().bench || [])]; return Math.round(all.reduce((s, m) => s + m.lvl, 0) / Math.max(1, all.length)); }
 // banked experience from the old level cap of 30 pays out now
 function catchUpLevels() { for (const m of [...S().party, ...(S().bench || []), ...Object.values(S().away || {})]) gainExp(m, 0); }
 function returnFromAway(id) {
   const st = S(), m = st.away && st.away[id]; if (!m) return null;
   delete st.away[id];
-  const lv = Math.max(m.lvl, partyLevel()); if (lv > m.lvl) gainExp(m, Math.max(0, EXP_TABLE[lv] - m.exp));
+  const lv = Math.max(m.lvl, groupLevel()); if (lv > m.lvl) gainExp(m, Math.max(0, EXP_TABLE[lv] - m.exp));
   m.hp = stats(m).mhp; m.mp = stats(m).mmp; m.status = {};
   st.bench = st.bench || []; st.bench.push(m); ensureInParty(id);
   return m;
@@ -454,7 +454,7 @@ async function wardenSpotted(n) {
   if (r === 'win') { n.out = true; await notify('The wardens are down.', null); }
   else if (r === 'run') { await F().warp(F().map.id, F().map.start[0], F().map.start[1], F().map.start[2]); }
 }
-async function chapelEvent() {
+async function ebonChapelEvent() {
   if (flag('ch5veil')) return;
   const f = F();
   if (f._chapelBusy) return; f._chapelBusy = true;
@@ -897,7 +897,7 @@ async function vaultLetter() {
 }
 
 // ------------------------------------------------------------------ small places
-async function nestSign() {
+async function skynestSign() {
   if (heroHere('miasma')) await say(MI(), "Not mine. My cousin Vesk's. She always did have terrible taste in coins. Take whatever you like, she owes me.");
   else await say(null, "A pile of old coins in a dragon's nest. The owner hasn't been back in years.");
 }
