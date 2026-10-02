@@ -37,7 +37,7 @@ const AI = fs.readFileSync(path.join(__dirname, 'sim.js'), 'utf8').match(/const 
       if (b && b.ui && b.ui.kind === 'cmd') { b.setCmd(b.ui.m, aiPick(b, b.ui.m)); return; }
       const top = Game.top();
       if (top instanceof DialogScene && top.menu) {
-        const s = JSON.stringify(top.pages); const hit = Object.keys(window.__pick).find(k => s.includes(k));
+        const s = top.pages.flat().join(' '); const hit = Object.keys(window.__pick).find(k => s.includes(k));
         let i = 0; if (hit) { const v = window.__pick[hit]; i = typeof v === 'number' ? v : Math.max(0, top.choices.findIndex(c => c.includes(v))); }
         top.menu.index = i; Input.pressed.a = true; return;
       }
