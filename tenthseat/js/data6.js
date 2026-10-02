@@ -78,19 +78,19 @@ Object.assign(ENEMIES, {
     weak: ['ice'], acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'strike', name: 'Chain of Debt', mult: 1.8, fx: 'slash' }, { w: 1, type: 'spell', name: 'Bound Inferno', target: 'all', pow: 68, elem: 'fire', fx: 'fire' }],
     lines: { start: '"You PAID to get into Emberport. Zariel doesn\'t take coin. Zariel takes blood. Let\'s settle the debt."', half: '"HAH! Now THAT is payment!"' },
   }),
-  heartseedthrall: B6('The Heartseed Thrall', 'heartseedthrall', { art: 'spider', tint: { h: 320, s: 1.4, l: 1.0 }, scale: 3.2 }, 30000, 146, {
+  heartseedthrall: B6('The Heartseed Thrall', 'heartseedthrall', { art: 'spider', tint: { h: 320, s: 1.4, l: 1.0 }, scale: 3.2 }, 25500, 146, {
     actions: 3,
     weak: ['fire'], resist: ['earth', 'poison'],
     acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Heartseed Bloom', target: 'all', pow: 84, elem: 'earth', status: 'poison', chance: 40, fx: 'poison' }, { w: 1, type: 'strike', name: 'Strangling Love', mult: 2.1, fx: 'slash' }, { w: 1, type: 'heal', name: 'Stolen Spring', pow: 2000, uses: 1, when: 'hurt' }],
     lines: { start: 'A goddess\'s heart, beating inside something that was never meant to love anything.', half: 'The thorns loosen. Something inside the Thrall is trying to let go.' },
   }),
-  dawnheartseraph: B6('The Dawnheart Seraph', 'dawnheartseraph', { art: 'wisp', tint: { h: 40, s: 1.8, l: 1.6 }, scale: 3.4 }, 30000, 146, {
+  dawnheartseraph: B6('The Dawnheart Seraph', 'dawnheartseraph', { art: 'wisp', tint: { h: 40, s: 1.8, l: 1.6 }, scale: 3.4 }, 25500, 146, {
     actions: 3,
-    weak: ['dark', 'ice'], resist: ['holy', 'fire'],
-    acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Dawnheart Lance', target: 'one', pow: 140, elem: 'holy', fx: 'holy' }, { w: 1, type: 'spell', name: 'Noonfall', target: 'all', pow: 70, elem: 'holy', fx: 'light' }, { w: 1, type: 'status', name: 'Blinding Mercy', target: 'all', status: 'blind', chance: 45, fx: 'light' }],
+    weak: ['dark', 'ice'], resist: ['holy'],
+    acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'Dawnheart Lance', target: 'one', pow: 118, elem: 'holy', fx: 'holy' }, { w: 1, type: 'spell', name: 'Noonfall', target: 'all', pow: 62, elem: 'holy', fx: 'light' }, { w: 1, type: 'status', name: 'Blinding Mercy', target: 'all', status: 'blind', chance: 45, fx: 'light' }],
     lines: { start: '"Every day is a second chance. I am the last one. There will be no more after me."', half: 'The Seraph\'s light flickers like a sunset that has forgotten how to end.' },
   }),
-  starless: B6('The Starless', 'starless', { art: 'shade', tint: { h: 270, s: 1.8, l: 0.4 }, scale: 3.6 }, 32000, 148, {
+  starless: B6('The Starless', 'starless', { art: 'shade', tint: { h: 270, s: 1.8, l: 0.4 }, scale: 3.6 }, 27000, 148, {
     actions: 3,
     weak: ['holy'], resist: ['dark'],
     acts: [{ w: 3, type: 'attack' }, { w: 2, type: 'spell', name: 'A Stolen Night', target: 'all', pow: 74, elem: 'dark', fx: 'dark' }, { w: 1, type: 'status', name: 'Endless Dark', target: 'all', status: 'sleep', chance: 40, fx: 'smoke' }, { w: 1, type: 'spell', name: 'Unmoon', target: 'one', pow: 140, elem: 'dark', fx: 'dark' }],
