@@ -421,6 +421,7 @@ tenthseat/
   js/ui.js            dialog, field menu (Items/Skills/Job/Equip/Status/Order/Config/Save), shops, inn, chapel
   js/field.js         exploration, encounters, cutscene helpers (walk, npcWalk, card, crawl)
   js/battle.js        ATB battle system, effects, backgrounds (+ bg_*, sheet overrides)
+  js/hd2d.js          HD-2D look: tilted camera, depth of field, lights, shadows, bloom (see HD2D_STYLE_GUIDE_FOR_CHATGPT.md)
   js/main.js          title screen, new game, boot
   js/assets.js        GENERATED: every PNG embedded as a data URI
   assets/             PNG art (b_* bosses, m_* monsters, heroes, faces)

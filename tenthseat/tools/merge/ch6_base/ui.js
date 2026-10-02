@@ -381,13 +381,12 @@ class ConfigPanel {
       { text: 'Battle mode', right: c.atb === 'wait' ? 'Wait' : 'Active', k: 'atb' },
       { text: 'Battle speed', right: '●'.repeat(c.speed + 1) + '○'.repeat(5 - c.speed), k: 'speed' },
       { text: 'Sound', right: Audio2.muted ? 'Off' : 'On', k: 'sound' },
-      { text: 'Visuals', right: c.visual === 'classic' ? 'Classic' : 'HD-2D', k: 'visual' },
-    ], { x: 12, y: 448, w: 680, rows: 4, rowH: 36, index: i, size: 14 });
+    ], { x: 12, y: 448, w: 680, rows: 3, rowH: 36, index: i, size: 14 });
     this.list.h = 180;
   }
   update() {
     const c = S().cfg, cur = this.list.cur;
-    const hints = { atb: 'Wait: time stops while you pick a skill, item or target. Active: it never stops.', speed: 'How fast the time gauges fill. Left/right to change.', sound: 'Toggle music and sound effects.', visual: 'HD-2D: tilted camera, depth of field, real lights and shadows. Classic: flat pixel art.' };
+    const hints = { atb: 'Wait: time stops while you pick a skill, item or target. Active: it never stops.', speed: 'How fast the time gauges fill. Left/right to change.', sound: 'Toggle music and sound effects.' };
     this.menu.msg = hints[cur.k];
     if (cur.k === 'speed' && (Input.rep('left') || Input.rep('right'))) { c.speed = clamp(c.speed + (Input.rep('right') ? 1 : -1), 0, 5); Audio2.sfx('cursor'); this.build(); return false; }
     const r = this.list.update();
@@ -396,7 +395,6 @@ class ConfigPanel {
       if (r.select.k === 'atb') c.atb = c.atb === 'wait' ? 'active' : 'wait';
       if (r.select.k === 'speed') c.speed = (c.speed + 1) % 6;
       if (r.select.k === 'sound') Audio2.toggleMute();
-      if (r.select.k === 'visual') c.visual = c.visual === 'classic' ? 'hd2d' : 'classic';
       this.build();
     }
     return false;

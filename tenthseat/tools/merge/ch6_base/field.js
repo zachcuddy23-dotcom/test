@@ -287,8 +287,6 @@ class FieldScene {
       ctx.drawImage(this.tileArt(c, x, y), sx, sy, TS, TS);
       if (this.map.world && c === '~') this.foam(x, y, sx, sy);
     }
-    const hd = HD2D.on();
-    if (hd) HD2D.tileShadows(this, x0, y0, x1, y1, cx, cy);
     if (this.map.overlay) this.map.overlay(cx, cy);
     const objs = [];
     for (const ch of this.map._chests || []) objs.push({ y: ch.y, draw: () => ctx.drawImage(S().chests[ch.id] ? OBJ.chestOpen : OBJ.chest, ch.x * TS - cx, ch.y * TS - cy, TS, TS) });
@@ -307,7 +305,6 @@ class FieldScene {
         const bigImg = (n.def.img && IMG[n.def.img]) || (n.def.enemy && enemyImg(ENEMIES[n.def.enemy]));
         if (bigImg) { const s = n.def.scale || 0.5; ctx.drawImage(bigImg, nx * TS - cx + TS / 2 - bigImg.width * s / 2, ny * TS - cy + TS - bigImg.height * s, bigImg.width * s, bigImg.height * s); return; }
         const img = chibi(n.def.look, pose === 'sleep' ? 'down' : n.dir, fr, pose);
-        if (hd && pose !== 'sleep') HD2D.blob(nx * TS - cx + TS / 2, (ny - bob / TS) * TS - cy + TS - 3);
         if (pose === 'sleep') { ctx.save(); ctx.beginPath(); ctx.rect(nx * TS - cx - 6, ny * TS - cy - 30, TS + 12, 48); ctx.clip(); ctx.drawImage(img, nx * TS - cx - 3, ny * TS - cy - 18, 54, 72); ctx.restore(); if (Math.floor(Game.frame / 30) % 2) text('z', nx * TS - cx + 40, ny * TS - cy - 30, '#fff', 12); }
         else ctx.drawImage(img, nx * TS - cx - 3, ny * TS - cy - 24, 54, 72);
       } });
@@ -318,17 +315,14 @@ class FieldScene {
       if (st.onShip) { ctx.drawImage(OBJ.ship, px * TS - cx, py * TS - cy + Math.sin(Game.frame / 20) * 2, TS, TS); return; }
       let fr = 0; if (this.moving) { const k = this.moving.t / this.moving.n; fr = k < 0.5 ? ((this.stepCount % 2) ? 1 : 2) : 0; }
       const talk = Game.speaking === HEROES[lead.id].name && Math.floor(Game.frame / 6) % 2 ? 2 : 0;
-      if (hd) HD2D.blob(px * TS - cx + TS / 2, py * TS - cy + TS - 3);
       ctx.drawImage(chibi(HEROES[lead.id].look, st.dir, fr), px * TS - cx - 3, py * TS - cy - 24 - talk, 54, 72);
     } });
     for (const a of this.actors || []) objs.push({ y: a.y + 0.02, draw: () => this.drawActor(a, cx, cy) });
     objs.sort((a, b) => a.y - b.y).forEach(o => o.draw());
     for (const n of this.visibleNpcs()) if (n.def.sight) { ctx.fillStyle = 'rgba(255,220,90,0.22)'; for (const [x, y] of this.sightTiles(n)) ctx.fillRect(x * TS - cx, y * TS - cy, TS, TS); }
-    if (hd) HD2D.light(this, x0, y0, x1, y1, cx, cy);
     const tint = this.nightTint || (typeof this.map.tint === 'function' ? this.map.tint() : this.map.tint);
     if (tint) { ctx.fillStyle = tint; ctx.fillRect(0, 0, W, H); }
     if (this.map.embers && this.map.embers()) this.drawEmbers();
-    if (hd) HD2D.fieldPost(this);
     if (this.banner > 0) {
       const a = Math.min(1, this.banner / 30); ctx.globalAlpha = a;
       const w = textW(this.map.name) + 80; drawWindow((W - w) / 2, 24, w, 70); text(this.map.name, W / 2, 50, '#fff', 16, 'center'); ctx.globalAlpha = 1;

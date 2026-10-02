@@ -624,9 +624,7 @@ class BattleScene {
   }
   // ------------------------------------------------------------------ draw
   draw() {
-    const hd = HD2D.on();
-    ctx.drawImage(hd ? HD2D.battleBg(this.bg) : battleBg(this.bg), 0, 0);
-    if (hd) { for (const e of this.enemies) if (!e.gone && !e.dying) HD2D.blob(e.x + e.img.width / 2, e.y + e.img.height - 4, Math.min(90, e.img.width * 0.38)); this.party().forEach((m, i) => { if (alive(m)) { const p = this.partyPos(i); HD2D.blob(p.x + this.pb.get(m).ox, p.y - 2, 26); } }); }
+    ctx.drawImage(battleBg(this.bg), 0, 0);
     for (const e of this.enemies) {
       if (e.gone) continue;
       let img = e.img; const x = e.x, y = e.y;
@@ -691,7 +689,6 @@ class BattleScene {
         else { const c = this.memberCenter(t); drawCursor(c.x - 50, c.y); }
       }
     }
-    if (hd) HD2D.battlePost(this);
     this.drawUI();
   }
   drawUI() {
