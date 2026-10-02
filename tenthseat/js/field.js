@@ -328,6 +328,7 @@ class FieldScene {
     objs.sort((a, b) => a.y - b.y).forEach(o => o.draw());
     for (const n of this.visibleNpcs()) if (n.def.sight) { ctx.fillStyle = 'rgba(255,220,90,0.22)'; for (const [x, y] of this.sightTiles(n)) ctx.fillRect(x * TS - cx, y * TS - cy, TS, TS); }
     if (paint) paintedFx(this, cx, cy, 'over');
+    if (Game.showGrid) drawWalkGrid(this, x0, y0, x1, y1, cx, cy);
     if (hd) HD2D.light(this, x0, y0, x1, y1, cx, cy);
     const tint = this.nightTint || (typeof this.map.tint === 'function' ? this.map.tint() : this.map.tint);
     if (tint) { ctx.fillStyle = tint; ctx.fillRect(0, 0, W, H); }

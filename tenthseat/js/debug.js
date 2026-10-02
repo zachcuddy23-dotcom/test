@@ -147,6 +147,7 @@ class DebugScene {
       { text: 'Unlock all jobs, +5000 G', k: 'jobs', disabled: !inGame },
       { text: `Random battles: ${inGame && flag('noEnc') ? 'OFF' : 'ON'}`, k: 'enc', disabled: !inGame },
       { text: `Show position: ${Game.showPos ? 'ON' : 'OFF'}`, k: 'pos' },
+      { text: `Show walk grid: ${Game.showGrid ? 'ON' : 'OFF'}`, k: 'grid' },
       { text: `Error log (${Game.errors.length})`, k: 'log' },
       { text: 'Close', k: 'close' },
     ], { x: 180, y: 60, w: 600, rows: 11, rowH: 34, title: 'DEBUG', size: 14 });
@@ -169,6 +170,7 @@ class DebugScene {
     if (k === 'jobs') { S().jobsOpen = JOB_ORDER.slice(); S().gold += 5000; this.msg = 'All jobs unlocked.'; }
     if (k === 'enc') { setFlag('noEnc', !flag('noEnc')); }
     if (k === 'pos') Game.showPos = !Game.showPos;
+    if (k === 'grid') Game.showGrid = !Game.showGrid;
     if (k === 'log') { this.mode = 'log'; return; }
     if (k === 'close') { this.close(); return; }
     const i = this.menu.index; this.root(); this.menu.index = i;
@@ -190,3 +192,9 @@ class DebugScene {
 }
 function openDebug() { if (!(Game.top() instanceof DebugScene)) Game.push(new DebugScene()); }
 window.addEventListener('keydown', e => { if (e.code === 'F2' || e.code === 'Backquote') { e.preventDefault(); openDebug(); } });
+// Art tests: the painted Docks of Solanthia, listed first
+CHECKPOINTS.unshift(
+  { name: '* Art test: Docks of Solanthia (painted map)', flags: ['intro', 'noEnc'], party: ['raine', 'miasma'], lvl: 5, map: ['soldocks', 15, 2, 'down'], run: () => { Game.showPos = true; } },
+  { name: '* Art test: walk from Solanthia to the docks', flags: ['intro', 'noEnc'], party: ['raine', 'miasma'], lvl: 5, map: ['solanthia', 27, 12, 'right'] },
+  { ...CH5('Art test: Docks with the dragon (Ch5 lines)', 'ashkarAlly', ['ch5start', 'noEnc'], PT5, BN5, 40, ['soldocks', 18, 12, 'down']), name: '* Art test: Docks in Chapter 5 (Captain Orsa\'s dragon lines)' },
+);

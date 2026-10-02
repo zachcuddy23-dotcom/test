@@ -46,6 +46,21 @@ function paintedFx(f, cx, cy, layer) {
   }
 }
 
+// Debug > Show walk grid: green = walkable, red = blocked, letters mark doors, shops, signs.
+function drawWalkGrid(f, x0, y0, x1, y1, cx, cy) {
+  ctx.save(); ctx.lineWidth = 1;
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    const c = f.tileAt(x, y); if (c == null) continue;
+    const t = f.tileDef(c), sx = x * TS - cx, sy = y * TS - cy;
+    const sign = f.map.signs && f.map.signs[x + ',' + y], door = c === '+' || t.exit || t.stairs;
+    ctx.fillStyle = door ? 'rgba(80,160,255,0.40)' : t.shop ? 'rgba(255,200,40,0.40)' : t.solid ? 'rgba(255,40,40,0.22)' : 'rgba(40,255,90,0.18)';
+    ctx.fillRect(sx, sy, TS, TS); ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.strokeRect(sx + 0.5, sy + 0.5, TS - 1, TS - 1);
+    const lab = door ? 'DOOR' : t.shop ? 'SHOP' : sign ? 'SIGN' : '';
+    if (lab) text(lab, sx + TS / 2, sy + TS / 2 - 5, '#fff', 8, 'center');
+  }
+  ctx.restore();
+}
+
 // ---------------------------------------------------------------------------
 // The Docks of Solanthia (painted pilot map). Reached from the east side of Solanthia.
 // ---------------------------------------------------------------------------
@@ -55,12 +70,12 @@ MAPS.soldocks = {
   rows: [
     "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
     "zzzzzzzzzzzzzzz+zzzzzzzzzzzzzzzz",
-    "zzzzzzzzzzzzzz...zzzzzzzzzzzzzzz",
-    "zzzzzzzzzzzzzzz...zzzzzzzzzzzzzz",
-    "zzzzzzzzzzzzzzzz..zzzzzzzzzzzzzz",
-    "zzzzzzzzzzzzzzzz...zzzzzzzzzzzzz",
-    "zzzzzzzzzzzzzzzz...zzzzzzzzzzzzz",
-    "zzzzzzzzzzzzzzzz...zzzzzzzzzzzzz",
+    "zzzzzzzzzzzzzz....zzzzzzzzzzzzzz",
+    "zzzzzzzzzzzzzz.....zzzzzzzzzzzzz",
+    "zzzzzzzzzzzzzzz....zzzzzzzzzzzzz",
+    "zzzzzzzzzzzzzzz....zzzzzzzzzzzzz",
+    "zzzzzzzzzzzzzzz....zzzzzzzzzzzzz",
+    "zzzzzzzzzzzzzzz....zzzzzzzzzzzzz",
     "zzzzzzzzzzzzzz.....5zzzzzzzzzzzz",
     "zzzzzzzzzzzzz........zzzzzzzzzzz",
     "zzQ....zzIzzz.......zzzzzzzzzzzz",
