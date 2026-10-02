@@ -99,6 +99,8 @@ HD2D.light = function (f, x0, y0, x1, y1, cx, cy) {
     const c = f.tileAt(x, y); if (c == null) continue;
     const L = HD_LIGHTS[f.tileDef(c).art]; if (L) lights.push([x * TS - cx + TS / 2, y * TS - cy + TS / 2, L, x * 7 + y * 13]);
   }
+  // painted maps list their lamps in picture pixels: [x, y, art]
+  for (const [lx, ly, art] of f.map.lights || []) { const L = HD_LIGHTS[art || 'lantern']; if (L && lx - cx > -200 && lx - cx < W + 200 && ly - cy > -200 && ly - cy < H + 200) lights.push([lx - cx, ly - cy, L, lx + ly]); }
   const t = Game.frame, fl = (L, seed) => L[4] ? 0.88 + 0.08 * Math.sin(t / 6 + seed) + 0.04 * Math.sin(t / 2.3 + seed * 3) : 1;
   if (mood.amb) {
     const w = W / 2, h = H / 2, lm = HD2D.canvas('light', w, h), x = lm.x;

@@ -91,3 +91,30 @@ These are unchanged: `<hero>_<job>_sheet.png`, 11 frames in one row (see `CHATGP
 4. Run the checks in `CHATGPT_GUIDE.md` section 8.
 
 If something looks too bright, lower that mood's `grade` alpha or raise the bloom cut in `HD2D.fieldPost()`. If a dungeon is too dark, raise its `amb` numbers (255 means no darkening).
+
+---
+
+## 5. Painted maps: one picture instead of tiles
+
+A map can use one big painting instead of tiles. **The Docks of Solanthia** is the first one, reached through the east gate of Solanthia (`js/painted.js`).
+
+The walls, doors, NPCs, chests and shops still come from the map's `rows`. The grid is simply invisible, and **48 picture pixels = 1 tile**.
+
+### Adding a painting
+1. Paint it at the map's size: width = tiles across × 48, height = tiles down × 48. A ChatGPT image at 1536×1024 is 32×21 tiles.
+2. Save it as `assets/paintings/<key>.jpg` (JPG keeps the file small), then run `python3 tools/build_paintings.py`.
+3. In the map, add `painted: '<key>'`. Then write `rows` to match the picture:
+   - `.` walkable
+   - `z` blocked
+   - `+` a door (listed in `doors`)
+   - shop letters (`I`, `W`, `A`, ...) on stalls
+   - digits for NPCs and letters for chests, as usual
+4. Optional extras:
+   - `lights: [[x, y], ...]`: lamp positions in picture pixels. They glow and flicker in HD-2D.
+   - `water: true`: sun glints on the blue parts of the picture.
+   - `gulls: 5`: seabirds.
+
+### Painting prompt (what the docks painting looks like)
+> *"High-detail fantasy harbor town, warm golden-hour light, cream limestone buildings with terracotta roofs, blue-and-gold sun banners, cobbled plaza, wooden piers, painted in a crisp 'HD-2D' diorama style with tiny pixel-like detail. Camera looking down from high above at about 45°, slightly from the front, so the ground is flat and readable. Wide open walkable areas (plazas, piers, stairs) at least 100 px across. No people. 1536×1024."*
+
+Leave **open floor** where people should walk. NPCs and heroes are drawn on top, so a painting with busy clutter everywhere gives them nowhere to stand.

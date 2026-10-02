@@ -281,14 +281,17 @@ class FieldScene {
     cx = Math.round(cx); cy = Math.round(cy);
     const x0 = Math.floor(cx / TS), y0 = Math.floor(cy / TS), x1 = Math.ceil((cx + W) / TS), y1 = Math.ceil((cy + H) / TS);
     ctx.fillStyle = this.map.world ? '#2a5ab8' : '#000'; ctx.fillRect(0, 0, W, H);
-    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    const paint = this.map.painted && IMG['paint_' + this.map.painted];
+    if (paint) ctx.drawImage(paint, -cx, -cy);
+    else for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
       const c = this.tileAt(x, y); if (c == null) continue;
       const sx = x * TS - cx, sy = y * TS - cy;
       ctx.drawImage(this.tileArt(c, x, y), sx, sy, TS, TS);
       if (this.map.world && c === '~') this.foam(x, y, sx, sy);
     }
     const hd = HD2D.on();
-    if (hd) HD2D.tileShadows(this, x0, y0, x1, y1, cx, cy);
+    if (hd && !paint) HD2D.tileShadows(this, x0, y0, x1, y1, cx, cy);
+    if (paint) paintedFx(this, cx, cy, 'under');
     if (this.map.overlay) this.map.overlay(cx, cy);
     const objs = [];
     for (const ch of this.map._chests || []) objs.push({ y: ch.y, draw: () => ctx.drawImage(S().chests[ch.id] ? OBJ.chestOpen : OBJ.chest, ch.x * TS - cx, ch.y * TS - cy, TS, TS) });
@@ -324,6 +327,7 @@ class FieldScene {
     for (const a of this.actors || []) objs.push({ y: a.y + 0.02, draw: () => this.drawActor(a, cx, cy) });
     objs.sort((a, b) => a.y - b.y).forEach(o => o.draw());
     for (const n of this.visibleNpcs()) if (n.def.sight) { ctx.fillStyle = 'rgba(255,220,90,0.22)'; for (const [x, y] of this.sightTiles(n)) ctx.fillRect(x * TS - cx, y * TS - cy, TS, TS); }
+    if (paint) paintedFx(this, cx, cy, 'over');
     if (hd) HD2D.light(this, x0, y0, x1, y1, cx, cy);
     const tint = this.nightTint || (typeof this.map.tint === 'function' ? this.map.tint() : this.map.tint);
     if (tint) { ctx.fillStyle = tint; ctx.fillRect(0, 0, W, H); }
